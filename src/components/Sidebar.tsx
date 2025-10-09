@@ -19,7 +19,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center gap-2">
             <img
-              src="public/ICU-Medical-logo.jpg"
+              src="/ICU-Medical-logo.jpg"
               alt="Logo"
               className="h-14
                p-0 w-auto"
