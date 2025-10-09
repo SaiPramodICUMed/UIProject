@@ -11,6 +11,12 @@ const Inbox: React.FC = () => {
     { header: "Email", accessor: "email" },
     { header: "Role", accessor: "role" },
     { header: "Status", accessor: "status" },
+    { header: "ID", accessor: "id" },
+    { header: "Name", accessor: "name" },
+    { header: "Email", accessor: "email" },
+    { header: "Role", accessor: "role" },
+    { header: "Status", accessor: "status" },
+    
   ];
 
   const data = Array.from({ length: 20 }, (_, i) => ({

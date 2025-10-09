@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
-//import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function layOut({ children }: { children: React.ReactNode }) {
   const [activeMenu, setActiveMenu] = useState("inbox");
   const [activeSub, setActiveSub] = useState("inbox");
   const [drawerOpen, setDrawerOpen] = useState(false);
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const activeSUbMenu = (sub: string) => {
     setActiveSub(sub);
-    //navigate(`/${sub} || "/inbox"`);
+    navigate(`/${sub}`);
   };
 
   const activeMenuItem = (menu: string) => {
@@ -23,7 +23,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
     };
     setActiveMenu(menu);
     setActiveSub(subitems[menu] || "inbox");
-    // navigate(`/${subitems[menu] || "/inbox"}`);
+    navigate(`/${subitems[menu] || "/inbox"}`);
   };
 
   return (

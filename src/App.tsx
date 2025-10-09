@@ -14,6 +14,7 @@ function App() {
     <LayOut>
      <Routes>
       <Route path="/" element={< Inbox/>} />
+      <Route path="/inbox" element={< Inbox/>} />
 
       {/* <Route path="/GateDashboard" element={<GateDashboard />} />
 

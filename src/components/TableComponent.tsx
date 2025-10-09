@@ -16,6 +16,10 @@ const TableComponent: React.FC<TableProps> = ({
   columns,
   height = "500px",
 }) => {
+  const handleRowClick = (row: Record<string, any>) => {
+    console.log("Row clicked:", row);
+  };
+
   return (
     <div
       className="w-full overflow-x-auto border rounded-lg shadow-sm bg-white"
@@ -41,9 +45,10 @@ const TableComponent: React.FC<TableProps> = ({
           {data.map((row, rowIndex) => (
             <tr
               key={rowIndex}
-              className={`${
-                rowIndex % 2 === 0 ? "bg-[#e0e1f2]" : "bg-white"
-              } hover:bg-gray-100`}
+              onClick={() => handleRowClick(row)}
+              className={`cursor-pointer ${
+                rowIndex % 2 === 0 ? "bg-[#ebeff3]" : "bg-white"
+              } hover:bg-[#d0e5f5]`}
             >
               {columns.map((col, colIndex) => (
                 <td
