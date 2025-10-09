@@ -99,7 +99,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
               Admin
             </button>
             <button
-              onClick={() => activeMenuItem("profile")}
+              // onClick={() => activeMenuItem("profile")}
               className={
                 activeMenu === ""
                   ? "bg-white text-blue-900 font-semibold px-5 py-1 rounded"
@@ -138,7 +138,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 >
                   Inbox
                 </button>
-                <button
+                <button 
                   onClick={() => activeSUbMenu("drafts")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
