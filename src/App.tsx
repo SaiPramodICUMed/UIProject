@@ -3,7 +3,7 @@ import './App.css'
 //import Sidebar from "./components/Sidebar";
 import LayOut from "./layout/layout";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import Inbox from "./pages/inbox";
+import Inbox from "./pages/Inbox";
 function App() {
   
 

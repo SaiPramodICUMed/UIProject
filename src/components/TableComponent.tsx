@@ -11,7 +11,11 @@ interface TableProps {
   height?: string;
 }
 
-const TableComponent: React.FC<TableProps> = ({ data, columns, height = "500px" }) => {
+const TableComponent: React.FC<TableProps> = ({
+  data,
+  columns,
+  height = "500px",
+}) => {
   return (
     <div
       className="w-full overflow-x-auto border rounded-lg shadow-sm bg-white"
@@ -35,9 +39,17 @@ const TableComponent: React.FC<TableProps> = ({ data, columns, height = "500px" 
         {/* Table Body */}
         <tbody className="bg-white text-gray-800">
           {data.map((row, rowIndex) => (
-            <tr key={rowIndex} className="hover:bg-gray-50">
+            <tr
+              key={rowIndex}
+              className={`${
+                rowIndex % 2 === 0 ? "bg-[#e0e1f2]" : "bg-white"
+              } hover:bg-gray-100`}
+            >
               {columns.map((col, colIndex) => (
-                <td key={colIndex} className="border px-4 py-2 whitespace-nowrap">
+                <td
+                  key={colIndex}
+                  className="border px-4 py-2 whitespace-nowrap"
+                >
                   {row[col.accessor]}
                 </td>
               ))}
