@@ -28,7 +28,7 @@ const TableComponent: React.FC<TableProps> = ({
             {columns.map((col, i) => (
               <th
                 key={i}
-                className="border px-4 py-2 text-left font-semibold whitespace-nowrap"
+                className="border border-black px-4 py-2 text-left font-semibold whitespace-nowrap"
               >
                 {col.header}
               </th>
