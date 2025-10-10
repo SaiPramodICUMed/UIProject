@@ -1,6 +1,5 @@
 import React from "react";
 
-
 interface TableProps {
   data: Record<string, any>[];
   columns: any[];
@@ -14,52 +13,90 @@ const TableComponent: React.FC<TableProps> = ({
   height = "500px",
   color = "blue",
 }) => {
+  const [sortConfig, setSortConfig] = React.useState<{
+    key: string;
+    direction: "asc" | "desc";
+  } | null>(null);
+
   const handleRowClick = (row: Record<string, any>) => {
     console.log("Row clicked:", row);
   };
 
   function formatToDate(isoString: string): string {
-  if (!isoString) return "";
+    if (!isoString) return "";
 
-  const date = new Date(isoString);
-  if (isNaN(date.getTime())) return "";
+    const date = new Date(isoString);
+    if (isNaN(date.getTime())) return "";
 
-  const day = date.getDate().toString().padStart(2, "0");
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const year = date.getFullYear();
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
 
-  return `${day}/${month}/${year}`;
-}
- function formatToUSCurrency(value: string | number): string {
-  const num = Number(value);
-  if (isNaN(num)) return "";
+    return `${day}/${month}/${year}`;
+  }
 
-  return num.toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-}
- function getDaysFromToday(dateString: string): string {
-  if (!dateString) return "0 days";
+  function formatToUSCurrency(value: string | number): string {
+    const num = Number(value);
+    if (isNaN(num)) return "";
 
-  const givenDate = new Date(dateString);
-  const today = new Date();
+    return num.toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  }
 
-  // Reset hours to avoid partial day issues
-  givenDate.setHours(0, 0, 0, 0);
-  today.setHours(0, 0, 0, 0);
+  function getDaysFromToday(dateString: string): string {
+    if (!dateString) return "0 days";
 
-  const diffTime = today.getTime() - givenDate.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const givenDate = new Date(dateString);
+    const today = new Date();
 
-  return `${diffDays} days`;
-}
+    givenDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
 
+    const diffTime = today.getTime() - givenDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
+    return `${diffDays} days`;
+  }
 
+  // Handle sorting
+  const handleSort = (accessor: string) => {
+    if (sortConfig?.key === accessor) {
+      setSortConfig({
+        key: accessor,
+        direction: sortConfig.direction === "asc" ? "desc" : "asc",
+      });
+    } else {
+      setSortConfig({ key: accessor, direction: "asc" });
+    }
+  };
 
+  const sortedData = React.useMemo(() => {
+    if (!sortConfig) return data;
+
+    const { key, direction } = sortConfig;
+
+    return [...data].sort((a, b) => {
+      let aValue = a[key];
+      let bValue = b[key];
+
+      // Handle numbers
+      if (!isNaN(Number(aValue)) && !isNaN(Number(bValue))) {
+        aValue = Number(aValue);
+        bValue = Number(bValue);
+      } else {
+        aValue = aValue?.toString() ?? "";
+        bValue = bValue?.toString() ?? "";
+      }
+
+      if (aValue < bValue) return direction === "asc" ? -1 : 1;
+      if (aValue > bValue) return direction === "asc" ? 1 : -1;
+      return 0;
+    });
+  }, [data, sortConfig]);
 
   return (
     <div
@@ -73,9 +110,19 @@ const TableComponent: React.FC<TableProps> = ({
             {columns.map((col, i) => (
               <th
                 key={i}
-                className="border border-black px-4 py-2 text-left font-semibold whitespace-nowrap"
+                onClick={() => handleSort(col.accessor)}
+                className="border border-black px-4 py-2 text-left font-semibold whitespace-nowrap cursor-pointer select-none"
               >
-                {col.header}
+                <div className="flex justify-between items-center">
+                  <span>{col.header}</span>
+                  <span>
+                    {sortConfig?.key === col.accessor
+                      ? sortConfig?.direction === "asc"
+                        ? "▲"
+                        : "▼"
+                      : ""}
+                  </span>
+                </div>
               </th>
             ))}
           </tr>
@@ -83,7 +130,7 @@ const TableComponent: React.FC<TableProps> = ({
 
         {/* Table Body */}
         <tbody className="bg-white text-gray-800">
-          {data.map((row, rowIndex) => (
+          {sortedData.map((row, rowIndex) => (
             <tr
               key={rowIndex}
               onClick={() => handleRowClick(row)}
@@ -96,12 +143,15 @@ const TableComponent: React.FC<TableProps> = ({
                   key={colIndex}
                   className="border px-4 py-2 whitespace-nowrap"
                 >
-                    {(col.accessor=='Created'||col.accessor=='LastModified')?formatToDate(row[col.accessor]):
-                      col.accessor=='FloorBreaks'?`${row[col.accessor]} (${row.FloorBreaksP}%)`:
-                      col.accessor=='OriginalValue'?formatToUSCurrency(row[col.accessor]):
-                      col.accessor=='Due'? getDaysFromToday(row[col.accessor]) :
-                      row[col.accessor]}
-                  {/* {row[col.accessor]}{col.accessor} */}
+                  {col.accessor === "Created" || col.accessor === "LastModified"
+                    ? formatToDate(row[col.accessor])
+                    : col.accessor === "FloorBreaks"
+                    ? `${row[col.accessor]} (${row.FloorBreaksP}%)`
+                    : col.accessor === "OriginalValue"
+                    ? formatToUSCurrency(row[col.accessor])
+                    : col.accessor === "Due"
+                    ? getDaysFromToday(row[col.accessor])
+                    : row[col.accessor]}
                 </td>
               ))}
             </tr>
