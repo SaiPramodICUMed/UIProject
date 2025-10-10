@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import TableComponent from "../components/TableComponent";
 import Pagination from "../components/PageNation";
 import axios from "axios";
+// import data from "../../data.json";
 
 const Inbox: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -18,7 +19,6 @@ const Inbox: React.FC = () => {
     { header: "Items", accessor: "ItemCount" },
     { header: "Value", accessor: "OriginalValue" },
     { header: "Floor Breaks", accessor: "FloorBreaks" },
-    { header: "Floor Breaks Percentage", accessor: "FloorBreaksP" },
     { header: "Due", accessor: "Due" },
     { header: "Country", accessor: "CountryName" },
   ];
@@ -149,7 +149,7 @@ useEffect(() => {
         />
       </div>
       {/* Responsive Table inside the same container */}
-      <TableComponent data={inboxData} columns={columns} height="450px" />
+      <TableComponent data={inboxData} columns={columns} height="450px" color="red"/>
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

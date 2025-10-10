@@ -1,24 +1,65 @@
 import React from "react";
 
-interface Column {
-  header: string;
-  accessor: string;
-}
 
 interface TableProps {
   data: Record<string, any>[];
-  columns: Column[];
+  columns: any[];
   height?: string;
+  color?: string;
 }
 
 const TableComponent: React.FC<TableProps> = ({
   data,
   columns,
   height = "500px",
+  color = "blue",
 }) => {
   const handleRowClick = (row: Record<string, any>) => {
     console.log("Row clicked:", row);
   };
+
+  function formatToDate(isoString: string): string {
+  if (!isoString) return "";
+
+  const date = new Date(isoString);
+  if (isNaN(date.getTime())) return "";
+
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+ function formatToUSCurrency(value: string | number): string {
+  const num = Number(value);
+  if (isNaN(num)) return "";
+
+  return num.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+ function getDaysFromToday(dateString: string): string {
+  if (!dateString) return "0 days";
+
+  const givenDate = new Date(dateString);
+  const today = new Date();
+
+  // Reset hours to avoid partial day issues
+  givenDate.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+
+  const diffTime = today.getTime() - givenDate.getTime();
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+  return `${diffDays} days`;
+}
+
+
+
+
 
   return (
     <div
@@ -46,7 +87,7 @@ const TableComponent: React.FC<TableProps> = ({
             <tr
               key={rowIndex}
               onClick={() => handleRowClick(row)}
-              className={`cursor-pointer ${
+              className={`cursor-pointer text-xs text-${color}-800 ${
                 rowIndex % 2 === 0 ? "bg-[#ebeff3]" : "bg-white"
               } hover:bg-[#d0e5f5]`}
             >
@@ -55,7 +96,12 @@ const TableComponent: React.FC<TableProps> = ({
                   key={colIndex}
                   className="border px-4 py-2 whitespace-nowrap"
                 >
-                  {row[col.accessor]}
+                    {(col.accessor=='Created'||col.accessor=='LastModified')?formatToDate(row[col.accessor]):
+                      col.accessor=='FloorBreaks'?`${row[col.accessor]} (${row.FloorBreaksP}%)`:
+                      col.accessor=='OriginalValue'?formatToUSCurrency(row[col.accessor]):
+                      col.accessor=='Due'? getDaysFromToday(row[col.accessor]) :
+                      row[col.accessor]}
+                  {/* {row[col.accessor]}{col.accessor} */}
                 </td>
               ))}
             </tr>
