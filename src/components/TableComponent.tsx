@@ -17,7 +17,7 @@ const TableComponent: React.FC<TableProps> = ({
     key: string;
     direction: "asc" | "desc";
   } | null>(null);
-
+console.log(color)
   const handleRowClick = (row: Record<string, any>) => {
     console.log("Row clicked:", row);
   };
@@ -46,6 +46,11 @@ const TableComponent: React.FC<TableProps> = ({
       maximumFractionDigits: 2,
     });
   }
+  const colorClassMap: Record<string, string> = {
+  blue: "text-blue-800",
+  red: "text-red-800",
+  green: "text-green-800",
+};
 
   function getDaysFromToday(dateString: string): string {
     if (!dateString) return "0 days";
@@ -134,14 +139,14 @@ const TableComponent: React.FC<TableProps> = ({
             <tr
               key={rowIndex}
               onClick={() => handleRowClick(row)}
-              className={`cursor-pointer text-xs text-${color}-800 ${
+              className={`cursor-pointer text-xs  ${
                 rowIndex % 2 === 0 ? "bg-[#ebeff3]" : "bg-white"
               } hover:bg-[#d0e5f5]`}
             >
               {columns.map((col, colIndex) => (
                 <td
                   key={colIndex}
-                  className="border px-4 py-2 whitespace-nowrap"
+                  className={`border px-4 py-2 whitespace-nowrap ${colorClassMap[color] ? "text-red-800":"text-grey-800"} `}
                 >
                   {col.accessor === "Created" || col.accessor === "LastModified"
                     ? formatToDate(row[col.accessor])
