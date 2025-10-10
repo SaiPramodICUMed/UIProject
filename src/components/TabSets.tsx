@@ -7,11 +7,6 @@ type Tab = {
   label: string;
   count?: number;
 };
-// useEffect
-// const fetchData = async (arg) =>
-// {
-
-// }
 
 const tabs: Tab[] = [
   { id: "Inbox", label: "Inbox", count: 0 },
@@ -44,7 +39,7 @@ const fetchData = async (arg:any) => {
 
     // 👈 second argument is the body (data)
     const response = await axios.post(
-      `https://localhost:7206/api/Inbox/view`,
+      `https://localhost:7206/api/Inbox/inbox`,
       payload, 
       { headers: { "Content-Type": "application/json" } } // optional config
     );
