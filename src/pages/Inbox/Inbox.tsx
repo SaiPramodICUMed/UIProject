@@ -5,8 +5,9 @@ import axios from "axios";
 
 const Inbox: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [inboxData, setInboxData] = useState([]);
+   const [inboxData, setInboxData] = useState([]);
   const totalPages = 10;
+ // const inboxData:any=[];
   const columns = [   
     { header: "Task Name", accessor: "Name" },
     { header: "Task Type", accessor: "TaskType" },
@@ -18,7 +19,6 @@ const Inbox: React.FC = () => {
     { header: "Items", accessor: "ItemCount" },
     { header: "Value", accessor: "OriginalValue" },
     { header: "Floor Breaks", accessor: "FloorBreaks" },
-    { header: "Floor Breaks Percentage", accessor: "FloorBreaksP" },
     { header: "Due", accessor: "Due" },
     { header: "Country", accessor: "CountryName" },
   ];
@@ -84,11 +84,12 @@ useEffect(() => {
       </div>
       {/* Responsive Table inside the same container */}
       <TableComponent data={inboxData} columns={columns} height="450px" />
+      {inboxData?.length !== 0 &&(
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={(page) => setCurrentPage(page)}
-      />
+      />)}
     </div>
   );
 };

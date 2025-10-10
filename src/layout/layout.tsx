@@ -29,7 +29,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
   return (
     <div className=" flex flex-col text-gray-800 overflow-hidden">
       {/* Top Navbar */}
-      <nav className="bg-[#0f59ac] text-white border-b border-white">
+      <nav className="bg-[#0f59ac] text-white text-sm border-b border-white">
         <div className=" mx-auto px-4 py-1 flex justify-between items-center mr-2">
           {/* <h1 className="text-lg font-bold">My Web App</h1> */}
           <div className="flex items-center gap-2">
@@ -49,7 +49,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 "font-medium " +
                 (activeMenu === "inbox"
                   ? "bg-white text-blue-900 font-semibold px-5 py-1 rounded"
-                  : " xl:px-5 hover:text-blue-200")
+                  : " xl:px-2 hover:text-blue-200")
               }
             >
               Inbox
@@ -60,7 +60,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 "font-medium " +
                 (activeMenu === "pricing"
                   ? "bg-white text-blue-900 font-semibold px-5 py-1 rounded"
-                  : " xl:px-5 hover:text-blue-200")
+                  : " xl:px-2 hover:text-blue-200")
               }
             >
               Pricing
@@ -71,7 +71,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 "font-medium " +
                 (activeMenu === "strategy"
                   ? "bg-white text-blue-900 font-semibold px-5 py-1 rounded"
-                  : "xl: px-5 hover:text-blue-200")
+                  : "xl: px-2 hover:text-blue-200")
               }
             >
               Strategy
@@ -82,7 +82,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 "font-medium " +
                 (activeMenu === "email"
                   ? "bg-white text-blue-900 font-semibold px-5 py-1 rounded"
-                  : " xl:px-5 hover:text-blue-200")
+                  : " xl:px-2 hover:text-blue-200")
               }
             >
               Email
@@ -93,7 +93,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 " mr-11 font-medium " +
                 (activeMenu === "admin"
                   ? "bg-white text-blue-900 font-semibold px-5 py-1 rounded"
-                  : "xl: px-5 hover:text-blue-200")
+                  : "xl: px-2 hover:text-blue-200")
               }
             >
               Admin
@@ -123,7 +123,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
 
       {/* Submenu (Desktop) */}
       {activeSub && (
-        <div className="hidden md:block bg-white shadow-md">
+        <div className="hidden md:block bg-white shadow-md text-sm">
           <div className="mx-auto px-4 flex space-x-4">
             {activeMenu === "inbox" && (
               <>

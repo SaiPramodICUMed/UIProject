@@ -64,7 +64,7 @@ console.log(color)
     const diffTime = today.getTime() - givenDate.getTime();
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-    return `${diffDays} days`;
+    return `- ${diffDays} days`;
   }
 
   // Handle sorting
@@ -80,8 +80,9 @@ console.log(color)
   };
 
   const sortedData = React.useMemo(() => {
+    
     if (!sortConfig) return data;
-
+console.log("equal")
     const { key, direction } = sortConfig;
 
     return [...data].sort((a, b) => {
@@ -99,6 +100,7 @@ console.log(color)
 
       if (aValue < bValue) return direction === "asc" ? -1 : 1;
       if (aValue > bValue) return direction === "asc" ? 1 : -1;
+      
       return 0;
     });
   }, [data, sortConfig]);
@@ -116,7 +118,7 @@ console.log(color)
               <th
                 key={i}
                 onClick={() => handleSort(col.accessor)}
-                className="border border-black px-4 py-2 text-left font-semibold whitespace-nowrap cursor-pointer select-none"
+                className="border border-black px-4 py-2 text-left font-semibold text-xs whitespace-nowrap cursor-pointer select-none"
               >
                 <div className="flex justify-between items-center">
                   <span>{col.header}</span>
@@ -135,7 +137,8 @@ console.log(color)
 
         {/* Table Body */}
         <tbody className="bg-white text-gray-800">
-          {sortedData.map((row, rowIndex) => (
+           { sortedData.length != 0? (
+          sortedData.map((row, rowIndex) => (
             <tr
               key={rowIndex}
               onClick={() => handleRowClick(row)}
@@ -159,10 +162,17 @@ console.log(color)
                     : row[col.accessor]}
                 </td>
               ))}
+            </tr>))):(
+
+            <tr>
+              <td colSpan={columns.length} className="text-center p-4 text-gray-500">
+                No records to display.
+              </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
+      
     </div>
   );
 };
