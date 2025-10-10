@@ -81,11 +81,12 @@ useEffect(() => {
       </div>
       {/* Responsive Table inside the same container */}
       <TableComponent data={inboxData} columns={columns} height="450px" />
+       {inboxData?.length !== 0 &&(
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={(page) => setCurrentPage(page)}
-      />
+      />)}
     </div>
   );
 };

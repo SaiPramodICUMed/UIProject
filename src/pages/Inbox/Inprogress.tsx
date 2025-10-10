@@ -89,11 +89,12 @@ const Inprogress: React.FC = () => {
         height="450px"
         color="red"
       />
+      {inboxData?.length !== 0 &&(
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={(page) => setCurrentPage(page)}
-      />
+      />)}
     </div>
   );
 };
