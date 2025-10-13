@@ -149,7 +149,8 @@ console.log("equal")
               {columns.map((col, colIndex) => (
                 <td
                   key={colIndex}
-                  className={`border px-4 py-2 whitespace-nowrap ${colorClassMap[color] ? "text-red-800":"text-grey-800"} `}
+                 //lassName={`border px-4 py-2 whitespace-nowrap ${colorClassMap[color] ? "text-red-800":"text-grey-800"} `}
+                  className={`border px-4 py-2 max-w-[60px] overflow-hidden text-ellipsis whitespace-nowrap ${colorClassMap[color] ? colorClassMap[color] : "text-gray-800"}`}
                 >
                   {col.accessor === "Created" || col.accessor === "LastModified"
                     ? formatToDate(row[col.accessor])
