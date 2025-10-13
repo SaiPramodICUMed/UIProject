@@ -17,7 +17,7 @@ const TableComponent: React.FC<TableProps> = ({
     key: string;
     direction: "asc" | "desc";
   } | null>(null);
-console.log(color)
+  console.log(color)
   const handleRowClick = (row: Record<string, any>) => {
     console.log("Row clicked:", row);
   };
@@ -47,10 +47,10 @@ console.log(color)
     });
   }
   const colorClassMap: Record<string, string> = {
-  blue: "text-blue-800",
-  red: "text-red-800",
-  green: "text-green-800",
-};
+    blue: "text-blue-800",
+    red: "text-red-800",
+    green: "text-green-800",
+  };
 
   function getDaysFromToday(dateString: string): string {
     if (!dateString) return "0 days";
@@ -80,9 +80,8 @@ console.log(color)
   };
 
   const sortedData = React.useMemo(() => {
-    
     if (!sortConfig) return data;
-console.log("equal")
+   // console.log("equal");
     const { key, direction } = sortConfig;
 
     return [...data].sort((a, b) => {
@@ -100,7 +99,6 @@ console.log("equal")
 
       if (aValue < bValue) return direction === "asc" ? -1 : 1;
       if (aValue > bValue) return direction === "asc" ? 1 : -1;
-      
       return 0;
     });
   }, [data, sortConfig]);
@@ -137,43 +135,51 @@ console.log("equal")
 
         {/* Table Body */}
         <tbody className="bg-white text-gray-800">
-           { sortedData.length != 0? (
-          sortedData.map((row, rowIndex) => (
-            <tr
-              key={rowIndex}
-              onClick={() => handleRowClick(row)}
-              className={`cursor-pointer text-xs  ${
-                rowIndex % 2 === 0 ? "bg-[#ebeff3]" : "bg-white"
-              } hover:bg-[#d0e5f5]`}
-            >
-              {columns.map((col, colIndex) => (
-                <td
-                  key={colIndex}
-                 //lassName={`border px-4 py-2 whitespace-nowrap ${colorClassMap[color] ? "text-red-800":"text-grey-800"} `}
-                  className={`border px-4 py-2 max-w-[60px] overflow-hidden text-ellipsis whitespace-nowrap ${colorClassMap[color] ? colorClassMap[color] : "text-gray-800"}`}
-                >
-                  {col.accessor === "Created" || col.accessor === "LastModified"
-                    ? formatToDate(row[col.accessor])
-                    : col.accessor === "FloorBreaks"
-                    ? `${row[col.accessor]} (${row.FloorBreaksP}%)`
-                    : col.accessor === "OriginalValue"
-                    ? formatToUSCurrency(row[col.accessor])
-                    : col.accessor === "Due"
-                    ? getDaysFromToday(row[col.accessor])
-                    : row[col.accessor]}
-                </td>
-              ))}
-            </tr>))):(
-
+          {sortedData.length != 0 ? (
+            sortedData.map((row, rowIndex) => (
+              <tr
+                key={rowIndex}
+                onClick={() => handleRowClick(row)}
+                className={`cursor-pointer text-xs  ${
+                  rowIndex % 2 === 0 ? "bg-[#ebeff3]" : "bg-white"
+                } hover:bg-[#d0e5f5]`}
+              >
+                {columns.map((col, colIndex) => (
+                  <td
+                    key={colIndex}
+                    className={`border px-4 py-2 max-w-[60px] overflow-hidden text-ellipsis whitespace-nowrap ${
+                      colorClassMap[color]
+                        ? colorClassMap[color]
+                        : "text-gray-800"
+                    }`}
+                    title={String(row[col.accessor] ?? "")}
+                  >
+                    {col.accessor === "Created" ||
+                    col.accessor === "LastModified"
+                      ? formatToDate(row[col.accessor])
+                      : col.accessor === "FloorBreaks"
+                      ? `${row[col.accessor]} (${row.FloorBreaksP}%)`
+                      : col.accessor === "OriginalValue"
+                      ? formatToUSCurrency(row[col.accessor])
+                      : col.accessor === "Due"
+                      ? getDaysFromToday(row[col.accessor])
+                      : row[col.accessor]}
+                  </td>
+                ))}
+              </tr>
+            ))
+          ) : (
             <tr>
-              <td colSpan={columns.length} className="text-center p-4 text-gray-500">
+              <td
+                colSpan={columns.length}
+                className="text-center p-4 text-gray-500"
+              >
                 No records to display.
               </td>
             </tr>
           )}
         </tbody>
       </table>
-      
     </div>
   );
 };
