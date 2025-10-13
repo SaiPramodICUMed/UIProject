@@ -232,6 +232,17 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   Accounts
                 </button>
                 <button
+                  onClick={() => activeSUbMenu("sites")}
+                  className={
+                    "px-3 py-2 font-medium border-b-2 " +
+                    (activeSub === "sites"
+                      ? "bg-[#0f59ac] text-white"
+                      : "border-transparent hover:border-blue-900 text-gray-700")
+                  }
+                >
+                  Sites
+                </button>
+                <button
                   onClick={() => activeSUbMenu("groups")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
@@ -254,15 +265,59 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   Price Lists
                 </button>
                 <button
-                  onClick={() => activeSUbMenu("erpLoad")}
+                  onClick={() => activeSUbMenu("erpLoadCompletedTasks")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "erpLoad"
+                    (activeSub === "erpLoadCompletedTasks"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
                 >
-                  ERP Load
+                  ERP Load-Completed Tasks
+                </button>
+                <button
+                  onClick={() => activeSUbMenu("erpLoadAwaitingLoad")}
+                  className={
+                    "px-3 py-2 font-medium border-b-2 " +
+                    (activeSub === "erpLoadAwaitingLoad"
+                      ? "bg-[#0f59ac] text-white"
+                      : "border-transparent hover:border-blue-900 text-gray-700")
+                  }
+                >
+                  ERP Load-Awaiting Load
+                </button>
+                <button
+                  onClick={() => activeSUbMenu("erpLoadManuallyUpdating")}
+                  className={
+                    "px-3 py-2 font-medium border-b-2 " +
+                    (activeSub === "erpLoadManuallyUpdating"
+                      ? "bg-[#0f59ac] text-white"
+                      : "border-transparent hover:border-blue-900 text-gray-700")
+                  }
+                >
+                  ERP Load-Manually Updating
+                </button>
+                <button
+                  onClick={() => activeSUbMenu("erpLoadLettingExpire")}
+                  className={
+                    "px-3 py-2 font-medium border-b-2 " +
+                    (activeSub === "erpLoadLettingExpire"
+                      ? "bg-[#0f59ac] text-white"
+                      : "border-transparent hover:border-blue-900 text-gray-700")
+                  }
+                >
+                  ERP Load-Letting Expire
+                </button>
+                 <button
+                  onClick={() => activeSUbMenu("erpLoadRecentlyLoaded")}
+                  className={
+                    "px-3 py-2 font-medium border-b-2 " +
+                    (activeSub === "erpLoadRecentlyLoaded"
+                      ? "bg-[#0f59ac] text-white"
+                      : "border-transparent hover:border-blue-900 text-gray-700")
+                  }
+                >
+                  ERP Load-Recently Loaded
                 </button>
                 <button
                   onClick={() => activeSUbMenu("renewalsCalendar")}
@@ -642,12 +697,12 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "erpLoad"
+                    (activeSub === "erpLoadCompletedTasks"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
                   onClick={() => {
-                    activeSUbMenu("erpLoad");
+                    activeSUbMenu("erpLoadCompletedTasks");
                     setDrawerOpen(false);
                   }}
                 >

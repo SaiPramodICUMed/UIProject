@@ -1,39 +1,36 @@
 import React, { useEffect, useState } from "react";
-import TableComponent from "../../components/TableComponent";
-import Pagination from "../../components/PageNation";
+import TableComponent from "../../../components/TableComponent";
+import Pagination from "../../../components/PageNation";
 import axios from "axios";
 
-const PriceLists: React.FC = () => {
+const RecentlyLoaded: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [inboxData, setInboxData] = useState([]);
   const totalPages = 10;
   const columns = [   
-    { header: "Name", accessor: "Name" },
-    { header: "Description", accessor: "Description" },
-    { header: "Type", accessor: "Type" },
-    { header: "Header Id", accessor: "Id" },
-    { header: "Contract ID", accessor: "ContractID" },
-    { header: "Start Date", accessor: "StartDate" },
-    { header: "End Date", accessor: "EndDate" },
-    { header: "Active", accessor: "Active" },
-    { header: "1 YR Sales", accessor: "LastYearSales" },
-    { header: "1 YR Sales (traced)", accessor: "YRSalesTracing" },
-    { header: "Last Sale Date", accessor: "LastSaleDate" },
-    { header: "Items On Price List", accessor: "ItemCount" },
-    { header: "Country", accessor: "CountryName" },
+    { header: "Task Id", accessor: "TaskId" },
+    { header: "Task Type", accessor: "TaskTypeName" },
+    { header: "PL Name", accessor: "Name" },
+    { header: "PL Desc", accessor: "Description" },
+    { header: "PL Comment", accessor: "Comments" },
+    { header: "New PL Start Date", accessor: "StartDate" },
+    { header: "# Items", accessor: "ItemCount" },
+    { header: "Qualifiers", accessor: "Active" },
+    { header: "Status", accessor: "LoadStatus" },
+    //{ header: "Action", accessor: "YRSalesTracing" },
   ];
 
-  const fetchData = async (arg:any) => {
-  console.log(arg);
+  const fetchData = async () => {
+  //console.log(arg);
   //setActiveTab(arg);
   try {
     const payload = {
-      viewName: "vw_PriceLists",
+      viewName: "dbo.GetLoadTasks(8375, 5)",
       firstRow: 1,
       lastRow: 10,
-      sortBy: "Id",
+      sortBy: "TaskId",
       sortByDirection: "asc",
-      filter: `AND UserID = 8375 AND (LastYearSales IS NOT NULL AND LastYearSales <> 0)`,
+      filter: ``,
       fieldList: "*",
       timeout: 0
     };
@@ -55,7 +52,7 @@ const PriceLists: React.FC = () => {
 };
 
 useEffect(() => {
-    fetchData('Inprogress');
+    fetchData();
   }, []);
 
   return (
@@ -69,7 +66,7 @@ useEffect(() => {
       {/* <span className="font-medium hover:text-blue-700 cursor-pointer">Inbox</span> */} 
 /
       {/* <FaChevronRight className="text-gray-400 text-xs" /> */}
-      <span className="text-gray-500 font-medium">Price Lists</span>
+      <span className="text-gray-500 font-medium">ERP Load-Recently Loaded</span>
     </nav>
     
         {/* <h2 className="text-xl font-semibold text-blue-700">User Details</h2> */}
@@ -84,7 +81,7 @@ useEffect(() => {
       </div>
       {/* Responsive Table inside the same container */}
       <TableComponent data={inboxData} columns={columns} height="450px" />
-       {inboxData?.length !== 0 &&(
+      {inboxData?.length !== 0 &&(
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
@@ -94,4 +91,4 @@ useEffect(() => {
   );
 };
 
-export default PriceLists;
+export default RecentlyLoaded;

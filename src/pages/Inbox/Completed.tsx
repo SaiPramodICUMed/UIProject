@@ -59,13 +59,13 @@ useEffect(() => {
          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
          <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-4">
       {/* <FaHome className="text-blue-600" /> */}
-      <span className="font-medium hover:text-blue-700 cursor-pointer">Inbox</span>
+      <span className="font-medium">Inbox</span>
 
       {/* <FaChevronRight className="text-gray-400 text-xs" /> */}
       {/* <span className="font-medium hover:text-blue-700 cursor-pointer">Inbox</span> */} 
 /
       {/* <FaChevronRight className="text-gray-400 text-xs" /> */}
-      <span className="text-gray-500 font-medium">Inbox</span>
+      <span className="text-gray-500 font-medium">Completed</span>
     </nav>
     
         {/* <h2 className="text-xl font-semibold text-blue-700">User Details</h2> */}
