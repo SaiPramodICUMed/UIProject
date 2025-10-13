@@ -1,11 +1,58 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export default function layOut({ children }: { children: React.ReactNode }) {
-  const [activeMenu, setActiveMenu] = useState("inbox");
-  const [activeSub, setActiveSub] = useState("inbox");
+  const subitems: any = {
+    inbox: "inbox",
+    pricing: "accounts",
+    strategy: "segmentationAccounts",
+    email: "allMails",
+    admin: "user",
+  };
+  const menusFrom: any = {
+    drafts: "inbox",
+    inprogress: "inbox",
+    completed: "inbox",
+    accounts: "pricing",
+    sites: "pricing",
+    locations: "pricing",
+    segmentationAccounts: "strategy",
+    analysis: "strategy",
+    forecast: "strategy",
+    allMails: "email",
+    archived: "email",
+    unread: "email",
+    user: "admin",
+    transilation: "admin",
+    contrySettings: "admin",
+    templates: "admin",
+    groups:"pricing",
+    priceLists:"pricing",
+    erpLoadCompletedTasks:"pricing",
+    erpLoadAwaitingLoad:"pricing",
+    erpLoadManuallyUpdating:"pricing",
+    erpLoadLettingExpire:"pricing",
+    erpLoadRecentlyLoaded:"pricing",
+    renewalsCalendar:"pricing",
+    targetsAndFloors:"strategy",
+    approvalControls:"strategy",
+    competitors:"strategy",
+    promotions:"strategy",
+  };
+
+  const location = useLocation();
+  const cleanPath = location.pathname.startsWith("/")
+    ? location.pathname.slice(1)
+    : location.pathname;
+  console.log(menusFrom[cleanPath],cleanPath);
+
+  const [activeMenu, setActiveMenu] = useState("");
+  const [activeSub, setActiveSub] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [showSubmenu, setShowSubmenu] = useState(false);
+  
   const navigate = useNavigate();
 
   const activeSUbMenu = (sub: string) => {
@@ -14,17 +61,24 @@ export default function layOut({ children }: { children: React.ReactNode }) {
   };
 
   const activeMenuItem = (menu: string) => {
-    const subitems: any = {
-      inbox: "inbox",
-      pricing: "accounts",
-      strategy: "segmentation",
-      email: "allMails",
-      admin: "user",
-    };
     setActiveMenu(menu);
     setActiveSub(subitems[menu] || "inbox");
     navigate(`/${subitems[menu] || "/inbox"}`);
   };
+
+  useEffect(() => {
+  const path = location.pathname.startsWith("/")
+    ? location.pathname.slice(1)
+    : location.pathname;
+
+  // If we have a mapping (menusFrom[path]) use it, otherwise default to 'inbox'
+  const mainMenu = menusFrom[path] || "inbox";
+  
+  setActiveMenu(mainMenu);
+  setActiveSub(path || "inbox");
+}, [location.pathname]);
+
+
 
   return (
     <div className=" flex flex-col text-gray-800 overflow-hidden">
@@ -47,7 +101,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
               onClick={() => activeMenuItem("inbox")}
               className={
                 "font-medium " +
-                (activeMenu === "inbox"
+                (activeMenu == "inbox"
                   ? "bg-white text-blue-900 font-semibold px-5 py-1 rounded"
                   : " xl:px-2 hover:text-blue-200")
               }
@@ -58,7 +112,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
               onClick={() => activeMenuItem("pricing")}
               className={
                 "font-medium " +
-                (activeMenu === "pricing"
+                (activeMenu == "pricing"
                   ? "bg-white text-blue-900 font-semibold px-5 py-1 rounded"
                   : " xl:px-2 hover:text-blue-200")
               }
@@ -69,7 +123,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
               onClick={() => activeMenuItem("strategy")}
               className={
                 "font-medium " +
-                (activeMenu === "strategy"
+                (activeMenu == "strategy"
                   ? "bg-white text-blue-900 font-semibold px-5 py-1 rounded"
                   : "xl: px-2 hover:text-blue-200")
               }
@@ -80,7 +134,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
               onClick={() => activeMenuItem("email")}
               className={
                 "font-medium " +
-                (activeMenu === "email"
+                (activeMenu == "email"
                   ? "bg-white text-blue-900 font-semibold px-5 py-1 rounded"
                   : " xl:px-2 hover:text-blue-200")
               }
@@ -91,7 +145,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
               onClick={() => activeMenuItem("admin")}
               className={
                 " mr-11 font-medium " +
-                (activeMenu === "admin"
+                (activeMenu == "admin"
                   ? "bg-white text-blue-900 font-semibold px-5 py-1 rounded"
                   : "xl: px-2 hover:text-blue-200")
               }
@@ -101,7 +155,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
             <button
               // onClick={() => activeMenuItem("profile")}
               className={
-                activeMenu === ""
+                activeMenu == ""
                   ? "bg-white text-blue-900 font-semibold px-5 py-1 rounded"
                   : "font-medium flex items-center space-x-2bg-white text-white font-semibold px-5 rounded hover:text-blue-200"
               }
@@ -125,24 +179,24 @@ export default function layOut({ children }: { children: React.ReactNode }) {
       {activeSub && (
         <div className="hidden md:block bg-white shadow-md text-sm">
           <div className="mx-auto px-4 flex space-x-4">
-            {activeMenu === "inbox" && (
+            {activeMenu == "inbox" && (
               <>
                 <button
                   onClick={() => activeSUbMenu("inbox")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "inbox"
+                    (activeSub == "inbox"
                       ? "bg-[#0f59ac] text-white "
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
                 >
                   Inbox
                 </button>
-                <button 
+                <button
                   onClick={() => activeSUbMenu("drafts")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "drafts"
+                    (activeSub == "drafts"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -153,7 +207,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("inprogress")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "inprogress"
+                    (activeSub == "inprogress"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -164,7 +218,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("awaitingResults")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "awaitingResults"
+                    (activeSub == "awaitingResults"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -175,7 +229,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("completed")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "completed"
+                    (activeSub == "completed"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -186,7 +240,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("cancelled")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "cancelled"
+                    (activeSub == "cancelled"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -197,7 +251,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("trash")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "trash"
+                    (activeSub == "trash"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -208,7 +262,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("all")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "all"
+                    (activeSub == "all"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -218,13 +272,13 @@ export default function layOut({ children }: { children: React.ReactNode }) {
               </>
             )}
 
-            {activeMenu === "pricing" && (
+            {activeMenu == "pricing" && (
               <>
                 <button
                   onClick={() => activeSUbMenu("accounts")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "accounts"
+                    (activeSub == "accounts"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -235,7 +289,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("sites")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "sites"
+                    (activeSub == "sites"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -246,7 +300,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("groups")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "groups"
+                    (activeSub == "groups"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -257,29 +311,40 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("priceLists")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "priceLists"
+                    (activeSub == "priceLists"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
                 >
                   Price Lists
                 </button>
-                <button
-                  onClick={() => activeSUbMenu("erpLoadCompletedTasks")}
-                  className={
-                    "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "erpLoadCompletedTasks"
-                      ? "bg-[#0f59ac] text-white"
-                      : "border-transparent hover:border-blue-900 text-gray-700")
-                  }
-                >
-                  ERP Load-Completed Tasks
-                </button>
+        <button
+ // onClick={() => activeSUbMenu("erpLoadCompletedTasks")}
+  className={
+    "px-3 py-2 font-medium border-b-2 relative " +
+    (activeSub == "erpLoadCompletedTasks"
+      ? "bg-[#0f59ac] text-white"
+      : "border-transparent hover:border-blue-900 text-gray-700")
+  }
+  onMouseEnter={() => setShowSubmenu(true)}
+  onMouseLeave={() => setShowSubmenu(false)}
+>
+  ERP Load
+
+  {/* Sub-submenu */}
+  {showSubmenu && (
+    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg border rounded w-48 z-[9999]">
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("erpLoadCompletedTasks")}>Sub Task 1</li>
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("erpLoadCompletedTasks")}>Sub Task 2</li>
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("erpLoadCompletedTasks")}>Sub Task 3</li>
+    </ul>
+  )}
+</button>
                 <button
                   onClick={() => activeSUbMenu("erpLoadAwaitingLoad")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "erpLoadAwaitingLoad"
+                    (activeSub == "erpLoadAwaitingLoad"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -290,7 +355,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("erpLoadManuallyUpdating")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "erpLoadManuallyUpdating"
+                    (activeSub == "erpLoadManuallyUpdating"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -301,18 +366,18 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("erpLoadLettingExpire")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "erpLoadLettingExpire"
+                    (activeSub == "erpLoadLettingExpire"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
                 >
                   ERP Load-Letting Expire
                 </button>
-                 <button
+                <button
                   onClick={() => activeSUbMenu("erpLoadRecentlyLoaded")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "erpLoadRecentlyLoaded"
+                    (activeSub == "erpLoadRecentlyLoaded"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -323,7 +388,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("renewalsCalendar")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "renewalsCalendar"
+                    (activeSub == "renewalsCalendar"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -333,24 +398,24 @@ export default function layOut({ children }: { children: React.ReactNode }) {
               </>
             )}
 
-            {activeMenu === "strategy" && (
+            {activeMenu == "strategy" && (
               <>
                 <button
-                  onClick={() => activeSUbMenu("segmentation")}
+                  onClick={() => activeSUbMenu("segmentationAccounts")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "segmentation"
+                    (activeSub == "segmentationAccounts"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
                 >
-                  Segmentation
+                  Segmentation-Accounts
                 </button>
                 <button
                   onClick={() => activeSUbMenu("targetsAndFloors")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "targetsAndFloors"
+                    (activeSub == "targetsAndFloors"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -361,7 +426,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("approvalControls")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "approvalControls"
+                    (activeSub == "approvalControls"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -372,7 +437,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("competitors")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "competitors"
+                    (activeSub == "competitors"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -383,7 +448,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("promotions")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "promotions"
+                    (activeSub == "promotions"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -392,13 +457,13 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 </button>
               </>
             )}
-            {activeMenu === "email" && (
+            {activeMenu == "email" && (
               <>
                 <button
                   onClick={() => activeSUbMenu("allMails")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "allMails"
+                    (activeSub == "allMails"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -409,7 +474,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("unread")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "unread"
+                    (activeSub == "unread"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -420,7 +485,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("archived ")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "archived "
+                    (activeSub == "archived "
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -429,13 +494,13 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 </button>
               </>
             )}
-            {activeMenu === "admin" && (
+            {activeMenu == "admin" && (
               <>
                 <button
                   onClick={() => activeSUbMenu("user")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "user"
+                    (activeSub == "user"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -446,7 +511,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("transilation")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "transilation"
+                    (activeSub == "transilation"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -457,7 +522,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("contrySettings")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "contrySettings"
+                    (activeSub == "contrySettings"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -468,7 +533,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onClick={() => activeSUbMenu("templates")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "templates"
+                    (activeSub == "templates"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -504,24 +569,24 @@ export default function layOut({ children }: { children: React.ReactNode }) {
           <div>
             <button
               onClick={() =>
-                setActiveMenu(activeMenu === "inbox" ? "" : "inbox")
+                setActiveMenu(activeMenu == "inbox" ? "" : "inbox")
               }
               className={
                 "w-full text-left px-4 py-3 font-medium flex justify-between items-center " +
-                (activeMenu === "inbox"
+                (activeMenu == "inbox"
                   ? "bg-blue-100 text-blue-700"
                   : "hover:bg-gray-100 text-gray-800")
               }
             >
               Inbox
-              <span>{activeMenu === "inbox" ? "▲" : "▼"}</span>
+              <span>{activeMenu == "inbox" ? "▲" : "▼"}</span>
             </button>
-            {activeMenu === "inbox" && (
+            {activeMenu == "inbox" && (
               <div className="bg-gray-50">
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "inbox"
+                    (activeSub == "inbox"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -535,7 +600,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "drafts"
+                    (activeSub == "drafts"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -549,7 +614,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "inprogress"
+                    (activeSub == "inprogress"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -563,7 +628,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "awaitingResults"
+                    (activeSub == "awaitingResults"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -577,7 +642,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "completed"
+                    (activeSub == "completed"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -591,7 +656,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "cancelled"
+                    (activeSub == "cancelled"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -605,7 +670,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "trash"
+                    (activeSub == "trash"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -619,7 +684,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "all"
+                    (activeSub == "all"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -638,24 +703,24 @@ export default function layOut({ children }: { children: React.ReactNode }) {
           <div>
             <button
               onClick={() =>
-                setActiveMenu(activeMenu === "pricing" ? "" : "pricing")
+                setActiveMenu(activeMenu == "pricing" ? "" : "pricing")
               }
               className={
                 "w-full text-left px-4 py-3 font-medium flex justify-between items-center " +
-                (activeMenu === "pricing"
+                (activeMenu == "pricing"
                   ? "bg-blue-100 text-blue-700"
                   : "hover:bg-gray-100 text-gray-800")
               }
             >
               Pricing
-              <span>{activeMenu === "pricing" ? "▲" : "▼"}</span>
+              <span>{activeMenu == "pricing" ? "▲" : "▼"}</span>
             </button>
-            {activeMenu === "pricing" && (
+            {activeMenu == "pricing" && (
               <div className="bg-gray-50">
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "accounts"
+                    (activeSub == "accounts"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -669,7 +734,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "groups"
+                    (activeSub == "groups"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -683,7 +748,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "priceLists"
+                    (activeSub == "priceLists"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -697,7 +762,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "erpLoadCompletedTasks"
+                    (activeSub == "erpLoadCompletedTasks"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -711,7 +776,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "renewalsCalendar"
+                    (activeSub == "renewalsCalendar"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -730,38 +795,38 @@ export default function layOut({ children }: { children: React.ReactNode }) {
           <div>
             <button
               onClick={() =>
-                setActiveMenu(activeMenu === "strategy" ? "" : "strategy")
+                setActiveMenu(activeMenu == "strategy" ? "" : "strategy")
               }
               className={
                 "w-full text-left px-4 py-3 font-medium flex justify-between items-center " +
-                (activeMenu === "strategy"
+                (activeMenu == "strategy"
                   ? "bg-blue-100 text-blue-700"
                   : "hover:bg-gray-100 text-gray-800")
               }
             >
               Strategy
-              <span>{activeMenu === "strategy" ? "▲" : "▼"}</span>
+              <span>{activeMenu == "strategy" ? "▲" : "▼"}</span>
             </button>
-            {activeMenu === "strategy" && (
+            {activeMenu == "strategy" && (
               <div className="bg-gray-50">
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "segmentation"
+                    (activeSub == "segmentationAccounts"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
                   onClick={() => {
-                    activeSUbMenu("segmentation");
+                    activeSUbMenu("segmentationAccounts");
                     setDrawerOpen(false);
                   }}
                 >
-                  Segmentation
+                  segmentation-Accounts
                 </button>
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "targetsAndFloors"
+                    (activeSub == "targetsAndFloors"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -775,7 +840,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "approvalControls"
+                    (activeSub == "approvalControls"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -789,7 +854,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "competitors"
+                    (activeSub == "competitors"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -803,7 +868,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "promotions"
+                    (activeSub == "promotions"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -821,24 +886,24 @@ export default function layOut({ children }: { children: React.ReactNode }) {
           <div>
             <button
               onClick={() =>
-                setActiveMenu(activeMenu === "email" ? "" : "email")
+                setActiveMenu(activeMenu == "email" ? "" : "email")
               }
               className={
                 "w-full text-left px-4 py-3 font-medium flex justify-between items-center " +
-                (activeMenu === "email"
+                (activeMenu == "email"
                   ? "bg-blue-100 text-blue-700"
                   : "hover:bg-gray-100 text-gray-800")
               }
             >
               Email
-              <span>{activeMenu === "email" ? "▲" : "▼"}</span>
+              <span>{activeMenu == "email" ? "▲" : "▼"}</span>
             </button>
-            {activeMenu === "admin" && (
+            {activeMenu == "admin" && (
               <div className="bg-gray-50">
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "allMails"
+                    (activeSub == "allMails"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -852,7 +917,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "unread"
+                    (activeSub == "unread"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -866,7 +931,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "archived "
+                    (activeSub == "archived "
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -884,24 +949,24 @@ export default function layOut({ children }: { children: React.ReactNode }) {
           <div>
             <button
               onClick={() =>
-                setActiveMenu(activeMenu === "admin" ? "" : "admin")
+                setActiveMenu(activeMenu == "admin" ? "" : "admin")
               }
               className={
                 "w-full text-left px-4 py-3 font-medium flex justify-between items-center " +
-                (activeMenu === "admin"
+                (activeMenu == "admin"
                   ? "bg-blue-100 text-blue-700"
                   : "hover:bg-gray-100 text-gray-800")
               }
             >
               Admin
-              <span>{activeMenu === "admin" ? "▲" : "▼"}</span>
+              <span>{activeMenu == "admin" ? "▲" : "▼"}</span>
             </button>
-            {activeMenu === "admin" && (
+            {activeMenu == "admin" && (
               <div className="bg-gray-50">
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "user"
+                    (activeSub == "user"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -915,7 +980,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "transilation"
+                    (activeSub == "transilation"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -929,7 +994,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "contrySettings"
+                    (activeSub == "contrySettings"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -943,7 +1008,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
-                    (activeSub === "templates"
+                    (activeSub == "templates"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
@@ -969,8 +1034,9 @@ export default function layOut({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Main Content */}
-      <div>{children}
-      {/* <main className=" mx-auto px-4 py-8 flex-1">
+      <div>
+        {children}
+        {/* <main className=" mx-auto px-4 py-8 flex-1">
         <h2 className="text-2xl font-bold mb-4">{activeSub}</h2>
         <p>
           You are viewing the <b>{activeSub}</b> section under{" "}
