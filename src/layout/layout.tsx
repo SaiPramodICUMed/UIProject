@@ -17,7 +17,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
     const subitems: any = {
       inbox: "inbox",
       pricing: "accounts",
-      strategy: "segmentation",
+      strategy: "segmentationAccounts",
       email: "allMails",
       admin: "user",
     };
@@ -336,15 +336,26 @@ export default function layOut({ children }: { children: React.ReactNode }) {
             {activeMenu === "strategy" && (
               <>
                 <button
-                  onClick={() => activeSUbMenu("segmentation")}
+                  onClick={() => activeSUbMenu("segmentationAccounts")}
                   className={
                     "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub === "segmentation"
+                    (activeSub === "segmentationAccounts"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
                 >
-                  Segmentation
+                  Segmentation-Accounts
+                </button>
+                <button
+                  onClick={() => activeSUbMenu("segmentationGroups")}
+                  className={
+                    "px-3 py-2 font-medium border-b-2 " +
+                    (activeSub === "segmentationGroups"
+                      ? "bg-[#0f59ac] text-white"
+                      : "border-transparent hover:border-blue-900 text-gray-700")
+                  }
+                >
+                  Segmentation-Groups
                 </button>
                 <button
                   onClick={() => activeSUbMenu("targetsAndFloors")}

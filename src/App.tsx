@@ -20,6 +20,9 @@ import AwaitingLoad from "./pages/Pricing/ERPLoad/AwaitingLoad";
 import ManuallyUpdating from "./pages/Pricing/ERPLoad/ManuallyUpdating";
 import LettingExpire from "./pages/Pricing/ERPLoad/LettingExpire";
 import RecentlyLoaded from "./pages/Pricing/ERPLoad/RecentlyLoaded";
+import SegmentationAccounts from "./pages/Strategy/Segmentation/Accounts";
+import SegmentationGroups from "./pages/Strategy/Segmentation/Groups";
+import TargetsAndFloors from "./pages/Strategy/TargetsAndFloors";
 
 function App() {
   
@@ -48,6 +51,9 @@ function App() {
       <Route path="/erpLoadManuallyUpdating" element={< ManuallyUpdating/>} />
       <Route path="/erpLoadLettingExpire" element={< LettingExpire/>} />
       <Route path="/erpLoadRecentlyLoaded" element={< RecentlyLoaded/>} />
+      <Route path="/segmentationAccounts" element={< SegmentationAccounts/>} />
+      <Route path="/segmentationGroups" element={< SegmentationGroups/>} />
+      <Route path="/targetsAndFloors" element={< TargetsAndFloors/>} />
     </Routes>
     </LayOut>
     </Router>
