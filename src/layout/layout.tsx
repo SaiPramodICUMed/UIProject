@@ -47,7 +47,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
   const cleanPath = location.pathname.startsWith("/")
     ? location.pathname.slice(1)
     : location.pathname;    
-  if (cleanPath === "login' || cleanPath === '") {
+  if (cleanPath === "login" || cleanPath === "") {
     return <>{children}</>;
   }
 
