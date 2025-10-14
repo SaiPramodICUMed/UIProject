@@ -60,7 +60,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
   const [showSegmentation,setShowSegmentation]=useState(false);
   const [showErpLoad,setShowErpLoad]=useState(false)
   const [showAccounts, setShowAccounts] = useState(false);
-  const [showRenewvals,setshowRenewvals]=useState(false);
+  //const [showRenewvals,setshowRenewvals]=useState(false);
 
   const navigate = useNavigate();
 
