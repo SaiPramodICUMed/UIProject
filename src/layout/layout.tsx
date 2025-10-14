@@ -46,7 +46,11 @@ export default function layOut({ children }: { children: React.ReactNode }) {
   const cleanPath = location.pathname.startsWith("/")
     ? location.pathname.slice(1)
     : location.pathname;
-  console.log(menusFrom[cleanPath],cleanPath);
+    if (cleanPath === 'login') {
+    return <>{children}</>;
+  }
+    
+  //console.log(menusFrom[cleanPath],cleanPath);
 
   const [activeMenu, setActiveMenu] = useState("");
   const [activeSub, setActiveSub] = useState("");
@@ -54,6 +58,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
   const [showSubmenu, setShowSubmenu] = useState(false);
   
   const navigate = useNavigate();
+  
 
   const activeSUbMenu = (sub: string) => {
     setActiveSub(sub);
@@ -77,6 +82,8 @@ export default function layOut({ children }: { children: React.ReactNode }) {
   setActiveMenu(mainMenu);
   setActiveSub(path || "inbox");
 }, [location.pathname]);
+
+
 
 
 

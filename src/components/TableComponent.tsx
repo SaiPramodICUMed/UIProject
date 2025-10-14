@@ -17,7 +17,7 @@ const TableComponent: React.FC<TableProps> = ({
     key: string;
     direction: "asc" | "desc";
   } | null>(null);
-  console.log(color)
+  //console.log(color)
   const handleRowClick = (row: Record<string, any>) => {
     console.log("Row clicked:", row);
   };

@@ -28,6 +28,7 @@ import RenewalAll from "./pages/Pricing/RenewalsCalendar/All";
 import Error from "./pages/Pricing/RenewalsCalendar/Error";
 import Expired from "./pages/Pricing/RenewalsCalendar/Expired";
 import Manual from "./pages/Pricing/RenewalsCalendar/Manual";
+import Login from "./pages/login";
 
 function App() {
   
@@ -64,6 +65,7 @@ function App() {
       <Route path="/error" element={< Error/>} />
       <Route path="/expired" element={< Expired/>} />
       <Route path="/manual" element={< Manual/>} />
+      <Route path="/login" element={<Login/>}/>
     </Routes>
     </LayOut>
     </Router>
