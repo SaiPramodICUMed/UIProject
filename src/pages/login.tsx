@@ -1,4 +1,6 @@
 import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -8,8 +10,37 @@ export default function Login() {
   const isFormValid = username.trim() !== "" && password.trim() !== "";
 
   const handleLogin = (e: React.FormEvent) => {
+    getUserDetails();
     e.preventDefault();
-    alert(`Logged in as: ${username}`);
+    localStorage.setItem("username",username);
+    navigate('/inbox');
+    //alert(`Logged in as: ${username}`);
+  };
+const navigate = useNavigate();
+
+const getUserDetails = async () => {    
+  //  setLoading(true);
+    //setActiveTab(arg);
+    try {
+      const payload = {
+        email: username,
+        password: password
+      };
+
+      // 👈 second argument is the body (data)
+      const response = await axios.post(
+        `https://10.2.6.130:5000/api/Login/login`,
+        payload,
+        { headers: { "Content-Type": "application/json" } } // optional config
+      );
+
+      console.log("API Response:", response.data);
+      //setInboxData(response.data);      
+      return response.data;
+    } catch (error: any) {
+      console.error("Error fetching data:", error.message);
+      return null;
+    }
   };
 
   return (
@@ -38,7 +69,7 @@ export default function Login() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter username"
+              placeholder="Enter User name"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0070C0] focus:outline-none"
             />
           </div>
@@ -53,7 +84,7 @@ export default function Login() {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password"
+                placeholder="Enter Password"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0070C0] focus:outline-none pr-10"
               />
               <button

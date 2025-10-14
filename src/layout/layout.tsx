@@ -45,8 +45,8 @@ export default function layOut({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const cleanPath = location.pathname.startsWith("/")
     ? location.pathname.slice(1)
-    : location.pathname;
-    if (cleanPath === 'login') {
+    : location.pathname;    
+    if (cleanPath === 'login' || cleanPath === '') {
     return <>{children}</>;
   }
     
@@ -168,7 +168,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
               }
             >
               <FaUserCircle className="text-2xl  m-2" />
-              <span>John Doe</span>
+              <span>{localStorage.getItem("username")}</span>
             </button>
           </div>
 

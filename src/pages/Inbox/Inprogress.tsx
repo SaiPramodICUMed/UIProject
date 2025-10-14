@@ -38,7 +38,7 @@ const Inprogress: React.FC = () => {
 
   const fetchData = async (arg: any,start:number,end:number) => {
     console.log(arg,start,end);
-  //  setLoading(true);
+    setLoading(true);
     //setActiveTab(arg);
     try {
       const payload = {

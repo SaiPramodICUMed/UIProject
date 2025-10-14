@@ -39,7 +39,7 @@ function App() {
     <Router>
     <LayOut>
      <Routes>
-      <Route path="/" element={< Inbox/>} />
+      <Route path="/" element={< Login/>} />
       <Route path="/inbox" element={< Inbox/>} />
       <Route path="/inprogress" element={< Inprogress/>} />
       <Route path="/awaitingResults" element={< AwaitingResults/>} />
