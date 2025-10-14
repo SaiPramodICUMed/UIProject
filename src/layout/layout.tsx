@@ -28,37 +28,41 @@ export default function layOut({ children }: { children: React.ReactNode }) {
     transilation: "admin",
     contrySettings: "admin",
     templates: "admin",
-    groups:"pricing",
-    priceLists:"pricing",
-    erpLoadCompletedTasks:"pricing",
-    erpLoadAwaitingLoad:"pricing",
-    erpLoadManuallyUpdating:"pricing",
-    erpLoadLettingExpire:"pricing",
-    erpLoadRecentlyLoaded:"pricing",
-    renewalsCalendar:"pricing",
-    targetsAndFloors:"strategy",
-    approvalControls:"strategy",
-    competitors:"strategy",
-    promotions:"strategy",
+    groups: "pricing",
+    priceLists: "pricing",
+    erpLoadCompletedTasks: "pricing",
+    erpLoadAwaitingLoad: "pricing",
+    erpLoadManuallyUpdating: "pricing",
+    erpLoadLettingExpire: "pricing",
+    erpLoadRecentlyLoaded: "pricing",
+    renewalsCalendar: "pricing",
+    targetsAndFloors: "strategy",
+    approvalControls: "strategy",
+    competitors: "strategy",
+    promotions: "strategy",
+    aboutToExpire:"pricing"
   };
 
   const location = useLocation();
   const cleanPath = location.pathname.startsWith("/")
     ? location.pathname.slice(1)
     : location.pathname;    
-    if (cleanPath === 'login' || cleanPath === '') {
+  if (cleanPath === "login' || cleanPath === '") {
     return <>{children}</>;
   }
-    
+
   //console.log(menusFrom[cleanPath],cleanPath);
 
   const [activeMenu, setActiveMenu] = useState("");
   const [activeSub, setActiveSub] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [showSubmenu, setShowSubmenu] = useState(false);
-  
+  //const [showSubmenu, setShowSubmenu] = useState(false);
+  const [showSegmentation,setShowSegmentation]=useState(false);
+  const [showErpLoad,setShowErpLoad]=useState(false)
+  const [showAccounts, setShowAccounts] = useState(false);
+  const [showRenewvals,setshowRenewvals]=useState(false);
+
   const navigate = useNavigate();
-  
 
   const activeSUbMenu = (sub: string) => {
     setActiveSub(sub);
@@ -72,20 +76,16 @@ export default function layOut({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-  const path = location.pathname.startsWith("/")
-    ? location.pathname.slice(1)
-    : location.pathname;
+    const path = location.pathname.startsWith("/")
+      ? location.pathname.slice(1)
+      : location.pathname;
 
-  // If we have a mapping (menusFrom[path]) use it, otherwise default to 'inbox'
-  const mainMenu = menusFrom[path] || "inbox";
-  
-  setActiveMenu(mainMenu);
-  setActiveSub(path || "inbox");
-}, [location.pathname]);
+    // If we have a mapping (menusFrom[path]) use it, otherwise default to 'inbox'
+    const mainMenu = menusFrom[path] || "inbox";
 
-
-
-
+    setActiveMenu(mainMenu);
+    setActiveSub(path || "inbox");
+  }, [location.pathname]);
 
   return (
     <div className=" flex flex-col text-gray-800 overflow-hidden">
@@ -184,7 +184,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
 
       {/* Submenu (Desktop) */}
       {activeSub && (
-        <div className="hidden md:block bg-white shadow-md text-sm">
+        <div className="hidden md:block bg-white shadow-md text-sm ">
           <div className="mx-auto px-4 flex space-x-4">
             {activeMenu == "inbox" && (
               <>
@@ -284,22 +284,32 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   // onClick={() => activeSUbMenu("accounts")}
                   className={
-                    "px-3 py-2 font-medium border-b-2 relative" +
+                    "px-3 py-2 font-medium border-b-2 relative " +
                     (activeSub == "accounts"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
-                  onMouseEnter={() => setShowSubmenu(true)}
-                  onMouseLeave={() => setShowSubmenu(false)}
+                  onMouseEnter={() => setShowAccounts(true)}
+                  onMouseLeave={() => setShowAccounts(false)}
                 >
                   Accounts
-                  {showSubmenu && (
-    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg border rounded w-48 z-[9999]">
-      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("accounts")}>Account</li>
-      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("sites")}>Site</li>     
-    </ul>
-  )}
-                </button>              
+                  {showAccounts && (
+                    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg rounded w-48 z-[9999]">
+                      <li
+                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        onClick={() => activeSUbMenu("accounts")}
+                      >
+                        Account
+                      </li>
+                      <li
+                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        onClick={() => activeSUbMenu("sites")}
+                      >
+                        Site
+                      </li>
+                    </ul>
+                  )}
+                </button> 
                 <button
                   onClick={() => activeSUbMenu("groups")}
                   className={
@@ -322,40 +332,67 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 >
                   Price Lists
                 </button>
-        <button 
-  className={
-    "px-3 py-2 font-medium border-b-2 relative " +
-    (activeSub == "erpLoadCompletedTasks"
-      ? "bg-[#0f59ac] text-white"
-      : "border-transparent hover:border-blue-900 text-gray-700")
-  }
-  onMouseEnter={() => setShowSubmenu(true)}
-  onMouseLeave={() => setShowSubmenu(false)}
->
-  ERP Load
-
-  {/* Sub-submenu */}
-  {showSubmenu && (
-    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg border rounded w-48 z-[9999]">
-      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("erpLoadCompletedTasks")}>Completed Tasks</li>
-      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("erpLoadAwaitingLoad")}>Awaiting Load</li>
-      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("erpLoadManuallyUpdating")}>Manually Updating</li>
-      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("erpLoadLettingExpire")}>Letting Expire</li>
-      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("erpLoadRecentlyLoaded")}>Recently Loaded</li>
-    </ul>
-  )}
-</button>              
                 <button
-                  // onClick={() => activeSUbMenu("renewalsCalendar")}
                   className={
-                    "px-3 py-2 font-medium border-b-2 relative" +
+                    "px-3 py-2 font-medium border-b-2 relative " +
+                    (activeSub == "erpLoadCompletedTasks"
+                      ? "bg-[#0f59ac] text-white"
+                      : "border-transparent hover:border-blue-900 text-gray-700")
+                  }
+                  onMouseEnter={() => setShowErpLoad(true)}
+                  onMouseLeave={() => setShowErpLoad(false)}
+                >
+                  ERP Load
+                  {/* Sub-submenu */}
+                  {showErpLoad && (
+                    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg border rounded w-48 z-[9999]">
+                      <li
+                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        onClick={() => activeSUbMenu("erpLoadCompletedTasks")}
+                      >
+                        Completed Tasks
+                      </li>
+                      <li
+                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        onClick={() => activeSUbMenu("erpLoadAwaitingLoad")}
+                      >
+                        Awaiting Load
+                      </li>
+                      <li
+                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        onClick={() => activeSUbMenu("erpLoadManuallyUpdating")}
+                      >
+                        Manually Updating
+                      </li>
+                      <li
+                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        onClick={() => activeSUbMenu("erpLoadLettingExpire")}
+                      >
+                        Letting Expire
+                      </li>
+                      <li
+                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        onClick={() => activeSUbMenu("erpLoadRecentlyLoaded")}
+                      >
+                        Recently Loaded
+                      </li>
+                    </ul>
+                  )}
+                </button>
+                {/* <button
+                 // onClick={() => activeSUbMenu("renewalsCalendar")}
+                   className={
+                    "px-3 py-2 font-medium border-b-2 relative " +
                     (activeSub == "renewalsCalendar"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
+                  onMouseEnter={() => setshowRenewvals(true)}
+                  onMouseLeave={() => setshowRenewvals(false)}
+     
                 >
                   Renewals Calendar
-                  {showSubmenu && (
+                  {showRenewvals && (
     <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg border rounded w-48 z-[9999]">
       <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("aboutToExpire")}>About to expire</li>
       <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("expired")}>Expired</li>
@@ -364,7 +401,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
       <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("renewalAll")}>All</li>
     </ul>
   )}
-                </button>
+                </button> */}
               </>
             )}
 
@@ -372,20 +409,32 @@ export default function layOut({ children }: { children: React.ReactNode }) {
               <>
                 <button
                   // onClick={() => activeSUbMenu("segmentationAccounts")}
-                  className={
-                    "px-3 py-2 font-medium border-b-2 relative" +
-                    (activeSub == "segmentationAccounts"
+                 className={
+                    "px-3 py-2 font-medium border-b-2 relative " +
+                    (activeSub == "segmentation"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
+                   onMouseEnter={() => setShowSegmentation(true)}
+                  onMouseLeave={() => setShowSegmentation(false)}
                 >
                   Segmentation
-                  {showSubmenu && (
-    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg border rounded w-48 z-[9999]">
-      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("segmentationAccounts")}>Accounts</li>
-      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("segmentationGroups")}>Groups</li>    
-    </ul>
-  )}
+                  {showSegmentation && (
+                    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg border rounded w-48 z-[9999]">
+                      <li
+                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        onClick={() => activeSUbMenu("segmentationAccounts")}
+                      >
+                        Accounts
+                      </li>
+                      <li
+                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        onClick={() => activeSUbMenu("segmentationGroups")}
+                      >
+                        Groups
+                      </li>
+                    </ul>
+                  )}
                 </button>
                 <button
                   onClick={() => activeSUbMenu("targetsAndFloors")}
