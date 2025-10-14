@@ -33,7 +33,7 @@ const Inprogress: React.FC = () => {
       const payload = {
         viewName: "dbo.Inbox_Tasks(8375)",
         firstRow: 1,
-        lastRow: 10,
+        lastRow: 20,
         sortBy: "DeadlineOrdered",
         sortByDirection: "asc",
         filter: `AND (  1 <> 1  OR tab = '${arg}' )  AND tab = '${arg}'`,

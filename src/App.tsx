@@ -23,6 +23,11 @@ import RecentlyLoaded from "./pages/Pricing/ERPLoad/RecentlyLoaded";
 import SegmentationAccounts from "./pages/Strategy/Segmentation/Accounts";
 import SegmentationGroups from "./pages/Strategy/Segmentation/Groups";
 import TargetsAndFloors from "./pages/Strategy/TargetsAndFloors";
+import AboutToExpire from "./pages/Pricing/RenewalsCalendar/AboutToExpire";
+import RenewalAll from "./pages/Pricing/RenewalsCalendar/All";
+import Error from "./pages/Pricing/RenewalsCalendar/Error";
+import Expired from "./pages/Pricing/RenewalsCalendar/Expired";
+import Manual from "./pages/Pricing/RenewalsCalendar/Manual";
 
 function App() {
   
@@ -54,6 +59,11 @@ function App() {
       <Route path="/segmentationAccounts" element={< SegmentationAccounts/>} />
       <Route path="/segmentationGroups" element={< SegmentationGroups/>} />
       <Route path="/targetsAndFloors" element={< TargetsAndFloors/>} />
+      <Route path="/aboutToExpire" element={< AboutToExpire/>} />
+      <Route path="/renewalAll" element={< RenewalAll/>} />
+      <Route path="/error" element={< Error/>} />
+      <Route path="/expired" element={< Expired/>} />
+      <Route path="/manual" element={< Manual/>} />
     </Routes>
     </LayOut>
     </Router>

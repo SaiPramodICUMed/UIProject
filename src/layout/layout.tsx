@@ -275,27 +275,24 @@ export default function layOut({ children }: { children: React.ReactNode }) {
             {activeMenu == "pricing" && (
               <>
                 <button
-                  onClick={() => activeSUbMenu("accounts")}
+                  // onClick={() => activeSUbMenu("accounts")}
                   className={
-                    "px-3 py-2 font-medium border-b-2 " +
+                    "px-3 py-2 font-medium border-b-2 relative" +
                     (activeSub == "accounts"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
+                  onMouseEnter={() => setShowSubmenu(true)}
+                  onMouseLeave={() => setShowSubmenu(false)}
                 >
                   Accounts
-                </button>
-                <button
-                  onClick={() => activeSUbMenu("sites")}
-                  className={
-                    "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub == "sites"
-                      ? "bg-[#0f59ac] text-white"
-                      : "border-transparent hover:border-blue-900 text-gray-700")
-                  }
-                >
-                  Sites
-                </button>
+                  {showSubmenu && (
+    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg border rounded w-48 z-[9999]">
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("accounts")}>Account</li>
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("sites")}>Site</li>     
+    </ul>
+  )}
+                </button>              
                 <button
                   onClick={() => activeSUbMenu("groups")}
                   className={
@@ -318,8 +315,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 >
                   Price Lists
                 </button>
-        <button
- // onClick={() => activeSUbMenu("erpLoadCompletedTasks")}
+        <button 
   className={
     "px-3 py-2 font-medium border-b-2 relative " +
     (activeSub == "erpLoadCompletedTasks"
@@ -334,66 +330,33 @@ export default function layOut({ children }: { children: React.ReactNode }) {
   {/* Sub-submenu */}
   {showSubmenu && (
     <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg border rounded w-48 z-[9999]">
-      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("erpLoadCompletedTasks")}>Sub Task 1</li>
-      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("erpLoadCompletedTasks")}>Sub Task 2</li>
-      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("erpLoadCompletedTasks")}>Sub Task 3</li>
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("erpLoadCompletedTasks")}>Completed Tasks</li>
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("erpLoadAwaitingLoad")}>Awaiting Load</li>
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("erpLoadManuallyUpdating")}>Manually Updating</li>
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("erpLoadLettingExpire")}>Letting Expire</li>
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("erpLoadRecentlyLoaded")}>Recently Loaded</li>
     </ul>
   )}
-</button>
+</button>              
                 <button
-                  onClick={() => activeSUbMenu("erpLoadAwaitingLoad")}
+                  // onClick={() => activeSUbMenu("renewalsCalendar")}
                   className={
-                    "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub == "erpLoadAwaitingLoad"
-                      ? "bg-[#0f59ac] text-white"
-                      : "border-transparent hover:border-blue-900 text-gray-700")
-                  }
-                >
-                  ERP Load-Awaiting Load
-                </button>
-                <button
-                  onClick={() => activeSUbMenu("erpLoadManuallyUpdating")}
-                  className={
-                    "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub == "erpLoadManuallyUpdating"
-                      ? "bg-[#0f59ac] text-white"
-                      : "border-transparent hover:border-blue-900 text-gray-700")
-                  }
-                >
-                  ERP Load-Manually Updating
-                </button>
-                <button
-                  onClick={() => activeSUbMenu("erpLoadLettingExpire")}
-                  className={
-                    "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub == "erpLoadLettingExpire"
-                      ? "bg-[#0f59ac] text-white"
-                      : "border-transparent hover:border-blue-900 text-gray-700")
-                  }
-                >
-                  ERP Load-Letting Expire
-                </button>
-                <button
-                  onClick={() => activeSUbMenu("erpLoadRecentlyLoaded")}
-                  className={
-                    "px-3 py-2 font-medium border-b-2 " +
-                    (activeSub == "erpLoadRecentlyLoaded"
-                      ? "bg-[#0f59ac] text-white"
-                      : "border-transparent hover:border-blue-900 text-gray-700")
-                  }
-                >
-                  ERP Load-Recently Loaded
-                </button>
-                <button
-                  onClick={() => activeSUbMenu("renewalsCalendar")}
-                  className={
-                    "px-3 py-2 font-medium border-b-2 " +
+                    "px-3 py-2 font-medium border-b-2 relative" +
                     (activeSub == "renewalsCalendar"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
                 >
                   Renewals Calendar
+                  {showSubmenu && (
+    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg border rounded w-48 z-[9999]">
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("aboutToExpire")}>About to expire</li>
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("expired")}>Expired</li>
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("manual")}>Manual</li>
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("error")}>Error</li>
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("renewalAll")}>All</li>
+    </ul>
+  )}
                 </button>
               </>
             )}
@@ -401,15 +364,21 @@ export default function layOut({ children }: { children: React.ReactNode }) {
             {activeMenu == "strategy" && (
               <>
                 <button
-                  onClick={() => activeSUbMenu("segmentationAccounts")}
+                  // onClick={() => activeSUbMenu("segmentationAccounts")}
                   className={
-                    "px-3 py-2 font-medium border-b-2 " +
+                    "px-3 py-2 font-medium border-b-2 relative" +
                     (activeSub == "segmentationAccounts"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
                 >
-                  Segmentation-Accounts
+                  Segmentation
+                  {showSubmenu && (
+    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg border rounded w-48 z-[9999]">
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("segmentationAccounts")}>Accounts</li>
+      <li className="px-4 py-2 border hover:bg-blue-100 cursor-pointer" onClick={() => activeSUbMenu("segmentationGroups")}>Groups</li>    
+    </ul>
+  )}
                 </button>
                 <button
                   onClick={() => activeSUbMenu("targetsAndFloors")}
