@@ -3,7 +3,7 @@ import TableComponent from "../../components/TableComponent";
 import Pagination from "../../components/PageNation";
 import axios from "axios";
 import Loader from "../../components/loader";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 //import data from "../../../data.json";
 
 const Inprogress: React.FC = () => {
