@@ -23,9 +23,7 @@ const user = useSelector((state:any) => state.user.users);
 const dispatch=useDispatch()
 console.log(user);
 
-const getUserDetails = async () => {    
-
-     
+const getUserDetails = async () => {         
     try {
       const payload = {
         email: username,

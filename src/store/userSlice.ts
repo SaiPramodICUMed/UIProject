@@ -1,14 +1,48 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface UserState {
-  a: number;
-  b:number;
-  c:number;
-  // Add other user properties as needed
+  activeCountryId: number;
+  activityStatus: number;
+  changeReportAlert: boolean;
+  commentsAlert: boolean;
+  country: string;
+  coverMessage: string | null;
+  coverMode: number;
+  cultureCode: string;
+  cultureCodeId: number;
+  currencyCode: string;
+  currencyFormat: string;
+  email: string;
+  enableEmail: boolean;
+  extViewOptions: string | null;
+  generalActionAlert: boolean;
+  gridPageSize: number;
+  isAdmin: boolean;
+  numberFormatId: number;
+  rate: number;
+  regionId: number;
+  roleId: number;
+  strategyTabAccess: string;
+  summaryReportType: string | null;
+  taskOpenNewTab: boolean;
+  timeZone: string;
+  userGroup: string | null;
+  userId: number;
+  userName: string;
+  userRole: string;
+  viewAllSpotCodes: boolean;  
+}
+
+interface InboxTaskCountsResponse {
+  awaitingResults: number;
+  draft: number;
+  inProgress: number;
+  inbox: number;
 }
 
 let initialState: any = {
   users: [{ }],
+  taskCount: { },
 };
 
 const userSlice = createSlice({
@@ -18,6 +52,10 @@ const userSlice = createSlice({
     addUser: (state, action:PayloadAction<UserState>) => {
       //state.users.push(action.payload);
        state.users={...action.payload};
+    },
+    addTaskCount: (state, action:PayloadAction<InboxTaskCountsResponse>) => {
+      //state.users.push(action.payload);
+       state.taskCount={...action.payload};
     },
     // removeUser: (state, action) => {
     //   state.users = state.users.filter(u => u.id !== action.payload);
@@ -37,6 +75,6 @@ const userSlice = createSlice({
 }
 });
 
-export const { addUser} = userSlice.actions;
+export const { addUser,addTaskCount} = userSlice.actions;
 
 export default userSlice.reducer;

@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { addTaskCount } from "../store/userSlice";
 
 export default function layOut({ children }: { children: React.ReactNode }) {
   const subitems: any = {
@@ -71,14 +74,15 @@ export default function layOut({ children }: { children: React.ReactNode }) {
     "erpLoadRecentlyLoaded",
     "erpLoadCompletedTasks"
   ];
-
+  const dispatch=useDispatch();
   const navigate = useNavigate();
-
+  const user = useSelector((state:any) => state.user.users);
+  console.log('reduxData', user);
   const activeSUbMenu = (sub: string) => {
     setActiveSub(sub);
     navigate(`/${sub}`);
   };
-
+  const taskCount = useSelector((state:any) => state.user.taskCount);
   const activeMenuItem = (menu: string) => {
     setActiveMenu(menu);
     setActiveSub(subitems[menu] || "inbox");
@@ -96,6 +100,27 @@ export default function layOut({ children }: { children: React.ReactNode }) {
     setActiveMenu(mainMenu);
     setActiveSub(path || "inbox");
   }, [location.pathname]);
+
+ const fetchTasksCount = async () => {
+  try {
+   
+    const response = await axios.get(
+      `https://vm-www-dprice01.icumed.com:5000/api/Inbox/taskCounts/8375`,       
+      { headers: { "Content-Type": "application/json" } } // optional config
+    );
+
+    console.log("Task count API Response:", response.data);    
+    dispatch(addTaskCount(response.data));
+    return response.data;
+  } catch (error: any) {
+    console.error("Error fetching data:", error.message);
+    return null;
+  }
+};
+
+useEffect(() => {    
+    fetchTasksCount();
+  }, []);
 
   return (
     <div className=" flex flex-col text-gray-800 overflow-hidden">
@@ -178,7 +203,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
               }
             >
               <FaUserCircle className="text-2xl  m-2" />
-              <span>{localStorage.getItem("username")}</span>
+              <span>{user.userName}</span>
             </button>
           </div>
 
@@ -207,7 +232,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
                 >
-                  Inbox
+                  Inbox ({taskCount.inbox})
                 </button>
                 <button
                   onClick={() => activeSUbMenu("drafts")}
@@ -218,7 +243,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
                 >
-                  Drafts
+                  Drafts ({taskCount.draft})
                 </button>
                 <button
                   onClick={() => activeSUbMenu("inprogress")}
@@ -229,7 +254,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
                 >
-                  In progress
+                  In progress ({taskCount.inProgress})
                 </button>
                 <button
                   onClick={() => activeSUbMenu("awaitingResults")}
@@ -240,7 +265,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
                 >
-                  Awaiting Results
+                  Awaiting Results ({taskCount.awaitingResults})
                 </button>
                 <button
                   onClick={() => activeSUbMenu("completed")}

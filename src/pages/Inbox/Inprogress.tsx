@@ -3,24 +3,26 @@ import TableComponent from "../../components/TableComponent";
 import Pagination from "../../components/PageNation";
 import axios from "axios";
 import Loader from "../../components/loader";
+import { useSelector, useDispatch } from "react-redux";
 //import data from "../../../data.json";
 
 const Inprogress: React.FC = () => {
+  const user = useSelector((state:any) => state.user.users);
   const [currentPage, setCurrentPage] = useState(1);
   const [inboxData, setInboxData] = useState([]);
   const [loading,setLoading]=useState(false);
   const total_records=5323;
-  const intervel=25;
-   const totalPages =  Math.ceil(total_records / intervel);
+  //const intervel=user.gridPageSize;
+   const totalPages =  Math.ceil(total_records / user.gridPageSize);
 
    const setPageChange =(pageNumber:any)=>{
         setCurrentPage(pageNumber)
-        let start=(pageNumber-1)*intervel+1;
-        let end=pageNumber*intervel;
+        let start=(pageNumber-1)*user.gridPageSize+1;
+        let end=pageNumber*user.gridPageSize;
         console.log(start,end);
 
    }
-
+ 
   const columns = [
     { header: "Task Name", accessor: "Name" },
     { header: "Task Type", accessor: "TaskType" },
@@ -42,7 +44,7 @@ const Inprogress: React.FC = () => {
     //setActiveTab(arg);
     try {
       const payload = {
-        viewName: "dbo.Inbox_Tasks(8375)",
+        viewName: `dbo.Inbox_Tasks(${user.userId})`,
         firstRow: 1,
         lastRow: 20,
         sortBy: "DeadlineOrdered",
