@@ -69,6 +69,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
     "erpLoadManuallyUpdating",
     "erpLoadLettingExpire",
     "erpLoadRecentlyLoaded",
+    "erpLoadCompletedTasks"
   ];
 
   const navigate = useNavigate();
