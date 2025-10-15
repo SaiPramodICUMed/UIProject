@@ -329,7 +329,7 @@ useEffect(() => {
                 >
                   Accounts
                   {showAccounts && (
-                    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg rounded w-48 z-[9999]">
+                    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white border shadow-lg rounded w-48 z-[9999]">
                       <li
                         className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
                         onClick={() => activeSUbMenu("accounts")}
@@ -381,9 +381,9 @@ useEffect(() => {
                   ERP Load
                   {/* Sub-submenu */}
                   {showErpLoad && (
-                    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg border rounded w-48 z-[9999]">
+                    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] border bg-white shadow-lg  rounded w-48 z-[9999]">
                       <li
-                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        className="px-4 py-2 border border  hover:bg-blue-100 cursor-pointer"
                         onClick={() => activeSUbMenu("erpLoadCompletedTasks")}
                       >
                         Completed Tasks
