@@ -219,7 +219,7 @@ useEffect(() => {
 
       {/* Submenu (Desktop) */}
       {activeSub && (
-        <div className="hidden md:block bg-white shadow-md text-sm ">
+        <div className="hidden md:block bg-white text-sm shadow-md shadow-gray-300 mb-4">
           <div className="mx-auto px-4 flex space-x-4">
             {activeMenu == "inbox" && (
               <>
