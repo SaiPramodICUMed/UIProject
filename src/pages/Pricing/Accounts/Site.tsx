@@ -65,7 +65,7 @@ useEffect(() => {
 
       {/* <FaChevronRight className="text-gray-400 text-xs" /> */}
       {/* <span className="font-medium hover:text-blue-700 cursor-pointer">Inbox</span> */} 
-/
+/ <span className="font-medium">Account</span>/
       {/* <FaChevronRight className="text-gray-400 text-xs" /> */}
       <span className="text-gray-500 font-medium">Sites</span>
     </nav>

@@ -1,6 +1,7 @@
 import "tailwindcss";
 import './App.css'
-//import Sidebar from "./components/Sidebar";
+import { Provider } from "react-redux";
+import store from "./store/store";
 import LayOut from "./layout/layout";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Inbox from "./pages/Inbox/Inbox";
@@ -36,6 +37,7 @@ function App() {
   return (
     <>
     {/* <Sidebar/> */}
+     <Provider store={store}>
     <Router>
     <LayOut>
      <Routes>
@@ -69,7 +71,7 @@ function App() {
     </Routes>
     </LayOut>
     </Router>
-      
+      </Provider>
     </>
   )
 }

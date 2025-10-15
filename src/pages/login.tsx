@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { addUser } from "../store/userSlice";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -17,10 +19,13 @@ export default function Login() {
     //alert(`Logged in as: ${username}`);
   };
 const navigate = useNavigate();
+const user = useSelector((state:any) => state.user.users);
+const dispatch=useDispatch()
+console.log(user);
 
 const getUserDetails = async () => {    
-  //  setLoading(true);
-    //setActiveTab(arg);
+
+     
     try {
       const payload = {
         email: username,
@@ -35,6 +40,7 @@ const getUserDetails = async () => {
       );
 
       console.log("API Response:", response.data);
+       dispatch(addUser(response.data));
       //setInboxData(response.data);      
       return response.data;
     } catch (error: any) {

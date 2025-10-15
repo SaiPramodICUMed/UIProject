@@ -19,6 +19,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
     sites: "pricing",
     locations: "pricing",
     segmentationAccounts: "strategy",
+    segmentationGroups: "strategy",
     analysis: "strategy",
     forecast: "strategy",
     allMails: "email",
@@ -40,27 +41,35 @@ export default function layOut({ children }: { children: React.ReactNode }) {
     approvalControls: "strategy",
     competitors: "strategy",
     promotions: "strategy",
-    aboutToExpire:"pricing"
+    aboutToExpire: "pricing",
   };
 
   const location = useLocation();
   const cleanPath = location.pathname.startsWith("/")
     ? location.pathname.slice(1)
-    : location.pathname;    
+    : location.pathname;
   if (cleanPath === "login" || cleanPath === "") {
     return <>{children}</>;
   }
 
   //console.log(menusFrom[cleanPath],cleanPath);
 
-  const [activeMenu, setActiveMenu] = useState("");
-  const [activeSub, setActiveSub] = useState("");
+  const [activeMenu, setActiveMenu] = useState("inbox");
+  const [activeSub, setActiveSub] = useState("inbox");
   const [drawerOpen, setDrawerOpen] = useState(false);
   //const [showSubmenu, setShowSubmenu] = useState(false);
-  const [showSegmentation,setShowSegmentation]=useState(false);
-  const [showErpLoad,setShowErpLoad]=useState(false)
+  const [showSegmentation, setShowSegmentation] = useState(false);
+  const [showErpLoad, setShowErpLoad] = useState(false);
   const [showAccounts, setShowAccounts] = useState(false);
   //const [showRenewvals,setshowRenewvals]=useState(false);
+  const [activeSubSub, setActiveSubSub] = useState("");
+  const priceSubItems: any = [
+    "erpLoadAwaitingLoad",
+    "erpLoadAwaitingLoad",
+    "erpLoadManuallyUpdating",
+    "erpLoadLettingExpire",
+    "erpLoadRecentlyLoaded",
+  ];
 
   const navigate = useNavigate();
 
@@ -285,7 +294,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   // onClick={() => activeSUbMenu("accounts")}
                   className={
                     "px-3 py-2 font-medium border-b-2 relative " +
-                    (activeSub == "accounts"
+                    (activeSub == "accounts" || activeSub == "sites"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -309,7 +318,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                       </li>
                     </ul>
                   )}
-                </button> 
+                </button>
                 <button
                   onClick={() => activeSUbMenu("groups")}
                   className={
@@ -335,7 +344,8 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 <button
                   className={
                     "px-3 py-2 font-medium border-b-2 relative " +
-                    (activeSub == "erpLoadCompletedTasks"
+                    // (activeSub == "erpLoadCompletedTasks"
+                    (priceSubItems.includes(activeSub)
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
@@ -409,13 +419,14 @@ export default function layOut({ children }: { children: React.ReactNode }) {
               <>
                 <button
                   // onClick={() => activeSUbMenu("segmentationAccounts")}
-                 className={
+                  className={
                     "px-3 py-2 font-medium border-b-2 relative " +
-                    (activeSub == "segmentation"
+                    (activeSub == "segmentationAccounts" ||
+                    activeSub == "segmentationGroups"
                       ? "bg-[#0f59ac] text-white"
                       : "border-transparent hover:border-blue-900 text-gray-700")
                   }
-                   onMouseEnter={() => setShowSegmentation(true)}
+                  onMouseEnter={() => setShowSegmentation(true)}
                   onMouseLeave={() => setShowSegmentation(false)}
                 >
                   Segmentation
@@ -726,7 +737,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
 
           {/* Pricing */}
           <div>
-            <button
+            {/* <button
               onClick={() =>
                 setActiveMenu(activeMenu == "pricing" ? "" : "pricing")
               }
@@ -813,7 +824,95 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   Renewals Calendar
                 </button>
               </div>
-            )}
+            )} */}
+            <div>
+              <button
+                onClick={() =>
+                  setActiveMenu(activeMenu === "pricing" ? "" : "pricing")
+                }
+                className={
+                  "w-full text-left px-4 py-3 font-medium flex justify-between items-center " +
+                  (activeMenu === "pricing"
+                    ? "bg-blue-100 text-blue-700"
+                    : "hover:bg-gray-100 text-gray-800")
+                }
+              >
+                Pricing
+                <span>{activeMenu === "pricing" ? "▲" : "▼"}</span>
+              </button>
+
+              {activeMenu === "pricing" && (
+                <div className="bg-gray-50">
+                  {/* Level 2 - Accounts */}
+                  <button
+                    onClick={() =>
+                      setActiveSub(activeSub === "accounts" ? "" : "accounts")
+                    }
+                    className={
+                      "block w-full text-left px-8 py-2 rounded flex justify-between " +
+                      (activeSub === "accounts"
+                        ? "bg-blue-50 text-blue-700 font-medium"
+                        : "hover:bg-gray-100 text-gray-700")
+                    }
+                  >
+                    Accounts
+                    <span>{activeSub === "accounts" ? "▲" : "▼"}</span>
+                  </button>
+
+                  {/* ✅ Level 3 - Account & Site */}
+                  {activeSub === "accounts" && (
+                    <div className="bg-gray-100 ml-4">
+                      <button
+                        onClick={() => {
+                          setActiveSubSub("account");
+                          setDrawerOpen(false);
+                        }}
+                        className={
+                          "block w-full text-left px-12 py-2 rounded " +
+                          (activeSubSub === "account"
+                            ? "bg-blue-100 text-blue-700 font-medium"
+                            : "hover:bg-gray-200 text-gray-800")
+                        }
+                      >
+                        Account
+                      </button>
+                      <button
+                        onClick={() => {
+                          setActiveSubSub("site");
+                          setDrawerOpen(false);
+                        }}
+                        className={
+                          "block w-full text-left px-12 py-2 rounded " +
+                          (activeSubSub === "site"
+                            ? "bg-blue-100 text-blue-700 font-medium"
+                            : "hover:bg-gray-200 text-gray-800")
+                        }
+                      >
+                        Site
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Level 2 - Groups */}
+                  <button
+                    className={
+                      "block w-full text-left px-8 py-2 rounded " +
+                      (activeSub === "groups"
+                        ? "bg-blue-50 text-blue-700 font-medium"
+                        : "hover:bg-gray-100 text-gray-700")
+                    }
+                    onClick={() => {
+                      setActiveSub("groups");
+                      setDrawerOpen(false);
+                    }}
+                  >
+                    Groups
+                  </button>
+
+                  {/* ...other pricing submenus */}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* strategy */}
