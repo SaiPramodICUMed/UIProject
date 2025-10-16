@@ -68,25 +68,41 @@ export default function layOut({ children }: { children: React.ReactNode }) {
   const [activeSubSub, setActiveSubSub] = useState("");
   const priceSubItems: any = [
     "erpLoadAwaitingLoad",
-    "erpLoadAwaitingLoad",
     "erpLoadManuallyUpdating",
     "erpLoadLettingExpire",
     "erpLoadRecentlyLoaded",
-    "erpLoadCompletedTasks"
+    "erpLoadCompletedTasks",
   ];
-  const dispatch=useDispatch();
+  const subchildItems: any = {
+    sites: "accounts",
+    accounts: "accounts",
+    erpLoadAwaitingLoad: "erpLoadCompletedTasks",
+    erpLoadManuallyUpdating: "erpLoadCompletedTasks",
+    erpLoadLettingExpire: "erpLoadCompletedTasks",
+    erpLoadRecentlyLoaded: "erpLoadCompletedTasks",
+    erpLoadCompletedTasks: "erpLoadCompletedTasks",
+    segmentationAccounts:"segmentationAccounts",
+    segmentationGroups:"segmentationAccounts"
+  };
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state:any) => state.user.users);
-  console.log('reduxData', user);
+  const user = useSelector((state: any) => state.user.users);
+  // console.log('reduxData', user);
   const activeSUbMenu = (sub: string) => {
     setActiveSub(sub);
     navigate(`/${sub}`);
   };
-  const taskCount = useSelector((state:any) => state.user.taskCount);
+  const taskCount = useSelector((state: any) => state.user.taskCount);
   const activeMenuItem = (menu: string) => {
     setActiveMenu(menu);
     setActiveSub(subitems[menu] || "inbox");
     navigate(`/${subitems[menu] || "/inbox"}`);
+  };
+  const activeSubSubMenu = (sub: string) => {
+    console.log("menu", sub, subchildItems[sub]);
+    setActiveSubSub(sub);
+    setActiveSub(subchildItems[sub]);
+    navigate(`/${sub}`);
   };
 
   useEffect(() => {
@@ -95,30 +111,39 @@ export default function layOut({ children }: { children: React.ReactNode }) {
       : location.pathname;
 
     // If we have a mapping (menusFrom[path]) use it, otherwise default to 'inbox'
-    const mainMenu = menusFrom[path] || "inbox";
+    let mainMenu: any;
+    const subchilditems = [...priceSubItems, "accounts", "sites","segmentationGroups","segmentationAccounts"];
+    console.log(subchilditems);
+    if (subchilditems.includes(path)) {
+      setActiveSubSub(path);
+      setActiveSub(subchildItems[path] || "inbox");
+      mainMenu = menusFrom[subchildItems[path]] || "inbox";
+      console.log(path, subchildItems[path], menusFrom[subchildItems[path]]);
+    } else {
+      mainMenu = menusFrom[path] || "inbox";
 
-    setActiveMenu(mainMenu);
-    setActiveSub(path || "inbox");
+      setActiveMenu(mainMenu);
+      setActiveSub(path || "inbox");
+    }
   }, [location.pathname]);
 
- const fetchTasksCount = async () => {
-  try {
-   
-    const response = await axios.get(
-      `https://vm-www-dprice01.icumed.com:5000/api/Inbox/taskCounts/8375`,       
-      { headers: { "Content-Type": "application/json" } } // optional config
-    );
+  const fetchTasksCount = async () => {
+    try {
+      const response = await axios.get(
+        `https://vm-www-dprice01.icumed.com:5000/api/Inbox/taskCounts/8375`,
+        { headers: { "Content-Type": "application/json" } } // optional config
+      );
 
-    console.log("Task count API Response:", response.data);    
-    dispatch(addTaskCount(response.data));
-    return response.data;
-  } catch (error: any) {
-    console.error("Error fetching data:", error.message);
-    return null;
-  }
-};
+      console.log("Task count API Response:", response.data);
+      dispatch(addTaskCount(response.data));
+      return response.data;
+    } catch (error: any) {
+      console.error("Error fetching data:", error.message);
+      return null;
+    }
+  };
 
-useEffect(() => {    
+  useEffect(() => {
     fetchTasksCount();
   }, []);
 
@@ -887,31 +912,39 @@ useEffect(() => {
 
                   {/* ✅ Level 3 - Account & Site */}
                   {activeSub === "accounts" && (
-                    <div className="bg-gray-100 ml-4">
+                    <div
+                      className={
+                        "block w-full text-left px-8 py-2 rounded " +
+                          activeSub ==
+                        "account"
+                          ? "bg-blue-50 text-blue-700 font-medium"
+                          : "hover:bg-gray-100 text-gray-700"
+                      }
+                    >
                       <button
-                        onClick={() => {
-                          setActiveSubSub("account");
-                          setDrawerOpen(false);
-                        }}
                         className={
                           "block w-full text-left px-12 py-2 rounded " +
-                          (activeSubSub === "account"
-                            ? "bg-blue-100 text-blue-700 font-medium"
-                            : "hover:bg-gray-200 text-gray-800")
+                          (activeSubSub == "accounts"
+                            ? "bg-blue-50 text-blue-700 font-medium"
+                            : "hover:bg-gray-100 text-gray-700")
                         }
+                        onClick={() => {
+                          activeSubSubMenu("accounts");
+                          setDrawerOpen(false);
+                        }}
                       >
-                        Account
+                        Accounts
                       </button>
                       <button
                         onClick={() => {
-                          setActiveSubSub("site");
+                          activeSubSubMenu("sites");
                           setDrawerOpen(false);
                         }}
                         className={
                           "block w-full text-left px-12 py-2 rounded " +
-                          (activeSubSub === "site"
-                            ? "bg-blue-100 text-blue-700 font-medium"
-                            : "hover:bg-gray-200 text-gray-800")
+                          (activeSubSub == "sites"
+                            ? "bg-blue-50 text-blue-700 font-medium"
+                            : "hover:bg-gray-100 text-gray-700")
                         }
                       >
                         Site
@@ -923,19 +956,122 @@ useEffect(() => {
                   <button
                     className={
                       "block w-full text-left px-8 py-2 rounded " +
-                      (activeSub === "groups"
+                      (activeSub == "groups"
                         ? "bg-blue-50 text-blue-700 font-medium"
                         : "hover:bg-gray-100 text-gray-700")
                     }
                     onClick={() => {
-                      setActiveSub("groups");
+                      activeSUbMenu("groups");
                       setDrawerOpen(false);
                     }}
                   >
                     Groups
                   </button>
+                  <button
+                    onClick={() =>
+                      setActiveSub(
+                        activeSub === "erpLoadCompletedTasks"
+                          ? ""
+                          : "erpLoadCompletedTasks"
+                      )
+                    }
+                    className={
+                      "block w-full text-left px-8 py-2 rounded flex justify-between " +
+                      
+                      (activeSub === "erpLoadCompletedTasks"
+                        ? "bg-blue-50 text-blue-700 font-medium"
+                        : "hover:bg-gray-100 text-gray-700")
+                    }
+                  >
+                    ERP Load
+                    <span>
+                      {activeSub === "erpLoadCompletedTasks" ? "▲" : "▼"}
+                    </span>
+                  </button>
 
-                  {/* ...other pricing submenus */}
+                  {/* ✅ Level 3 - Account & Site */}
+                  {activeSub === "erpLoadCompletedTasks" && (
+                    <div
+                      className={
+                        "block w-full text-left px-8 py-2 rounded " +
+                          activeSub ==
+                        "erpLoadCompletedTasks"
+                          ? "bg-blue-50 text-blue-700 font-medium"
+                          : "hover:bg-gray-100 text-gray-700"
+                      }
+                    >
+                      <button
+                        className={
+                          "block w-full text-left px-12 py-2 rounded " +
+                          (activeSubSub == "erpLoadCompletedTasks"
+                            ? "bg-blue-50 text-blue-700 font-medium"
+                            : "hover:bg-gray-100 text-gray-700")
+                        }
+                        onClick={() => {
+                          activeSubSubMenu("erpLoadCompletedTasks");
+                          setDrawerOpen(false);
+                        }}
+                      >
+                        Completed Tasks
+                      </button>
+                      <button
+                        onClick={() => {
+                          activeSubSubMenu("erpLoadAwaitingLoad");
+                          setDrawerOpen(false);
+                        }}
+                        className={
+                          "block w-full text-left px-12 py-2 rounded " +
+                          (activeSubSub == "erpLoadAwaitingLoad"
+                            ? "bg-blue-50 text-blue-700 font-medium"
+                            : "hover:bg-gray-100 text-gray-700")
+                        }
+                      >
+                        Awaiting Load
+                      </button>
+                      <button
+                        onClick={() => {
+                          activeSubSubMenu("erpLoadManuallyUpdating");
+                          setDrawerOpen(false);
+                        }}
+                        className={
+                          "block w-full text-left px-12 py-2 rounded " +
+                          (activeSubSub == "erpLoadManuallyUpdating"
+                            ? "bg-blue-50 text-blue-700 font-medium"
+                            : "hover:bg-gray-100 text-gray-700")
+                        }
+                      >
+                        Manually Updating
+                      </button>
+                      <button
+                        onClick={() => {
+                          activeSubSubMenu("erpLoadLettingExpire");
+                          setDrawerOpen(false);
+                        }}
+                        className={
+                          "block w-full text-left px-12 py-2 rounded " +
+                          (activeSubSub == "erpLoadLettingExpire"
+                            ? "bg-blue-50 text-blue-700 font-medium"
+                            : "hover:bg-gray-100 text-gray-700")
+                        }
+                      >
+                        Letting Expire
+                      </button>
+                      <button
+                        onClick={() => {
+                          activeSubSubMenu("erpLoadRecentlyLoaded");
+                          setDrawerOpen(false);
+                        }}
+                        className={
+                          "block w-full text-left px-12 py-2 rounded " +
+                          (activeSubSub == "erpLoadRecentlyLoaded"
+                            ? "bg-blue-50 text-blue-700 font-medium"
+                            : "hover:bg-gray-100 text-gray-700")
+                        }
+                      >
+                        Recently Loaded
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -961,7 +1097,7 @@ useEffect(() => {
               <div className="bg-gray-50">
                 <button
                   className={
-                    "block w-full text-left px-8 py-2 rounded " +
+                     "w-full text-left px-8 py-3 font-medium flex justify-between items-center " +
                     (activeSub == "segmentationAccounts"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
@@ -971,8 +1107,53 @@ useEffect(() => {
                     setDrawerOpen(false);
                   }}
                 >
-                  segmentation-Accounts
-                </button>
+                  Segmentation
+                    <span>{activeSub === "segmentationAccounts" ? "▲" : "▼"}</span>
+                  </button>
+
+                  {/* ✅ Level 3 - Account & Site */}
+                  {activeSub === "segmentationAccounts" && (
+                    <div
+                      className={
+                        "block w-full text-left px-8 py-2 rounded " +
+                          activeSub ==
+                        "segmentationAccounts"
+                          ? "bg-blue-50 text-blue-700 font-medium"
+                          : "hover:bg-gray-100 text-gray-700"
+                      }
+                    >
+                      <button
+                        className={
+                          "block w-full text-left px-12 py-2 rounded " +
+                          (activeSubSub == "segmentationAccounts"
+                            ? "bg-blue-50 text-blue-700 font-medium"
+                            : "hover:bg-gray-100 text-gray-700")
+                        }
+                        onClick={() => {
+                          activeSubSubMenu("segmentationAccounts");
+                          setDrawerOpen(false);
+                        }}
+                      >
+                        Accounts
+                      </button>
+                      <button
+                        onClick={() => {
+                          activeSubSubMenu("segmentationGroups");
+                          setDrawerOpen(false);
+                        }}
+                        className={
+                          "block w-full text-left px-12 py-2 rounded " +
+                          (activeSubSub == "segmentationGroups"
+                            ? "bg-blue-50 text-blue-700 font-medium"
+                            : "hover:bg-gray-100 text-gray-700")
+                        }
+                      >
+                        Groups
+                      </button>
+                    </div>
+                  )}
+
+                {/* </button> */}
                 <button
                   className={
                     "block w-full text-left px-8 py-2 rounded " +
