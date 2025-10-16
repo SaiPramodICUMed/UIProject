@@ -116,7 +116,7 @@ const TableComponent: React.FC<TableProps> = ({
               <th
                 key={i}
                 onClick={() => handleSort(col.accessor)}
-                className={`border border-black px-4 py-2 text-left font-semibold text-xs whitespace-nowrap cursor-pointer select-none ${i === 0 ? "min-w-[120px] w-[120px]" : "min-w-[60px] w-[60px]"
+                className={`border border-black px-4 py-2 text-left font-semibold text-xs whitespace-nowrap cursor-pointer select-none ${i === 0 ? "min-w-[80px] w-[80px]" : "min-w-[60px] w-[60px]"
                   }`}
               >
                 <div className="flex justify-between items-center">
@@ -150,7 +150,7 @@ const TableComponent: React.FC<TableProps> = ({
                     className={`border px-4 py-2 overflow-hidden text-ellipsis whitespace-nowrap ${colorClassMap[color]
                         ? colorClassMap[color]
                         : "text-gray-800"
-                      } ${colIndex === 0 ? "min-w-[120px] w-[120px]" : "min-w-[60px] w-[60px]"}`}
+                      } ${colIndex === 0 ? "min-w-[80px] w-[80px] max-w-[220px]" : "min-w-[80px] w-[80px] max-w-[220px]"}`}
                     title={String(row[col.accessor] ?? "")}
                   >
                     {col.accessor === "Created" ||
