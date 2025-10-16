@@ -46,7 +46,7 @@ const Inprogress: React.FC = () => {
       const payload = {
         viewName: `dbo.Inbox_Tasks(8375)`,
         firstRow: 1,
-        lastRow: 20,
+        lastRow: 10,
         sortBy: "DeadlineOrdered",
         sortByDirection: "asc",
         filter: `AND (  1 <> 1  OR tab = '${arg}' )  AND tab = '${arg}'`,
@@ -87,7 +87,7 @@ const Inprogress: React.FC = () => {
           {/* <FaChevronRight className="text-gray-400 text-xs" /> */}
           {/* <span className="font-medium hover:text-blue-700 cursor-pointer">Inbox</span> */}
           /{/* <FaChevronRight className="text-gray-400 text-xs" /> */}
-          <span className="text-gray-500 font-medium">Inprogress</span>
+          <span className="text-gray-500 font-medium">&nbsp;Inprogress</span>
         </nav>
 
         {/* <h2 className="text-xl font-semibold text-blue-700">User Details</h2> */}

@@ -70,7 +70,7 @@ const Groups: React.FC = () => {
           {/* <FaChevronRight className="text-gray-400 text-xs" /> */}
           {/* <span className="font-medium hover:text-blue-700 cursor-pointer">Inbox</span> */}
           /{/* <FaChevronRight className="text-gray-400 text-xs" /> */}
-          <span className="text-gray-500 font-medium">Segmentation /Gropus</span>
+          <span className="text-gray-500 font-medium">&nbsp;Segmentation /&nbsp;Gropus</span>
         </nav>
 
         {/* <h2 className="text-xl font-semibold text-blue-700">User Details</h2> */}

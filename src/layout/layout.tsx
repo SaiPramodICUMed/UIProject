@@ -359,7 +359,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                     "px-3 py-2 font-medium border-b-2 relative " +
                     (activeSub == "accounts" || activeSub == "sites"
                       ? "bg-[#0f59ac] text-white"
-                      : "border-transparent hover:border-blue-900 text-gray-700")
+                      : "border-transparent hover:border-blue-900 text-gray-700 hover:bg-gray-100")
                   }
                   onMouseEnter={() => setShowAccounts(true)}
                   onMouseLeave={() => setShowAccounts(false)}
@@ -487,7 +487,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                     (activeSub == "segmentationAccounts" ||
                     activeSub == "segmentationGroups"
                       ? "bg-[#0f59ac] text-white"
-                      : "border-transparent hover:border-blue-900 text-gray-700")
+                      : "border-transparent hover:border-blue-900 text-gray-700 hover:bg-gray-100")
                   }
                   onMouseEnter={() => setShowSegmentation(true)}
                   onMouseLeave={() => setShowSegmentation(false)}

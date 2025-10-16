@@ -81,7 +81,7 @@ const TableComponent: React.FC<TableProps> = ({
 
   const sortedData = React.useMemo(() => {
     if (!sortConfig) return data;
-   // console.log("equal");
+    // console.log("equal");
     const { key, direction } = sortConfig;
 
     return [...data].sort((a, b) => {
@@ -116,7 +116,8 @@ const TableComponent: React.FC<TableProps> = ({
               <th
                 key={i}
                 onClick={() => handleSort(col.accessor)}
-                className="border border-black px-4 py-2 text-left font-semibold text-xs whitespace-nowrap cursor-pointer select-none"
+                className={`border border-black px-4 py-2 text-left font-semibold text-xs whitespace-nowrap cursor-pointer select-none ${i === 0 ? "min-w-[120px] w-[120px]" : "min-w-[60px] w-[60px]"
+                  }`}
               >
                 <div className="flex justify-between items-center">
                   <span>{col.header}</span>
@@ -140,30 +141,28 @@ const TableComponent: React.FC<TableProps> = ({
               <tr
                 key={rowIndex}
                 onClick={() => handleRowClick(row)}
-                className={`cursor-pointer text-xs  ${
-                  rowIndex % 2 === 0 ? "bg-[#ebeff3]" : "bg-white"
-                } hover:bg-[#d0e5f5]`}
+                className={`cursor-pointer text-xs  ${rowIndex % 2 === 0 ? "bg-[#ebeff3]" : "bg-white"
+                  } hover:bg-[#d0e5f5]`}
               >
                 {columns.map((col, colIndex) => (
                   <td
                     key={colIndex}
-                    className={`border px-4 py-2 max-w-[80px] overflow-hidden text-ellipsis whitespace-nowrap ${
-                      colorClassMap[color]
+                    className={`border px-4 py-2 overflow-hidden text-ellipsis whitespace-nowrap ${colorClassMap[color]
                         ? colorClassMap[color]
                         : "text-gray-800"
-                    }`}
+                      } ${colIndex === 0 ? "min-w-[120px] w-[120px]" : "min-w-[60px] w-[60px]"}`}
                     title={String(row[col.accessor] ?? "")}
                   >
                     {col.accessor === "Created" ||
-                    col.accessor === "LastModified"
+                      col.accessor === "LastModified"
                       ? formatToDate(row[col.accessor])
                       : col.accessor === "FloorBreaks"
-                      ? `${row[col.accessor]} (${row.FloorBreaksP}%)`
-                      : col.accessor === "OriginalValue"
-                      ? formatToUSCurrency(row[col.accessor])
-                      : col.accessor === "Due"
-                      ? getDaysFromToday(row[col.accessor])
-                      : row[col.accessor]}
+                        ? `${row[col.accessor]} (${row.FloorBreaksP}%)`
+                        : col.accessor === "OriginalValue"
+                          ? formatToUSCurrency(row[col.accessor])
+                          : col.accessor === "Due"
+                            ? getDaysFromToday(row[col.accessor])
+                            : row[col.accessor]}
                   </td>
                 ))}
               </tr>
