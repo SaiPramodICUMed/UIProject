@@ -73,7 +73,7 @@ const Accounts: React.FC = () => {
           {/* <FaChevronRight className="text-gray-400 text-xs" /> */}
           {/* <span className="font-medium hover:text-blue-700 cursor-pointer">Inbox</span> */}
           /{/* <FaChevronRight className="text-gray-400 text-xs" /> */}
-          <span className="text-gray-500 font-medium">Segmentation /Accounts</span>
+          <span className="text-gray-500 font-medium">&nbsp;Segmentation /&nbsp;Accounts</span>
         </nav>
 
         {/* <h2 className="text-xl font-semibold text-blue-700">User Details</h2> */}
