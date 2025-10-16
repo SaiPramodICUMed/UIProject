@@ -1103,8 +1103,9 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                       : "hover:bg-gray-100 text-gray-700")
                   }
                   onClick={() => {
-                    activeSUbMenu("segmentationAccounts");
-                    setDrawerOpen(false);
+                   // activeSUbMenu("segmentationAccounts");
+                   setActiveSub(activeSub === "segmentationAccounts" ? "" : "segmentationAccounts")
+                   // setDrawerOpen(false);
                   }}
                 >
                   Segmentation
