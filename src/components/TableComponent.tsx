@@ -147,7 +147,7 @@ const TableComponent: React.FC<TableProps> = ({
                 {columns.map((col, colIndex) => (
                   <td
                     key={colIndex}
-                    className={`border px-4 py-2 max-w-[60px] overflow-hidden text-ellipsis whitespace-nowrap ${
+                    className={`border px-4 py-2 max-w-[80px] overflow-hidden text-ellipsis whitespace-nowrap ${
                       colorClassMap[color]
                         ? colorClassMap[color]
                         : "text-gray-800"

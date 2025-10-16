@@ -46,6 +46,17 @@ export default function layOut({ children }: { children: React.ReactNode }) {
     promotions: "strategy",
     aboutToExpire: "pricing",
   };
+  const subchilditems = [
+    "erpLoadAwaitingLoad",
+    "erpLoadManuallyUpdating",
+    "erpLoadLettingExpire",
+    "erpLoadRecentlyLoaded",
+    "erpLoadCompletedTasks",
+    "accounts",
+    "sites",
+    "segmentationGroups",
+    "segmentationAccounts",
+  ];
 
   const location = useLocation();
   const cleanPath = location.pathname.startsWith("/")
@@ -81,8 +92,8 @@ export default function layOut({ children }: { children: React.ReactNode }) {
     erpLoadLettingExpire: "erpLoadCompletedTasks",
     erpLoadRecentlyLoaded: "erpLoadCompletedTasks",
     erpLoadCompletedTasks: "erpLoadCompletedTasks",
-    segmentationAccounts:"segmentationAccounts",
-    segmentationGroups:"segmentationAccounts"
+    segmentationAccounts: "segmentationAccounts",
+    segmentationGroups: "segmentationAccounts",
   };
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -112,13 +123,14 @@ export default function layOut({ children }: { children: React.ReactNode }) {
 
     // If we have a mapping (menusFrom[path]) use it, otherwise default to 'inbox'
     let mainMenu: any;
-    const subchilditems = [...priceSubItems, "accounts", "sites","segmentationGroups","segmentationAccounts"];
-    console.log(subchilditems);
+
     if (subchilditems.includes(path)) {
+      //console.log(path, subchildItems[path]);
       setActiveSubSub(path);
-      setActiveSub(subchildItems[path] || "inbox");
-      mainMenu = menusFrom[subchildItems[path]] || "inbox";
-      console.log(path, subchildItems[path], menusFrom[subchildItems[path]]);
+      setActiveSub(subchildItems[path] );
+      mainMenu = menusFrom[subchildItems[path]];
+      setActiveMenu(mainMenu);
+      //console.log(path, subchildItems[path], menusFrom[subchildItems[path]]);
     } else {
       mainMenu = menusFrom[path] || "inbox";
 
@@ -977,7 +989,6 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                     }
                     className={
                       "block w-full text-left px-8 py-2 rounded flex justify-between " +
-                      
                       (activeSub === "erpLoadCompletedTasks"
                         ? "bg-blue-50 text-blue-700 font-medium"
                         : "hover:bg-gray-100 text-gray-700")
@@ -1097,62 +1108,67 @@ export default function layOut({ children }: { children: React.ReactNode }) {
               <div className="bg-gray-50">
                 <button
                   className={
-                     "w-full text-left px-8 py-3 font-medium flex justify-between items-center " +
+                    "w-full text-left px-8 py-3 font-medium flex justify-between items-center " +
                     (activeSub == "segmentationAccounts"
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "hover:bg-gray-100 text-gray-700")
                   }
                   onClick={() => {
-                   // activeSUbMenu("segmentationAccounts");
-                   setActiveSub(activeSub === "segmentationAccounts" ? "" : "segmentationAccounts")
-                   // setDrawerOpen(false);
+                    // activeSUbMenu("segmentationAccounts");
+                    setActiveSub(
+                      activeSub === "segmentationAccounts"
+                        ? ""
+                        : "segmentationAccounts"
+                    );
+                    // setDrawerOpen(false);
                   }}
                 >
                   Segmentation
-                    <span>{activeSub === "segmentationAccounts" ? "▲" : "▼"}</span>
-                  </button>
+                  <span>
+                    {activeSub === "segmentationAccounts" ? "▲" : "▼"}
+                  </span>
+                </button>
 
-                  {/* ✅ Level 3 - Account & Site */}
-                  {activeSub === "segmentationAccounts" && (
-                    <div
+                {/* ✅ Level 3 - Account & Site */}
+                {activeSub === "segmentationAccounts" && (
+                  <div
+                    className={
+                      "block w-full text-left px-8 py-2 rounded " + activeSub ==
+                      "segmentationAccounts"
+                        ? "bg-blue-50 text-blue-700 font-medium"
+                        : "hover:bg-gray-100 text-gray-700"
+                    }
+                  >
+                    <button
                       className={
-                        "block w-full text-left px-8 py-2 rounded " +
-                          activeSub ==
-                        "segmentationAccounts"
+                        "block w-full text-left px-12 py-2 rounded " +
+                        (activeSubSub == "segmentationAccounts"
                           ? "bg-blue-50 text-blue-700 font-medium"
-                          : "hover:bg-gray-100 text-gray-700"
+                          : "hover:bg-gray-100 text-gray-700")
+                      }
+                      onClick={() => {
+                        activeSubSubMenu("segmentationAccounts");
+                        setDrawerOpen(false);
+                      }}
+                    >
+                      Accounts
+                    </button>
+                    <button
+                      onClick={() => {
+                        activeSubSubMenu("segmentationGroups");
+                        setDrawerOpen(false);
+                      }}
+                      className={
+                        "block w-full text-left px-12 py-2 rounded " +
+                        (activeSubSub == "segmentationGroups"
+                          ? "bg-blue-50 text-blue-700 font-medium"
+                          : "hover:bg-gray-100 text-gray-700")
                       }
                     >
-                      <button
-                        className={
-                          "block w-full text-left px-12 py-2 rounded " +
-                          (activeSubSub == "segmentationAccounts"
-                            ? "bg-blue-50 text-blue-700 font-medium"
-                            : "hover:bg-gray-100 text-gray-700")
-                        }
-                        onClick={() => {
-                          activeSubSubMenu("segmentationAccounts");
-                          setDrawerOpen(false);
-                        }}
-                      >
-                        Accounts
-                      </button>
-                      <button
-                        onClick={() => {
-                          activeSubSubMenu("segmentationGroups");
-                          setDrawerOpen(false);
-                        }}
-                        className={
-                          "block w-full text-left px-12 py-2 rounded " +
-                          (activeSubSub == "segmentationGroups"
-                            ? "bg-blue-50 text-blue-700 font-medium"
-                            : "hover:bg-gray-100 text-gray-700")
-                        }
-                      >
-                        Groups
-                      </button>
-                    </div>
-                  )}
+                      Groups
+                    </button>
+                  </div>
+                )}
 
                 {/* </button> */}
                 <button
@@ -1230,7 +1246,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
               Email
               <span>{activeMenu == "email" ? "▲" : "▼"}</span>
             </button>
-            {activeMenu == "admin" && (
+            {activeMenu == "email" && (
               <div className="bg-gray-50">
                 <button
                   className={
