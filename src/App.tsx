@@ -1,8 +1,9 @@
 import "tailwindcss";
 import './App.css'
 import { Provider } from "react-redux";
-import store from "./store/store";
+import { store, persistor } from "./store/store";
 import LayOut from "./layout/layout";
+import { PersistGate } from "redux-persist/integration/react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Inbox from "./pages/Inbox/Inbox";
 import Inprogress from "./pages/Inbox/Inprogress";
@@ -38,6 +39,7 @@ function App() {
     <>
     {/* <Sidebar/> */}
      <Provider store={store}>
+       <PersistGate loading={null} persistor={persistor}>
     <Router>
     <LayOut>
      <Routes>
@@ -71,6 +73,7 @@ function App() {
     </Routes>
     </LayOut>
     </Router>
+    </PersistGate>
       </Provider>
     </>
   )
