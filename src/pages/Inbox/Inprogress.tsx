@@ -44,7 +44,7 @@ const Inprogress: React.FC = () => {
     //setActiveTab(arg);
     try {
       const payload = {
-        viewName: `dbo.Inbox_Tasks(${user.userId})`,
+        viewName: `dbo.Inbox_Tasks(8375)`,
         firstRow: 1,
         lastRow: 20,
         sortBy: "DeadlineOrdered",

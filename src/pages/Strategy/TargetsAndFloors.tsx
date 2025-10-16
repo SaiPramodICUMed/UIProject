@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import TableComponent from "../../components/TableComponent";
 import Pagination from "../../components/PageNation";
 import axios from "axios";
+import Loader from "../../components/loader";
 //import data from "../../data.json";
 
 const TargetsAndFloors: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [inboxData, setInboxData] = useState([]);
+  const [loading,setLoading]=useState(false);
   const totalPages = 10;
   const columns = [
     { header: "Item", accessor: "ItemName" },
@@ -26,6 +28,7 @@ const TargetsAndFloors: React.FC = () => {
   const fetchData = async () => {
     //console.log(arg);
     //setActiveTab(arg);
+    setLoading(true);
     try {
       const payload = {
         viewName: "vw_TargetData",
@@ -47,6 +50,7 @@ const TargetsAndFloors: React.FC = () => {
 
       console.log("API Response:", response.data);
       setInboxData(response.data);
+      setLoading(false);
       return response.data;
     } catch (error: any) {
       console.error("Error fetching data:", error.message);
@@ -60,6 +64,7 @@ const TargetsAndFloors: React.FC = () => {
 
   return (
     <div className="bg-white p-6">
+      <Loader isLoad={loading}/>
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
         <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-4">
           {/* <FaHome className="text-blue-600" /> */}
