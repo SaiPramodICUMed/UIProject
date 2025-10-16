@@ -27,7 +27,7 @@ const Inbox: React.FC = () => {
 
   const fetchData = async (arg:any) => {
   console.log(arg);
-  //setLoading(true);
+  setLoading(true);
   //setActiveTab(arg);
   try {
     const payload = {
