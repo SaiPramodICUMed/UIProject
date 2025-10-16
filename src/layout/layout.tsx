@@ -366,15 +366,15 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 >
                   Accounts
                   {showAccounts && (
-                    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white border shadow-lg rounded w-48 z-[9999]">
+                    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white  border-gray-300 rounded-b-xl shadow-lg rounded w-48 z-[9999]">
                       <li
-                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        className="px-4 py-2 bg-blue-50 border border-gray-300 border-b-0 hover:bg-blue-100 cursor-pointer"
                         onClick={() => activeSUbMenu("accounts")}
                       >
                         Account
                       </li>
                       <li
-                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        className="px-4 py-2 bg-gray-100 border rounded-b-xl border-gray-300  hover:bg-blue-100 cursor-pointer"
                         onClick={() => activeSUbMenu("sites")}
                       >
                         Site
@@ -410,7 +410,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                     // (activeSub == "erpLoadCompletedTasks"
                     (priceSubItems.includes(activeSub)
                       ? "bg-[#0f59ac] text-white"
-                      : "border-transparent hover:border-blue-900 text-gray-700")
+                      : "border-transparent hover: border-blue-900 text-gray-700 hover:bg-gray-100")
                   }
                   onMouseEnter={() => setShowErpLoad(true)}
                   onMouseLeave={() => setShowErpLoad(false)}
@@ -418,33 +418,33 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   ERP Load
                   {/* Sub-submenu */}
                   {showErpLoad && (
-                    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] border bg-white shadow-lg  rounded w-48 z-[9999]">
+                    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] border-gray-300 bg-white shadow-lg  rounded-b-xl w-48 z-[9999]">
                       <li
-                        className="px-4 py-2 border border  hover:bg-blue-100 cursor-pointer"
+                        className="px-4 py-2 bg-blue-50 border border-b-0 border-gray-300  hover:bg-blue-100 cursor-pointer"
                         onClick={() => activeSUbMenu("erpLoadCompletedTasks")}
                       >
                         Completed Tasks
                       </li>
                       <li
-                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        className="px-4 py-2 bg-gray-100 border border-b-0 border-gray-300 hover:bg-blue-100 cursor-pointer"
                         onClick={() => activeSUbMenu("erpLoadAwaitingLoad")}
                       >
                         Awaiting Load
                       </li>
                       <li
-                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        className="px-4 py-2 bg-blue-50 border border-b-0 border-gray-300 hover:bg-blue-100 cursor-pointer"
                         onClick={() => activeSUbMenu("erpLoadManuallyUpdating")}
                       >
                         Manually Updating
                       </li>
                       <li
-                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        className="px-4 py-2 bg-gray-100 border border-b-0 border-gray-300 hover:bg-blue-100 cursor-pointer"
                         onClick={() => activeSUbMenu("erpLoadLettingExpire")}
                       >
                         Letting Expire
                       </li>
                       <li
-                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        className="px-4 py-2 bg-blue-50 border rounded-b-xl border-gray-300 hover:bg-blue-100 cursor-pointer"
                         onClick={() => activeSUbMenu("erpLoadRecentlyLoaded")}
                       >
                         Recently Loaded
@@ -494,15 +494,15 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                 >
                   Segmentation
                   {showSegmentation && (
-                    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg border rounded w-48 z-[9999]">
+                    <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg border rounded-b-xl border-gray-300 rounded w-48 z-[9999]">
                       <li
-                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        className="px-4 py-2 bg-blue-50 border border-b-0 border-gray-300 hover:bg-blue-100 cursor-pointer"
                         onClick={() => activeSUbMenu("segmentationAccounts")}
                       >
                         Accounts
                       </li>
                       <li
-                        className="px-4 py-2 border hover:bg-blue-100 cursor-pointer"
+                        className="px-4 py-2 bg-gray-100 border rounded-b-xl border-b-0 border-gray-300 hover:bg-blue-100 cursor-pointer"
                         onClick={() => activeSUbMenu("segmentationGroups")}
                       >
                         Groups
