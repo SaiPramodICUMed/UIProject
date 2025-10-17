@@ -8,19 +8,21 @@ import { useSelector } from "react-redux";
 
 const Inprogress: React.FC = () => {
   const user = useSelector((state:any) => state.user.users);
+  const taskCount = useSelector((state: any) => state.user.taskCount);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(taskCount.inProgress);
   const [inboxData, setInboxData] = useState([]);
   const [loading,setLoading]=useState(false);
-  const total_records=5323;
+  
   //const intervel=user.gridPageSize;
-   const totalPages =  Math.ceil(total_records / user.gridPageSize);
-
+   const totalPages =  Math.ceil(totalRecords / user.gridPageSize);
+   
    const setPageChange =(pageNumber:any)=>{
         setCurrentPage(pageNumber)
-        let start=(pageNumber-1)*user.gridPageSize+1;
-        let end=pageNumber*user.gridPageSize;
+        let start= pageNumber == 0 ? 1 : (pageNumber-1)*user.gridPageSize+1;
+        let end= pageNumber == 0 ? user.gridPageSize : pageNumber*user.gridPageSize;
         console.log(start,end);
-
+        fetchData("inprogress",start,end);
    }
  
   const columns = [
@@ -44,9 +46,9 @@ const Inprogress: React.FC = () => {
     //setActiveTab(arg);
     try {
       const payload = {
-        viewName: `dbo.Inbox_Tasks(8375)`,
-        firstRow: 1,
-        lastRow: 10,
+        viewName: `dbo.Inbox_Tasks(${user.userId})`,
+        firstRow: start,
+        lastRow: end,
         sortBy: "DeadlineOrdered",
         sortByDirection: "asc",
         filter: `AND (  1 <> 1  OR tab = '${arg}' )  AND tab = '${arg}'`,
@@ -73,6 +75,7 @@ const Inprogress: React.FC = () => {
 
   useEffect(() => {
     fetchData("inprogress",1,25);
+
   }, []);
 
   return (
