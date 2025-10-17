@@ -14,9 +14,10 @@ const Inprogress: React.FC = () => {
   const [inboxData, setInboxData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [recordsPerPage, setRecordsPerPage] = useState(user.gridPageSize);
+  const [totalPages,setTotalPages]=useState( Math.ceil(totalRecords / user.gridPageSize))
 
   //const intervel=user.gridPageSize;
-  const totalPages = Math.ceil(totalRecords / user.gridPageSize);
+ // const totalPages = Math.ceil(totalRecords / user.gridPageSize);
 
   const setPageChange = (pageNumber: any) => {
     setCurrentPage(pageNumber);
@@ -83,6 +84,10 @@ const Inprogress: React.FC = () => {
   useEffect(() => {
     fetchData("inprogress", 1, 25);
   }, []);
+
+    useEffect(() => {
+    setTotalPages( Math.ceil(totalRecords / user.gridPageSize))
+  }, [recordsPerPage]);
 
   return (
     <div className="bg-white p-6">
