@@ -58,6 +58,20 @@ const [dateFilterValues, setDateFilterValues] = useState<Record<string, [string,
     red: "text-red-800",
     green: "text-green-800",
   };
+   function getDaysFromToday(dateString: string): string {
+    if (!dateString) return "0 days";
+
+    const givenDate = new Date(dateString);
+    const today = new Date();
+
+    givenDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    const diffTime = today.getTime() - givenDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    return `- ${diffDays} days`;
+  }
 
   // ======= Utility Formatters =======
   const formatToDate = (isoString: string) => {
@@ -563,13 +577,21 @@ case "dateRange": {
                 {columns.map((col, colIndex) => (
                   <td
                     key={colIndex}
-                    className={`border px-4 py-2 ${colorClassMap[color]}`}
+                   className={`border px-4 py-2 overflow-hidden text-ellipsis whitespace-nowrap ${colorClassMap[color]
+                        ? colorClassMap[color]
+                        : "text-gray-800"
+                      } ${colIndex === 0 ? "min-w-[80px] w-[80px] max-w-[220px]" : "min-w-[80px] w-[80px] max-w-[220px]"}`}
+                    title={String(row[col.accessor] ?? "")}
                   >
-                    {col.accessor === "Created"
+                    {col.accessor === "Created" ||col.accessor === "LastModified"
                       ? formatToDate(row[col.accessor])
-                      : col.accessor === "OriginalValue"
-                      ? formatToUSCurrency(row[col.accessor])
-                      : row[col.accessor]}
+                      : col.accessor === "FloorBreaks"
+                        ? `${row[col.accessor]} (${row.FloorBreaksP}%)`
+                        : col.accessor === "OriginalValue"
+                          ? formatToUSCurrency(row[col.accessor])
+                          : col.accessor === "Due"
+                            ? getDaysFromToday(row[col.accessor])
+                            : row[col.accessor]}
                   </td>
                 ))}
               </tr>
