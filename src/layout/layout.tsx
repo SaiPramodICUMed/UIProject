@@ -364,7 +364,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onMouseEnter={() => setShowAccounts(true)}
                   onMouseLeave={() => setShowAccounts(false)}
                 >
-                  Accounts
+                  Accounts&nbsp;&nbsp;▼
                   {showAccounts && (
                     <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white  border-gray-300 rounded-b-xl shadow-lg rounded w-48 z-[9999]">
                       <li
@@ -415,7 +415,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onMouseEnter={() => setShowErpLoad(true)}
                   onMouseLeave={() => setShowErpLoad(false)}
                 >
-                  ERP Load
+                  ERP Load&nbsp;&nbsp;▼
                   {/* Sub-submenu */}
                   {showErpLoad && (
                     <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] border-gray-300 bg-white shadow-lg  rounded-b-xl w-48 z-[9999]">
@@ -492,7 +492,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
                   onMouseEnter={() => setShowSegmentation(true)}
                   onMouseLeave={() => setShowSegmentation(false)}
                 >
-                  Segmentation
+                  Segmentation&nbsp;&nbsp;▼
                   {showSegmentation && (
                     <ul className="absolute left-0 top-full mt-0 text-[#0f59ac] bg-white shadow-lg border rounded-b-xl border-gray-300 rounded w-48 z-[9999]">
                       <li

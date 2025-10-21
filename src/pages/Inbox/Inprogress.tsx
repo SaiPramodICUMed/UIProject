@@ -9,28 +9,31 @@ import { useSelector } from "react-redux";
 const Inprogress: React.FC = () => {
   const user = useSelector((state: any) => state.user.users);
   const taskCount = useSelector((state: any) => state.user.taskCount);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalRecords, setTotalRecords] = useState(taskCount.inProgress);
   const [inboxData, setInboxData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(taskCount.inProgress);
   const [recordsPerPage, setRecordsPerPage] = useState(user.gridPageSize);
-  const [totalPages,setTotalPages]=useState( Math.ceil(totalRecords / user.gridPageSize))
+  const [totalPages, setTotalPages] = useState(Math.ceil(totalRecords / user.gridPageSize));
 
   //const intervel=user.gridPageSize;
- // const totalPages = Math.ceil(totalRecords / user.gridPageSize);
+  // const totalPages = Math.ceil(totalRecords / user.gridPageSize);
 
-  const setPageChange = (pageNumber: any) => {
+  const setPageChange = (pageNumber: any, listPerPage?: any) => {
+    const noOfrecordsPerPage = listPerPage ? listPerPage : recordsPerPage
     setCurrentPage(pageNumber);
-    let start = pageNumber == 0 ? 1 : (pageNumber - 1) * user.gridPageSize + 1;
+    let start = pageNumber == 0 ? 1 : (pageNumber - 1) * noOfrecordsPerPage + 1;
     let end =
-      pageNumber == 0 ? user.gridPageSize : pageNumber * user.gridPageSize;
+      pageNumber == 0 ? user.gridPageSize : pageNumber * noOfrecordsPerPage;
     console.log(start, end);
     fetchData("inprogress", start, end);
   };
 
   const changeRecordsPerPage = (recordsPerPage: any) => {
+    console.log("on count change", recordsPerPage);
     setRecordsPerPage(recordsPerPage);
-    setPageChange(1);
+    setTotalPages(Math.ceil(totalRecords / recordsPerPage))
+    setPageChange(1, recordsPerPage);
   };
 
   const columns = [
@@ -82,11 +85,11 @@ const Inprogress: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchData("inprogress", 1, 25);
+    fetchData("inprogress", 1, user.gridPageSize);
   }, []);
 
-    useEffect(() => {
-    setTotalPages( Math.ceil(totalRecords / user.gridPageSize))
+  useEffect(() => {
+    setTotalPages(Math.ceil(totalRecords / recordsPerPage))
   }, [recordsPerPage]);
 
   return (
@@ -104,13 +107,7 @@ const Inprogress: React.FC = () => {
 
         {/* <h2 className="text-xl font-semibold text-blue-700">User Details</h2> */}
 
-        <input
-          type="text"
-          placeholder="Search..."
-          // value={searchTerm}
-          // onChange={(e) => setSearchTerm(e.target.value)}
-          className="border-2 border-gray-300 rounded-lg px-3 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+
       </div>
       {/* Responsive Table inside the same container */}
       <TableComponent
@@ -120,11 +117,6 @@ const Inprogress: React.FC = () => {
         color="red"
       />
       {inboxData?.length !== 0 && (
-        // <Pagination
-        //   currentPage={currentPage}
-        //   totalPages={totalPages}
-        //   onPageChange={(page) => setPageChange(page)}
-        // />
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
