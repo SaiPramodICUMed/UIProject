@@ -36,14 +36,14 @@ const Inprogress: React.FC = () => {
     setPageChange(1, recordsPerPage);
   };
 
-  const columns = [
-    { header: "Task Name", accessor: "Name" },
-    { header: "Task Type", accessor: "TaskType" },
-    { header: "Status", accessor: "TaskStatus" },
-    { header: "Next", accessor: "FAO" },
-    { header: "Creator", accessor: "Owner" },
-    { header: "Created", accessor: "Created" },
-    { header: "Last Modified", accessor: "LastModified" },
+  const columns:any = [
+    { header: "Task Name", accessor: "Name", filterType:"text",filterOptions: ["Active", "Inactive", "Pending"], },
+    { header: "Task Type", accessor: "TaskType", filterType:"select",filterOptions: ["Activedsfsfdsdfsf", "Inactive", "Pending"],  },
+    { header: "Status", accessor: "TaskStatus", filterType:"autocomplete", filterOptions: ["Active", "Inactive", "Pending"],  },
+    { header: "Next", accessor: "FAO",filterType:"autocomplete" },
+    { header: "Creator", accessor: "Owner", filterType:"multiSelect", filterOptions: ["Actived", "Inactive", "Pending"],},
+    { header: "Created", accessor: "Created", filterType:"range" },
+    { header: "Last Modified", accessor: "LastModified" , filterType:"dateRange"},
     { header: "Items", accessor: "ItemCount" },
     { header: "Value", accessor: "OriginalValue" },
     { header: "Floor Breaks", accessor: "FloorBreaks" },
@@ -53,7 +53,7 @@ const Inprogress: React.FC = () => {
 
   const fetchData = async (arg: any, start: number, end: number) => {
     console.log(arg, start, end);
-    setLoading(true);
+   // setLoading(true);
     //setActiveTab(arg);
     try {
       const payload = {
@@ -134,3 +134,254 @@ const Inprogress: React.FC = () => {
 };
 
 export default Inprogress;
+// import React, { useMemo, useState } from "react";
+
+// interface ColumnConfig {
+//   header: string;
+//   accessor: string;
+//   filterType?: "text" | "select" | "autocomplete" | "dateRange";
+//   options?: string[]; // for select
+// }
+
+// interface TableProps {
+//   data: Record<string, any>[];
+//   columns: ColumnConfig[];
+//   height?: string;
+//   color?: string;
+// }
+
+// const TableComponent: React.FC<TableProps> = ({
+//   data,
+//   columns,
+//   height = "500px",
+//   color = "blue",
+// }) => {
+//   const [sortConfig, setSortConfig] = useState<{
+//     key: string;
+//     direction: "asc" | "desc";
+//   } | null>(null);
+
+//   const [filters, setFilters] = useState<Record<string, any>>({});
+
+//   const handleFilterChange = (key: string, value: any) => {
+//     setFilters((prev) => ({ ...prev, [key]: value }));
+//   };
+
+//   const handleRowClick = (row: Record<string, any>) => {
+//     console.log("Row clicked:", row);
+//   };
+
+//   // sorting
+//   const handleSort = (accessor: string) => {
+//     if (sortConfig?.key === accessor) {
+//       setSortConfig({
+//         key: accessor,
+//         direction: sortConfig.direction === "asc" ? "desc" : "asc",
+//       });
+//     } else {
+//       setSortConfig({ key: accessor, direction: "asc" });
+//     }
+//   };
+
+//   const sortedData = useMemo(() => {
+//     if (!sortConfig) return data;
+//     const { key, direction } = sortConfig;
+//     return [...data].sort((a, b) => {
+//       let aValue = a[key];
+//       let bValue = b[key];
+//       aValue = typeof aValue === "number" ? aValue : aValue?.toString()?.toLowerCase() ?? "";
+//       bValue = typeof bValue === "number" ? bValue : bValue?.toString()?.toLowerCase() ?? "";
+//       if (aValue < bValue) return direction === "asc" ? -1 : 1;
+//       if (aValue > bValue) return direction === "asc" ? 1 : -1;
+//       return 0;
+//     });
+//   }, [data, sortConfig]);
+
+//   // filtering
+//   const filteredData = useMemo(() => {
+//     return sortedData.filter((row) =>
+//       columns.every((col) => {
+//         const filterValue = filters[col.accessor];
+//         if (!filterValue) return true;
+
+//         if (col.filterType === "dateRange" && Array.isArray(filterValue)) {
+//           const [start, end] = filterValue;
+//           const rowDate = new Date(row[col.accessor]);
+//           if (start && rowDate < new Date(start)) return false;
+//           if (end && rowDate > new Date(end)) return false;
+//           return true;
+//         }
+
+//         const cellValue = String(row[col.accessor] ?? "").toLowerCase();
+//         return cellValue.includes(String(filterValue).toLowerCase());
+//       })
+//     );
+//   }, [sortedData, filters, columns]);
+
+//   const renderFilter = (col: ColumnConfig) => {
+//     switch (col.filterType) {
+//       case "select":
+//         return (
+//           <select
+//             className="w-full px-2 py-1 border border-gray-300 rounded text-xs"
+//             value={filters[col.accessor] ?? ""}
+//             onChange={(e) => handleFilterChange(col.accessor, e.target.value)}
+//           >
+//             <option value="">All</option>
+//             {col.options?.map((opt, i) => (
+//               <option key={i} value={opt}>
+//                 {opt}
+//               </option>
+//             ))}
+//           </select>
+//         );
+
+//       case "autocomplete":
+//         const suggestions = Array.from(
+//           new Set(data.map((d) => d[col.accessor]).filter(Boolean))
+//         ).filter((val) =>
+//           String(val)
+//             .toLowerCase()
+//             .includes((filters[col.accessor] ?? "").toLowerCase())
+//         );
+
+//         return (
+//           <div className="relative">
+//             <input
+//               type="text"
+//               placeholder="Search..."
+//               className="w-full px-2 py-1 border border-gray-300 rounded text-xs"
+//               value={filters[col.accessor] ?? ""}
+//               onChange={(e) => handleFilterChange(col.accessor, e.target.value)}
+//             />
+//             {filters[col.accessor] && suggestions.length > 0 && (
+//               <div className="absolute bg-white border border-gray-300 mt-1 rounded shadow max-h-40 overflow-y-auto z-10">
+//                 {suggestions.map((s, i) => (
+//                   <div
+//                     key={i}
+//                     onClick={() => handleFilterChange(col.accessor, s)}
+//                     className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-xs"
+//                   >
+//                     {s}
+//                   </div>
+//                 ))}
+//               </div>
+//             )}
+//           </div>
+//         );
+
+//       case "dateRange":
+//         return (
+//           <div className="flex flex-col gap-1 text-xs">
+//             <input
+//               type="date"
+//               value={filters[col.accessor]?.[0] ?? ""}
+//               onChange={(e) =>
+//                 handleFilterChange(col.accessor, [
+//                   e.target.value,
+//                   filters[col.accessor]?.[1] ?? "",
+//                 ])
+//               }
+//               className="w-full px-1 py-1 border border-gray-300 rounded"
+//             />
+//             <input
+//               type="date"
+//               value={filters[col.accessor]?.[1] ?? ""}
+//               onChange={(e) =>
+//                 handleFilterChange(col.accessor, [
+//                   filters[col.accessor]?.[0] ?? "",
+//                   e.target.value,
+//                 ])
+//               }
+//               className="w-full px-1 py-1 border border-gray-300 rounded"
+//             />
+//           </div>
+//         );
+
+//       default:
+//         return (
+//           <input
+//             type="text"
+//             placeholder="Search..."
+//             className="w-full px-2 py-1 border border-gray-300 rounded text-xs"
+//             value={filters[col.accessor] ?? ""}
+//             onChange={(e) => handleFilterChange(col.accessor, e.target.value)}
+//           />
+//         );
+//     }
+//   };
+
+//   return (
+//     <div
+//       className="w-full overflow-x-auto border rounded-lg shadow-sm bg-white"
+//       style={{ maxHeight: height }}
+//     >
+//       <table className="min-w-[800px] w-full border-collapse">
+//         <thead className="sticky top-0 bg-[#0f59ac] text-white z-10">
+//           <tr>
+//             {columns.map((col, i) => (
+//               <th
+//                 key={i}
+//                 onClick={() => handleSort(col.accessor)}
+//                 className="border border-black px-4 py-2 text-left font-semibold text-xs cursor-pointer select-none"
+//               >
+//                 <div className="flex justify-between items-center">
+//                   <span>{col.header}</span>
+//                   <span>
+//                     {sortConfig?.key === col.accessor
+//                       ? sortConfig.direction === "asc"
+//                         ? "▲"
+//                         : "▼"
+//                       : ""}
+//                   </span>
+//                 </div>
+//               </th>
+//             ))}
+//           </tr>
+//           <tr className="bg-gray-100 text-gray-800">
+//             {columns.map((col, i) => (
+//               <th key={i} className="border border-gray-300 px-2 py-1">
+//                 {renderFilter(col)}
+//               </th>
+//             ))}
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {filteredData.length ? (
+//             filteredData.map((row, rowIndex) => (
+//               <tr
+//                 key={rowIndex}
+//                 onClick={() => handleRowClick(row)}
+//                 className={`cursor-pointer text-xs ${
+//                   rowIndex % 2 === 0 ? "bg-[#ebeff3]" : "bg-white"
+//                 } hover:bg-[#d0e5f5]`}
+//               >
+//                 {columns.map((col, colIndex) => (
+//                   <td
+//                     key={colIndex}
+//                     className="border px-4 py-2 whitespace-nowrap"
+//                     title={String(row[col.accessor] ?? "")}
+//                   >
+//                     {String(row[col.accessor] ?? "")}
+//                   </td>
+//                 ))}
+//               </tr>
+//             ))
+//           ) : (
+//             <tr>
+//               <td
+//                 colSpan={columns.length}
+//                 className="text-center p-4 text-gray-500"
+//               >
+//                 No records to display.
+//               </td>
+//             </tr>
+//           )}
+//         </tbody>
+//       </table>
+//     </div>
+//   );
+// };
+
+// export default TableComponent;
+
