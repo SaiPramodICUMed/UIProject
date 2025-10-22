@@ -12,7 +12,7 @@ const Inprogress: React.FC = () => {
   const [inboxData, setInboxData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalRecords, setTotalRecords] = useState(taskCount.inProgress);
+  const [totalRecords] = useState(taskCount.inProgress);
   const [recordsPerPage, setRecordsPerPage] = useState(user.gridPageSize);
   const [totalPages, setTotalPages] = useState(Math.ceil(totalRecords / user.gridPageSize));
 

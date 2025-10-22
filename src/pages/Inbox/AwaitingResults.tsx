@@ -12,7 +12,7 @@ const AwaitingResults: React.FC = () => {
   const [inboxData, setInboxData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalRecords, setTotalRecords] = useState(taskCount.awaitingResults);
+  const [totalRecords] = useState(taskCount.awaitingResults);
   const [recordsPerPage, setRecordsPerPage] = useState(user.gridPageSize);
   const [totalPages, setTotalPages] = useState(Math.ceil(totalRecords / user.gridPageSize));
 

@@ -11,7 +11,7 @@ const Inbox: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const taskCount = useSelector((state: any) => state.user.taskCount);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalRecords, setTotalRecords] = useState(taskCount.inProgress);
+  const [totalRecords] = useState(taskCount.inProgress);
   const [recordsPerPage, setRecordsPerPage] = useState(user.gridPageSize);
   const [totalPages, setTotalPages] = useState(Math.ceil(totalRecords / user.gridPageSize));
   // const inboxData:any=[];

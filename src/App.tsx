@@ -25,6 +25,8 @@ import RecentlyLoaded from "./pages/Pricing/ERPLoad/RecentlyLoaded";
 import SegmentationAccounts from "./pages/Strategy/Segmentation/Accounts";
 import SegmentationGroups from "./pages/Strategy/Segmentation/Groups";
 import TargetsAndFloors from "./pages/Strategy/TargetsAndFloors";
+import Promotions from "./pages/Strategy/Promotions";
+import ApprovalControls from "./pages/Strategy/ApprovalControls";
 import AboutToExpire from "./pages/Pricing/RenewalsCalendar/AboutToExpire";
 import RenewalAll from "./pages/Pricing/RenewalsCalendar/All";
 import Error from "./pages/Pricing/RenewalsCalendar/Error";
@@ -70,6 +72,8 @@ function App() {
       <Route path="/expired" element={< Expired/>} />
       <Route path="/manual" element={< Manual/>} />
       <Route path="/login" element={<Login/>}/>
+      <Route path="/promotions" element={<Promotions/>}/>
+      <Route path="/approvalControls" element={<ApprovalControls/>}/>
     </Routes>
     </LayOut>
     </Router>

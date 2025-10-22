@@ -3,13 +3,16 @@ import TableComponent from "../../../components/TableComponent";
 import Pagination from "../../../components/PageNation";
 import axios from "axios";
 import Loader from "../../../components/loader";
-//import data from "../../data.json";
+import { useSelector } from "react-redux";
 
 const Accounts: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+    const user = useSelector((state: any) => state.user.users);
   const [inboxData, setInboxData] = useState([]);
   const [loading,setLoading]=useState(false);
-  const totalPages = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+    const [totalRecords, setTotalRecords] = useState(1);
+    const [recordsPerPage, setRecordsPerPage] = useState(user.gridPageSize);
+    const [totalPages, setTotalPages] = useState(Math.ceil(totalRecords / user.gridPageSize));
   const columns = [
     { header: "Customer Name", accessor: "CustomerName" },
     { header: "Customer Segment", accessor: "Segment" },
@@ -24,15 +27,32 @@ const Accounts: React.FC = () => {
     { header: "Items Sold", accessor: "ItemsSold" },
   ];
 
-  const fetchData = async () => {
+const setPageChange = (pageNumber: any, listPerPage?: any) => {
+    const noOfrecordsPerPage = listPerPage ? listPerPage : recordsPerPage
+    setCurrentPage(pageNumber);
+    let start = pageNumber == 0 ? 1 : (pageNumber - 1) * noOfrecordsPerPage + 1;
+    let end =
+      pageNumber == 0 ? user.gridPageSize : pageNumber * noOfrecordsPerPage;
+    console.log(start, end);
+    fetchData(start, end);
+  };
+
+  const changeRecordsPerPage = (recordsPerPage: any) => {
+    console.log("on count change", recordsPerPage);
+    setRecordsPerPage(recordsPerPage);
+    setTotalPages(Math.ceil(totalRecords / recordsPerPage))
+    setPageChange(1, recordsPerPage);
+  };
+
+  const fetchData = async (start: number, end: number) => {
     //console.log(arg);
     //setActiveTab(arg);
     setLoading(true);
     try {
       const payload = {
         viewName: "vw_AccountSales",
-        firstRow: 1,
-        lastRow: 10,
+        firstRow: start,
+        lastRow: end,
         sortBy: "CustomerName",
         sortByDirection: "asc",
         filter: `AND CountryID = 5`,
@@ -57,9 +77,40 @@ const Accounts: React.FC = () => {
     }
   };
 
+  const fetchCount = async () => {
+    //console.log(arg);
+    setLoading(true);
+    //setActiveTab(arg);
+    try {
+      const payload = {
+        viewName: `vw_AccountSales`,
+        filter: `AND CountryID = 5`
+      };
+
+      // 👈 second argument is the body (data)
+      const response = await axios.post(
+        `https://10.2.6.130:5000/api/Metadata/getViewCount`,
+        payload,
+        { headers: { "Content-Type": "application/json" } } // optional config
+      );
+
+      //console.log("All", response.data);
+      setTotalRecords(response.data.count);
+      setLoading(false);
+      return response.data;
+    } catch (error: any) {
+      console.error("Error fetching data:", error.message);
+      return null;
+    }
+  };
+
   useEffect(() => {
-    fetchData();
+    fetchCount();
+    fetchData(1, user.gridPageSize);
   }, []);
+  useEffect(() => {
+    setTotalPages(Math.ceil(totalRecords / recordsPerPage))
+  }, [recordsPerPage, totalRecords]);
 
   return (
     <div className="bg-white p-6">
@@ -78,13 +129,6 @@ const Accounts: React.FC = () => {
 
         {/* <h2 className="text-xl font-semibold text-blue-700">User Details</h2> */}
 
-        <input
-          type="text"
-          placeholder="Search..."
-          // value={searchTerm}
-          // onChange={(e) => setSearchTerm(e.target.value)}
-          className="border-2 border-gray-300 rounded-lg px-3 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
       </div>
       {/* Responsive Table inside the same container */}
       <TableComponent
@@ -93,12 +137,19 @@ const Accounts: React.FC = () => {
         height="450px"
         color="blue"
       />
-      {inboxData?.length !== 0 &&(
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={(page) => setCurrentPage(page)}
-      />)}
+      {inboxData?.length !== 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalRecords={totalRecords}
+          recordsPerPage={recordsPerPage}
+          onPageChange={setPageChange}
+          onRecordsPerPageChange={(val) => {
+            changeRecordsPerPage(val);
+            //setPageChange(1); // reset to first page on change
+          }}
+        />
+      )}
     </div>
   );
 };

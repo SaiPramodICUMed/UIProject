@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const apiCall = async (url: string, method: "GET" | "POST" = "GET", body?: any) => {
+export const apiCall = async (url: string, method: "GET" | "POST" = "GET") => {
   try {
     const response = await axios({
       url,

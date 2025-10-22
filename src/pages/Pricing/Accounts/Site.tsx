@@ -112,6 +112,9 @@ const Site: React.FC = () => {
     fetchCount();
     fetchData(1, user.gridPageSize);
   }, []);
+  useEffect(() => {
+          setTotalPages(Math.ceil(totalRecords / recordsPerPage))
+        }, [recordsPerPage,totalRecords]);
 
   return (
     <div className="bg-white p-6">
