@@ -34,17 +34,34 @@ const TableComponent: React.FC<TableProps> = ({
 
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [openFilter, setOpenFilter] = useState<string | null>(null);
-const [dateFilterValues, setDateFilterValues] = useState<Record<string, [string, string]>>({});
+  const [dateFilterValues, setDateFilterValues] = useState<
+    Record<string, [string, string]>
+  >({});
 
   const tableRef = useRef<HTMLDivElement>(null);
 
   // Close dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (tableRef.current && !tableRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+
+      // if tableRef not defined, skip
+      if (!tableRef.current) return;
+
+      // Check if clicked inside main table area
+      const clickedInsideTable = tableRef.current.contains(target);
+
+      // Check if clicked inside any open portal dropdown
+      const dropdownElements = document.querySelectorAll(".dropdown-portal");
+      const clickedInsidePortal = Array.from(dropdownElements).some((el) =>
+        el.contains(target)
+      );
+
+      if (!clickedInsideTable && !clickedInsidePortal) {
         setOpenFilter(null);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -58,7 +75,7 @@ const [dateFilterValues, setDateFilterValues] = useState<Record<string, [string,
     red: "text-red-800",
     green: "text-green-800",
   };
-   function getDaysFromToday(dateString: string): string {
+  function getDaysFromToday(dateString: string): string {
     if (!dateString) return "0 days";
 
     const givenDate = new Date(dateString);
@@ -177,7 +194,9 @@ const [dateFilterValues, setDateFilterValues] = useState<Record<string, [string,
     switch (col.filterType) {
       case "autocomplete": {
         const suggestions = values.filter((v) =>
-          String(v).toLowerCase().includes((filters[col.accessor] ?? "").toLowerCase())
+          String(v)
+            .toLowerCase()
+            .includes((filters[col.accessor] ?? "").toLowerCase())
         );
         return (
           <div className="relative">
@@ -230,7 +249,11 @@ const [dateFilterValues, setDateFilterValues] = useState<Record<string, [string,
         const allSelected = selectedValues.length === values.length;
 
         const buttonRef = useRef<HTMLDivElement>(null);
-        const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 200 });
+        const [dropdownPos, setDropdownPos] = useState({
+          top: 0,
+          left: 0,
+          width: 200,
+        });
 
         const toggleDropdown = () => {
           if (!openFilter && buttonRef.current) {
@@ -251,19 +274,22 @@ const [dateFilterValues, setDateFilterValues] = useState<Record<string, [string,
               className="w-full px-2 py-1 border rounded cursor-pointer bg-white"
               onClick={toggleDropdown}
             >
-              {selectedValues.length > 0 ? selectedValues.join(", ") : "Select options..."}
+              {selectedValues.length > 0
+                ? selectedValues.join(", ")
+                : "Select options..."}
             </div>
 
             {openFilter === col.accessor &&
               createPortal(
                 <div
+                  className="absolute z-50 bg-white border rounded shadow-lg max-h-64 overflow-y-auto dropdown-portal"
                   style={{
                     top: dropdownPos.top,
                     left: dropdownPos.left,
                     width: 200,
                   }}
-                  className="absolute z-50 bg-white border rounded shadow-lg max-h-64 overflow-y-auto"
                 >
+                  {/* Search, buttons, and checkboxes */}
                   <input
                     type="text"
                     placeholder="Search..."
@@ -274,7 +300,9 @@ const [dateFilterValues, setDateFilterValues] = useState<Record<string, [string,
                   <div className="flex gap-1 px-2 py-1 border-b">
                     <button
                       className="flex-1 px-2 py-1 text-xs border rounded bg-gray-100 hover:bg-gray-200"
-                      onClick={() => handleFilterChange(col.accessor, [...values])}
+                      onClick={() =>
+                        handleFilterChange(col.accessor, [...values])
+                      }
                       disabled={allSelected}
                     >
                       Select All
@@ -293,7 +321,7 @@ const [dateFilterValues, setDateFilterValues] = useState<Record<string, [string,
                       className="flex items-center px-2 py-1 hover:bg-gray-100 cursor-pointer"
                       onClick={() => {
                         const newVals = selectedValues.includes(v)
-                          ? selectedValues.filter((x:any) => x !== v)
+                          ? selectedValues.filter((x: any) => x !== v)
                           : [...selectedValues, v];
                         handleFilterChange(col.accessor, newVals);
                       }}
@@ -308,7 +336,9 @@ const [dateFilterValues, setDateFilterValues] = useState<Record<string, [string,
                     </div>
                   ))}
                   {filteredOptions.length === 0 && (
-                    <div className="px-2 py-1 text-gray-500 text-xs">No options found</div>
+                    <div className="px-2 py-1 text-gray-500 text-xs">
+                      No options found
+                    </div>
                   )}
                 </div>,
                 document.body
@@ -326,7 +356,11 @@ const [dateFilterValues, setDateFilterValues] = useState<Record<string, [string,
         ]);
 
         const buttonRef = useRef<HTMLDivElement>(null);
-        const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 200 });
+        const [dropdownPos, setDropdownPos] = useState({
+          top: 0,
+          left: 0,
+          width: 200,
+        });
 
         const toggleDropdown = () => {
           if (!openFilter && buttonRef.current) {
@@ -348,7 +382,8 @@ const [dateFilterValues, setDateFilterValues] = useState<Record<string, [string,
           handleFilterChange(col.accessor, newRange);
         };
 
-        const getPercent = (val: number) => ((val - staticMin) / (staticMax - staticMin)) * 100;
+        const getPercent = (val: number) =>
+          ((val - staticMin) / (staticMax - staticMin)) * 100;
 
         return (
           <div className="relative w-full">
@@ -377,7 +412,9 @@ const [dateFilterValues, setDateFilterValues] = useState<Record<string, [string,
                       className="absolute top-1/2 -translate-y-1/2 h-2 bg-blue-500 rounded"
                       style={{
                         left: `${getPercent(rangeValue[0])}%`,
-                        width: `${getPercent(rangeValue[1]) - getPercent(rangeValue[0])}%`,
+                        width: `${
+                          getPercent(rangeValue[1]) - getPercent(rangeValue[0])
+                        }%`,
                       }}
                     />
                     <input
@@ -422,102 +459,167 @@ const [dateFilterValues, setDateFilterValues] = useState<Record<string, [string,
           </div>
         );
       }
-case "dateRange": {
-  const startDate = dateFilterValues[col.accessor]?.[0] ?? filters[col.accessor]?.[0] ?? "";
-  const endDate = dateFilterValues[col.accessor]?.[1] ?? filters[col.accessor]?.[1] ?? "";
-  const [custom, setCustom] = useState(false);
-  const [selectedPeriod, setSelectedPeriod] = useState<string | null>(null);
+      case "dateRange": {
+        const [custom, setCustom] = useState(false);
+        const [selectedPeriod, setSelectedPeriod] = useState<string | null>(
+          null
+        );
+        const buttonRef = useRef<HTMLDivElement | null>(null);
+        const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0 });
 
-  const periods = ["Today", "1 Month", "3 Months", "6 Months", "1 Year", "2 Years"];
+        const startDate =
+          dateFilterValues[col.accessor]?.[0] ??
+          filters[col.accessor]?.[0] ??
+          "";
+        const endDate =
+          dateFilterValues[col.accessor]?.[1] ??
+          filters[col.accessor]?.[1] ??
+          "";
 
-  const handlePeriod = (period: string) => {
-    const today = new Date();
-    let start: Date;
+        const periods = [
+          "Today",
+          "1 Month",
+          "3 Months",
+          "6 Months",
+          "1 Year",
+          "2 Years",
+        ];
 
-    switch (period) {
-      case "Today": start = new Date(); break;
-      case "1 Month": start = new Date(); start.setMonth(today.getMonth() - 1); break;
-      case "3 Months": start = new Date(); start.setMonth(today.getMonth() - 3); break;
-      case "6 Months": start = new Date(); start.setMonth(today.getMonth() - 6); break;
-      case "1 Year": start = new Date(); start.setFullYear(today.getFullYear() - 1); break;
-      case "2 Years": start = new Date(); start.setFullYear(today.getFullYear() - 2); break;
-      default: start = today;
-    }
+        // 🧭 Calculate dropdown overlay position
+        useEffect(() => {
+          if (buttonRef.current && openFilter === col.accessor) {
+            const rect = buttonRef.current.getBoundingClientRect();
+            setDropdownPos({
+              top: rect.bottom + window.scrollY + 4,
+              left: rect.left + window.scrollX,
+            });
+          }
+        }, [openFilter]);
 
-    const s = start.toISOString().split("T")[0];
-    const e = today.toISOString().split("T")[0];
+        const handlePeriod = (period: string) => {
+          const today = new Date();
+          let start = new Date();
 
-    setDateFilterValues((prev) => ({ ...prev, [col.accessor]: [s, e] }));
-    handleFilterChange(col.accessor, [s, e]);
-    setSelectedPeriod(period);
-    setCustom(false);
-    setOpenFilter(null);
-  };
+          switch (period) {
+            case "1 Month":
+              start.setMonth(today.getMonth() - 1);
+              break;
+            case "3 Months":
+              start.setMonth(today.getMonth() - 3);
+              break;
+            case "6 Months":
+              start.setMonth(today.getMonth() - 6);
+              break;
+            case "1 Year":
+              start.setFullYear(today.getFullYear() - 1);
+              break;
+            case "2 Years":
+              start.setFullYear(today.getFullYear() - 2);
+              break;
+            default:
+              start = today;
+          }
 
-  const handleCustomChange = (index: 0 | 1, value: string) => {
-    const newRange: [string, string] = [...(dateFilterValues[col.accessor] ?? [startDate, endDate])] as [string, string];
-    newRange[index] = value;
-    setDateFilterValues((prev) => ({ ...prev, [col.accessor]: newRange }));
-    handleFilterChange(col.accessor, newRange);
-  };
+          const s = start.toISOString().split("T")[0];
+          const e = today.toISOString().split("T")[0];
 
-  return (
-    <div className="relative w-full">
-      <div
-        className="cursor-pointer border px-2 py-1 rounded text-xs bg-white shadow-sm hover:bg-gray-50 flex justify-between items-center"
-        onClick={() => setOpenFilter(openFilter === col.accessor ? null : col.accessor)}
-      >
-        <span>{startDate && endDate ? `${startDate} - ${endDate}` : "Select Date"}</span>
-        <span className="ml-2 text-gray-500">&#9662;</span>
-      </div>
+          setDateFilterValues((prev) => ({ ...prev, [col.accessor]: [s, e] }));
+          handleFilterChange(col.accessor, [s, e]);
+          setSelectedPeriod(period);
+          setCustom(false);
+          setOpenFilter(null);
+        };
 
-      {openFilter === col.accessor && (
-        <div className="absolute z-50 top-full left-0 mt-1 w-64 p-3 bg-white border rounded shadow-lg">
-          <div className="grid grid-cols-2 gap-2">
-            {periods.map((period) => (
-              <div
-                key={period}
-                className={`px-2 py-1 text-xs rounded cursor-pointer text-center hover:bg-[#0f59ac] ${
-                  selectedPeriod === period ? "bg-[#0f59ac] text-white font-semibold" : "bg-gray-100 text-gray-800"
-                }`}
-                onClick={() => handlePeriod(period)}
-              >
-                {period}
-              </div>
-            ))}
-          </div>
+        const handleCustomChange = (index: 0 | 1, value: string) => {
+          const newRange: [string, string] = [
+            ...(dateFilterValues[col.accessor] ?? [startDate, endDate]),
+          ] as [string, string];
+          newRange[index] = value;
+          setDateFilterValues((prev) => ({
+            ...prev,
+            [col.accessor]: newRange,
+          }));
+          handleFilterChange(col.accessor, newRange);
+        };
 
-          <div
-            className={`mt-3 px-2 py-1 text-xs rounded cursor-pointer text-center hover:bg-[#0f59ac] ${
-              custom ? "bg-[#0f59ac] text-white font-semibold" : "bg-gray-100 text-gray-800"
-            }`}
-            onClick={() => setCustom(true)}
-          >
-            Custom
-          </div>
-
-          {custom && (
-            <div className="flex flex-col gap-2 mt-2">
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => handleCustomChange(0, e.target.value)}
-                className="px-2 py-1 border rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-400"
-              />
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => handleCustomChange(1, e.target.value)}
-                className="px-2 py-1 border rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-400"
-              />
+        return (
+          <>
+            <div
+              ref={buttonRef}
+              className="cursor-pointer border px-2 py-1 rounded text-xs bg-white shadow-sm hover:bg-gray-50 flex justify-between items-center"
+              onClick={() =>
+                setOpenFilter(openFilter === col.accessor ? null : col.accessor)
+              }
+            >
+              <span>
+                {startDate && endDate
+                  ? `${startDate} - ${endDate}`
+                  : "Select Date"}
+              </span>
+              <span className="ml-2 text-gray-500">&#9662;</span>
             </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
 
+            {openFilter === col.accessor &&
+              createPortal(
+                <div
+                  className="absolute z-50 w-64 p-3 bg-white border rounded shadow-lg dropdown-portal"
+                  style={{
+                    top: dropdownPos.top,
+                    left: dropdownPos.left,
+                  }}
+                >
+                  {/* Predefined periods */}
+                  <div className="grid grid-cols-2 gap-2">
+                    {periods.map((period) => (
+                      <div
+                        key={period}
+                        className={`px-2 py-1 text-xs rounded cursor-pointer text-center hover:bg-blue-100 ${
+                          selectedPeriod === period
+                            ? "bg-[#0f59ac] text-white font-semibold"
+                            : "bg-gray-100 text-gray-800"
+                        }`}
+                        onClick={() => handlePeriod(period)}
+                      >
+                        {period}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Custom Option */}
+                  <div
+                    className={`mt-3 px-2 py-1 text-xs rounded cursor-pointer text-center hover:bg-blue-100 ${
+                      custom
+                        ? "bg-[#0f59ac] text-white font-semibold"
+                        : "bg-gray-100 text-gray-800"
+                    }`}
+                    onClick={() => setCustom(true)}
+                  >
+                    Custom
+                  </div>
+
+                  {/* Custom date pickers */}
+                  {custom && (
+                    <div className="flex flex-col gap-2 mt-2">
+                      <input
+                        type="date"
+                        value={startDate}
+                        onChange={(e) => handleCustomChange(0, e.target.value)}
+                        className="px-2 py-1 border rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-400"
+                      />
+                      <input
+                        type="date"
+                        value={endDate}
+                        onChange={(e) => handleCustomChange(1, e.target.value)}
+                        className="px-2 py-1 border rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-400"
+                      />
+                    </div>
+                  )}
+                </div>,
+                document.body
+              )}
+          </>
+        );
+      }
 
       default:
         return (
@@ -533,7 +635,11 @@ case "dateRange": {
   };
 
   return (
-    <div ref={tableRef} className="w-full overflow-x-auto border rounded-lg shadow-sm bg-white" style={{ maxHeight: height }}>
+    <div
+      ref={tableRef}
+      className="w-full overflow-x-auto border rounded-lg shadow-sm bg-white"
+      style={{ maxHeight: height }}
+    >
       <table className="min-w-[800px] w-full border-collapse">
         <thead className="sticky top-0 bg-[#0f59ac] text-white z-10">
           <tr>
@@ -577,28 +683,37 @@ case "dateRange": {
                 {columns.map((col, colIndex) => (
                   <td
                     key={colIndex}
-                   className={`border px-4 py-2 overflow-hidden text-ellipsis whitespace-nowrap ${colorClassMap[color]
+                    className={`border px-4 py-2 overflow-hidden text-ellipsis whitespace-nowrap ${
+                      colorClassMap[color]
                         ? colorClassMap[color]
                         : "text-gray-800"
-                      } ${colIndex === 0 ? "min-w-[80px] w-[80px] max-w-[220px]" : "min-w-[80px] w-[80px] max-w-[220px]"}`}
+                    } ${
+                      colIndex === 0
+                        ? "min-w-[80px] w-[80px] max-w-[220px]"
+                        : "min-w-[80px] w-[80px] max-w-[220px]"
+                    }`}
                     title={String(row[col.accessor] ?? "")}
                   >
-                    {col.accessor === "Created" ||col.accessor === "LastModified"
+                    {col.accessor === "Created" ||
+                    col.accessor === "LastModified"
                       ? formatToDate(row[col.accessor])
                       : col.accessor === "FloorBreaks"
-                        ? `${row[col.accessor]} (${row.FloorBreaksP}%)`
-                        : col.accessor === "OriginalValue"
-                          ? formatToUSCurrency(row[col.accessor])
-                          : col.accessor === "Due"
-                            ? getDaysFromToday(row[col.accessor])
-                            : row[col.accessor]}
+                      ? `${row[col.accessor]} (${row.FloorBreaksP}%)`
+                      : col.accessor === "OriginalValue"
+                      ? formatToUSCurrency(row[col.accessor])
+                      : col.accessor === "Due"
+                      ? getDaysFromToday(row[col.accessor])
+                      : row[col.accessor]}
                   </td>
                 ))}
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={columns.length} className="text-center p-4 text-gray-500">
+              <td
+                colSpan={columns.length}
+                className="text-center p-4 text-gray-500"
+              >
                 No records found.
               </td>
             </tr>
