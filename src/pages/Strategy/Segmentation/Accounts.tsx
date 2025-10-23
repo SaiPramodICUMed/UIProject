@@ -7,13 +7,15 @@ import { useSelector } from "react-redux";
 import SimpleBarChart from "../../../components/BarChart";
 
 const Accounts: React.FC = () => {
-    const user = useSelector((state: any) => state.user.users);
+  const user = useSelector((state: any) => state.user.users);
   const [inboxData, setInboxData] = useState([]);
-  const [loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-    const [totalRecords, setTotalRecords] = useState(1);
-    const [recordsPerPage, setRecordsPerPage] = useState(user.gridPageSize);
-    const [totalPages, setTotalPages] = useState(Math.ceil(totalRecords / user.gridPageSize));
+  const [totalRecords, setTotalRecords] = useState(1);
+  const [recordsPerPage, setRecordsPerPage] = useState(user.gridPageSize);
+  const [totalPages, setTotalPages] = useState(
+    Math.ceil(totalRecords / user.gridPageSize)
+  );
   const columns = [
     { header: "Customer Name", accessor: "CustomerName" },
     { header: "Customer Segment", accessor: "Segment" },
@@ -28,8 +30,8 @@ const Accounts: React.FC = () => {
     { header: "Items Sold", accessor: "ItemsSold" },
   ];
 
-const setPageChange = (pageNumber: any, listPerPage?: any) => {
-    const noOfrecordsPerPage = listPerPage ? listPerPage : recordsPerPage
+  const setPageChange = (pageNumber: any, listPerPage?: any) => {
+    const noOfrecordsPerPage = listPerPage ? listPerPage : recordsPerPage;
     setCurrentPage(pageNumber);
     let start = pageNumber == 0 ? 1 : (pageNumber - 1) * noOfrecordsPerPage + 1;
     let end =
@@ -41,7 +43,7 @@ const setPageChange = (pageNumber: any, listPerPage?: any) => {
   const changeRecordsPerPage = (recordsPerPage: any) => {
     console.log("on count change", recordsPerPage);
     setRecordsPerPage(recordsPerPage);
-    setTotalPages(Math.ceil(totalRecords / recordsPerPage))
+    setTotalPages(Math.ceil(totalRecords / recordsPerPage));
     setPageChange(1, recordsPerPage);
   };
 
@@ -85,7 +87,7 @@ const setPageChange = (pageNumber: any, listPerPage?: any) => {
     try {
       const payload = {
         viewName: `vw_AccountSales`,
-        filter: `AND CountryID = 5`
+        filter: `AND CountryID = 5`,
       };
 
       // 👈 second argument is the body (data)
@@ -110,28 +112,29 @@ const setPageChange = (pageNumber: any, listPerPage?: any) => {
     fetchData(1, user.gridPageSize);
   }, []);
   useEffect(() => {
-    setTotalPages(Math.ceil(totalRecords / recordsPerPage))
+    setTotalPages(Math.ceil(totalRecords / recordsPerPage));
   }, [recordsPerPage, totalRecords]);
 
   return (
     <div className="bg-white p-6">
-      <Loader isLoad={loading}/>
+      <Loader isLoad={loading} />
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
         <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-4">
           {/* <FaHome className="text-blue-600" /> */}
-          <span className="font-medium">
-            Strategy
-          </span>
+          <span className="font-medium">Strategy</span>
           {/* <FaChevronRight className="text-gray-400 text-xs" /> */}
           {/* <span className="font-medium hover:text-blue-700 cursor-pointer">Inbox</span> */}
           /{/* <FaChevronRight className="text-gray-400 text-xs" /> */}
-          <span className="text-gray-500 font-medium">&nbsp;Segmentation /&nbsp;Accounts</span>
+          <span className="text-gray-500 font-medium">
+            &nbsp;Segmentation /&nbsp;Accounts
+          </span>
         </nav>
 
         {/* <h2 className="text-xl font-semibold text-blue-700">User Details</h2> */}
-
       </div>
-       <SimpleBarChart/>
+      <div className="p-6">
+        <SimpleBarChart />
+      </div>
       {/* Responsive Table inside the same container */}
       <TableComponent
         data={inboxData}

@@ -6,7 +6,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
+  //Legend,
   LabelList,
 } from "recharts";
 
@@ -115,15 +115,16 @@ const renderLabel = (props: any) => {
 
 const SimpleBarChart: React.FC = () => {
   return (
+    
     <BarChart
       style={{
         width: "100%",
         maxWidth: "900px",
         maxHeight: "70vh",
-        aspectRatio: 1.618,
+        aspectRatio: 1.5,
       }}
       data={data}
-      margin={{ top: 20, right: 0, left: 0, bottom: 5 }}
+       margin={{ top: 20, right: 20, left: 60, bottom: 120 }}
     >
        <defs>
           <linearGradient id="pvGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -136,7 +137,7 @@ const SimpleBarChart: React.FC = () => {
       <XAxis dataKey="segmentName" interval={0}  angle={-90}  textAnchor="end"/>
       <YAxis tickFormatter={formatUSD} />
       <Tooltip formatter={(value: any) => formatUSD(value)} />
-      <Legend />
+      {/* <Legend /> */}
       <Bar dataKey="value"  fill="url(#pvGradient)">
         <LabelList dataKey="value" content={renderLabel} />
       </Bar>
