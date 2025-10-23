@@ -74,7 +74,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           onClick={handlePrev}
           disabled={currentPage === 1}
-          className="px-3 py-1 border rounded hover:bg-[#0f59ac] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+          className="px-3 py-1 text-xs border rounded hover:bg-[#0f59ac] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
         >
           « Prev
         </button>
@@ -84,7 +84,7 @@ const Pagination: React.FC<PaginationProps> = ({
             page === "..." ? (
               <span
                 key={`dots-${index}`}
-                className="px-3 py-1 text-gray-500 select-none"
+                className="px-3 py-1 text-gray-500 select-none text-xs"
               >
                 ...
               </span>
@@ -92,7 +92,7 @@ const Pagination: React.FC<PaginationProps> = ({
               <button
                 key={`page-${page}`}
                 onClick={() => onPageChange(Number(page))}
-                className={`px-3 py-1 border rounded shadow-sm ${
+                className={`px-3 py-1 border rounded shadow-sm text-xs ${
                   currentPage === page
                     ? "bg-[#0f59ac] text-white border-blue-600 font-semibold"
                     : "bg-white text-gray-700 hover:bg-[#0f59ac] hover:text-white"
@@ -107,7 +107,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           onClick={handleNext}
           disabled={currentPage === totalPages}
-          className="px-3 py-1 border rounded hover:bg-[#0f59ac] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+          className="px-3 py-1 text-xs border rounded hover:bg-[#0f59ac] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
         >
           Next »
         </button>

@@ -4,6 +4,7 @@ import Pagination from "../../../components/PageNation";
 import axios from "axios";
 import Loader from "../../../components/loader";
 import { useSelector } from "react-redux";
+import SimpleBarChart from "../../../components/BarChart";
 
 const Accounts: React.FC = () => {
     const user = useSelector((state: any) => state.user.users);
@@ -130,6 +131,7 @@ const setPageChange = (pageNumber: any, listPerPage?: any) => {
         {/* <h2 className="text-xl font-semibold text-blue-700">User Details</h2> */}
 
       </div>
+       <SimpleBarChart/>
       {/* Responsive Table inside the same container */}
       <TableComponent
         data={inboxData}
