@@ -10,6 +10,8 @@ interface Segment {
 
 const EditSegmentation: React.FC = () => {
   const [country, setCountry] = useState("Germany");
+  const [showModal, setShowModal] = useState(false);
+  const [newSeg, setNewSeg] = useState({ name: "", type: "" });
 
   const [segments] = useState<Segment[]>([
     { id: 405, name: "HC/AS -Distributors", type: "Account", country: "Germany", reference: "tier5" },
@@ -25,11 +27,23 @@ const EditSegmentation: React.FC = () => {
   ]);
 
   const handleAction = (action: string) => {
-    alert(`${action} button clicked`);
+    if (action === "Add New") {
+      setShowModal(true);
+    } else {
+      alert(`${action} button clicked`);
+    }
   };
 
+  const handleConfirm = () => {
+    alert(`New segmentation added:\nName: ${newSeg.name}\nType: ${newSeg.type}`);
+    setNewSeg({ name: "", type: "" });
+    setShowModal(false);
+  };
+
+  const isValid = newSeg.name.trim() !== "" && newSeg.type.trim() !== "";
+
   return (
-    <div className="p-6 bg-gray-50 min-h-screen text-sm">
+    <div className="p-6 bg-gray-50 min-h-screen text-sm relative">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-xl font-semibold text-gray-800">Edit Segmentation</h1>
@@ -92,9 +106,7 @@ const EditSegmentation: React.FC = () => {
             {segments.map((seg, i) => (
               <tr
                 key={seg.id}
-                className={`${
-                  i % 2 === 0 ? "bg-gray-50" : "bg-white"
-                } hover:bg-blue-50 transition`}
+                className={`${i % 2 === 0 ? "bg-gray-50" : "bg-white"} hover:bg-blue-50 transition`}
               >
                 <td className="px-4 py-2 border-b">{seg.id}</td>
                 <td className="px-4 py-2 border-b">{seg.name}</td>
@@ -117,6 +129,71 @@ const EditSegmentation: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-sm p-5">
+            <div className="flex justify-between items-center mb-3">
+              <h2 className="text-lg font-semibold text-gray-800">Add New Segmentation</h2>
+              <button
+                className="text-gray-400 hover:text-gray-600 text-xl"
+                onClick={() => setShowModal(false)}
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Fields */}
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm text-gray-700 font-medium">Name:</label>
+                <input
+                  type="text"
+                  value={newSeg.name}
+                  onChange={(e) => setNewSeg({ ...newSeg, name: e.target.value })}
+                  className="w-full border border-gray-300 rounded-md px-2 py-1 mt-1 focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter segmentation name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm text-gray-700 font-medium">Type:</label>
+                <select
+                  value={newSeg.type}
+                  onChange={(e) => setNewSeg({ ...newSeg, type: e.target.value })}
+                  className="w-full border border-gray-300 rounded-md px-2 py-1 mt-1 bg-white focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select Type</option>
+                  <option value="Account">Account</option>
+                  <option value="Group">Group</option>
+                </select>
+              </div>
+
+              <p className="text-xs text-gray-600">
+                <span className="font-semibold text-gray-800">Please note:</span> When a new
+                Segmentation is added, PMSI will send you an update to the target tool. Offsets and
+                Floors will need to be set for this new segmentation before it can go live.
+              </p>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex justify-end mt-5">
+              <button
+                onClick={handleConfirm}
+                disabled={!isValid}
+                className={`px-4 py-2 rounded-md text-white ${
+                  isValid
+                    ? "bg-blue-600 hover:bg-blue-700"
+                    : "bg-gray-300 cursor-not-allowed"
+                }`}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
