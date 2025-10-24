@@ -8,6 +8,8 @@ import SimpleBarChart from "../../../components/BarChart";
 
 const Accounts: React.FC = () => {
   const user = useSelector((state: any) => state.user.users);
+  const countries = useSelector((state: any) => state.user.countries);
+  console.log("countries state data:",countries);
   const [inboxData, setInboxData] = useState([]);
   const [summaryData, setSummaryData] = useState<any>({});
   const [loading, setLoading] = useState(false);

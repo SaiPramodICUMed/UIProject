@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { addTaskCount,addUser } from "../store/userSlice";
+import { addTaskCount,addUser, addCountries } from "../store/userSlice";
 
 export default function layOut({ children }: { children: React.ReactNode }) {
   const subitems: any = {
@@ -177,8 +177,25 @@ export default function layOut({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const fetchCountries = async () => {
+    try {
+      const response = await axios.get(
+        `https://vm-www-dprice01.icumed.com:5000/api/Metadata/getUsersCountries/8375`,
+        { headers: { "Content-Type": "application/json" } } // optional config
+      );
+
+      console.log("Countries API Response:", response.data);
+      dispatch(addCountries(response.data));
+      return response.data;
+    } catch (error: any) {
+      console.error("Error fetching data:", error.message);
+      return null;
+    }
+  };
+
   useEffect(() => {
     fetchTasksCount();
+    fetchCountries();
   }, []);
 
   return (
