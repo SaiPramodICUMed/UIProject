@@ -137,10 +137,10 @@ export default function layOut({ children }: { children: React.ReactNode }) {
       setActiveMenu(mainMenu);
       //console.log(path, subchildItems[path], menusFrom[subchildItems[path]]);
     } else {
-      mainMenu = menusFrom[path] || "";
+      mainMenu = menusFrom[path] || cleanPath;
 
       setActiveMenu(mainMenu);
-      setActiveSub(path || "");
+      setActiveSub(path || cleanPath);
     }
   }, [location.pathname]);
 
@@ -257,7 +257,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
               // onClick={() => activeMenuItem("profile")}
               onClick={() => setIsDropdownOpen((isDropdownOpen) => !isDropdownOpen)}
               className={
-                activeMenu == ""
+                activeMenu == "abc"
                   ? "bg-white text-blue-900 font-semibold px-5 py-1 rounded"
                   : "font-medium flex items-center space-x-2bg-white text-white font-semibold px-5 rounded hover:text-blue-200"
               }
