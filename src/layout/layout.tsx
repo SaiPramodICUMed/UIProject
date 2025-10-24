@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef  } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { addTaskCount } from "../store/userSlice";
+import { addTaskCount,addUser } from "../store/userSlice";
 
 export default function layOut({ children }: { children: React.ReactNode }) {
   const subitems: any = {
@@ -115,6 +115,11 @@ export default function layOut({ children }: { children: React.ReactNode }) {
     setActiveSub(subchildItems[sub]);
     navigate(`/${sub}`);
   };
+  const logoutHandler = () => {
+    dispatch(addUser({}));
+     navigate("/login");
+  }
+
 
   useEffect(() => {
     const path = location.pathname.startsWith("/")
@@ -132,12 +137,29 @@ export default function layOut({ children }: { children: React.ReactNode }) {
       setActiveMenu(mainMenu);
       //console.log(path, subchildItems[path], menusFrom[subchildItems[path]]);
     } else {
-      mainMenu = menusFrom[path] || "inbox";
+      mainMenu = menusFrom[path] || "";
 
       setActiveMenu(mainMenu);
-      setActiveSub(path || "inbox");
+      setActiveSub(path || "");
     }
   }, [location.pathname]);
+
+   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isDropdownOpen]);
 
   const fetchTasksCount = async () => {
     try {
@@ -233,6 +255,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
             </button>
             <button
               // onClick={() => activeMenuItem("profile")}
+              onClick={() => setIsDropdownOpen((isDropdownOpen) => !isDropdownOpen)}
               className={
                 activeMenu == ""
                   ? "bg-white text-blue-900 font-semibold px-5 py-1 rounded"
@@ -242,6 +265,40 @@ export default function layOut({ children }: { children: React.ReactNode }) {
               <FaUserCircle className="text-2xl  m-2" />
               <span>{user.userName}</span>
             </button>
+             {isDropdownOpen && (
+          <div className="absolute right-0 mt-13 w-44 bg-white border border-gray-200 rounded shadow-md z-20">
+            <button
+              onClick={() => {
+                setIsDropdownOpen(false);
+               // alert("Reset Password clicked");
+                 navigate("/resetPassword");
+              }}
+              className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50"
+            >
+              Reset Password
+            </button>
+            <button
+              onClick={() => {
+                setIsDropdownOpen(false);
+                // alert("Settings clicked");
+               // activeMenuItem("settings");
+              }}
+              className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50"
+            >
+              Settings
+            </button>
+            <button
+              onClick={() => {
+                setIsDropdownOpen(false);
+               
+               logoutHandler();
+                
+              }}
+              className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+            >
+              Logout
+            </button>
+          </div>)}
           </div>
 
           {/* Mobile Button */}

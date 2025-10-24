@@ -33,6 +33,8 @@ import Error from "./pages/Pricing/RenewalsCalendar/Error";
 import Expired from "./pages/Pricing/RenewalsCalendar/Expired";
 import Manual from "./pages/Pricing/RenewalsCalendar/Manual";
 import Login from "./pages/login";
+import ResetPassword from "./pages/resetPassword";
+import EditSegmentation from "./pages/editSegmentation";
 
 function App() {
   
@@ -74,6 +76,8 @@ function App() {
       <Route path="/login" element={<Login/>}/>
       <Route path="/promotions" element={<Promotions/>}/>
       <Route path="/approvalControls" element={<ApprovalControls/>}/>
+      <Route path="/resetPassword" element={<ResetPassword/>}/>
+      <Route path="/editSegmentation" element={<EditSegmentation/>}/>
     </Routes>
     </LayOut>
     </Router>

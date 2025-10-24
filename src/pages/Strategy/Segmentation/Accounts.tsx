@@ -132,6 +132,52 @@ const Accounts: React.FC = () => {
 
         {/* <h2 className="text-xl font-semibold text-blue-700">User Details</h2> */}
       </div>
+      <div className="bg-white border border-gray-300 rounded-xl p-4 md:p-6 w-full m-2">
+        <h2 className="text-lg font-semibold mb-4">Summary</h2>
+
+        {/* Summary content */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          {/* Total Customers */}
+          <div className="flex flex-col md:flex-row md:items-center gap-2">
+            <span className="font-semibold text-gray-800 whitespace-nowrap">
+              Total Customers:
+            </span>
+            <div className="bg-gray-100 px-4 py-2 rounded-md text-center min-w-[100px]">
+              4,124
+            </div>
+          </div>
+
+          {/* Gross Sales */}
+          <div className="flex flex-col md:flex-row md:items-center gap-2">
+            <span className="font-semibold text-gray-800 whitespace-nowrap">
+              Gross Sales:
+            </span>
+            <div className="bg-gray-100 px-4 py-2 rounded-md text-center min-w-[120px]">
+              € 32,419,629
+            </div>
+          </div>
+
+          {/* GM */}
+          <div className="flex flex-col md:flex-row md:items-center gap-2">
+            <span className="font-semibold text-gray-800 whitespace-nowrap">
+              GM:
+            </span>
+            <div className="bg-gray-100 px-4 py-2 rounded-md text-center min-w-[120px]">
+              € 18,487,382
+            </div>
+          </div>
+
+          {/* GM % */}
+          <div className="flex flex-col md:flex-row md:items-center gap-2">
+            <span className="font-semibold text-gray-800 whitespace-nowrap">
+              GM %:
+            </span>
+            <div className="bg-gray-100 px-4 py-2 rounded-md text-center min-w-[80px]">
+              58.4 %
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="p-6">
         <SimpleBarChart />
       </div>
