@@ -13,6 +13,7 @@ const Accounts: React.FC = () => {
   const [inboxData, setInboxData] = useState([]);
   const [summaryData, setSummaryData] = useState<any>({});
   const [loading, setLoading] = useState(false);
+   const [selectedValue, setSelectedValue] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(user.gridPageSize);
@@ -41,6 +42,18 @@ const Accounts: React.FC = () => {
       pageNumber == 0 ? user.gridPageSize : pageNumber * noOfrecordsPerPage;
     console.log(start, end);
     fetchData(start, end);
+  };
+
+  const options = [
+    { label: 'Apple', value: 'apple' },
+    { label: 'Banana', value: 'banana' },
+    { label: 'Orange', value: 'orange' },
+    { label: 'Apple', value: 'apple' },
+    { label: 'Banana', value: 'banana' },
+    { label: 'Orange', value: 'orange' },
+  ];
+   const handleChange = (event:any) => {
+    setSelectedValue(event.target.value);
   };
 
   const changeRecordsPerPage = (recordsPerPage: any) => {
@@ -149,7 +162,7 @@ const Accounts: React.FC = () => {
 
   return (
     <div className="bg-white p-6">
-      <Loader isLoad={loading} />
+      {/* <Loader isLoad={loading} /> */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
         <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-4">
           {/* <FaHome className="text-blue-600" /> */}
@@ -161,14 +174,28 @@ const Accounts: React.FC = () => {
             &nbsp;Segmentation /&nbsp;Accounts
           </span>
         </nav>
+        
 
         {/* <h2 className="text-xl font-semibold text-blue-700">User Details</h2> */}
+     
+      <div className=" top-0 right-0">  
+        <button className="bg-[#0f59ac] hover:bg-blue-600 text-white font-medium py-1 px-3 rounded text-sm mr-5">Edit Segmentation</button>    
+         <select id="fruit-select" value={selectedValue} onChange={handleChange}
+          className="w-[200] border border-gray-300 rounded-md px-3 py-0 text-gray-700 bg-white focus:ring-2 focus:ring-gray-200 focus:outline-none">
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
       </div>
-      <div className="bg-white border border-gray-300 rounded-xl p-4 md:p-6 w-full m-2">
-        <h2 className="text-lg font-semibold mb-4">Summary</h2>
+       </div>
+
+      <div className="bg-white border border-gray-300 rounded-xl px-4 md:px-4 w-full m-2">
+        <h2 className="text-lg font-semibold mb-2">Summary</h2>
 
         {/* Summary content */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-2">
           {/* Total Customers */}
           <div className="flex flex-col md:flex-row md:items-center gap-2">
             <span className="font-semibold text-gray-800 whitespace-nowrap">
