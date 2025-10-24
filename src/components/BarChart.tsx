@@ -119,7 +119,7 @@ const SimpleBarChart: React.FC = () => {
     <BarChart
       style={{
         width: "100%",
-        maxWidth: "900px",
+        maxWidth: "1200px",
         maxHeight: "70vh",
         aspectRatio: 1.5,
       }}

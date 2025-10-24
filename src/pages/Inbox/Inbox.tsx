@@ -19,6 +19,8 @@ const Inbox: React.FC = () => {
     { header: "Task Name", accessor: "Name" },
     { header: "Task Type", accessor: "TaskType" },
     { header: "Status", accessor: "TaskStatus" },
+    { header: "Account Names", accessor: "AccountNames" },
+    { header: "Buying Group Names", accessor: "BuyingGroupNames" },
     { header: "Next", accessor: "FAO" },
     { header: "Creator", accessor: "Owner" },
     { header: "Created", accessor: "Created" },

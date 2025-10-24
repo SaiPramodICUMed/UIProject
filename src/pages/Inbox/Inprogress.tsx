@@ -40,6 +40,8 @@ const Inprogress: React.FC = () => {
     { header: "Task Name", accessor: "Name", filterType:"text",filterOptions: ["Active", "Inactive", "Pending"], },
     { header: "Task Type", accessor: "TaskType", filterType:"select",filterOptions: ["Activedsfsfdsdfsf", "Inactive", "Pending"],  },
     { header: "Status", accessor: "TaskStatus", filterType:"autocomplete", filterOptions: ["Active", "Inactive", "Pending"],  },
+    { header: "Account Names", accessor: "AccountNames" },
+    { header: "Buying Group Names", accessor: "BuyingGroupNames" },
     { header: "Next", accessor: "FAO",filterType:"autocomplete" },
     { header: "Creator", accessor: "Owner", filterType:"multiSelect", filterOptions: ["Actived", "Inactive", "Pending"],},
     { header: "Created", accessor: "Created", filterType:"range" },
@@ -48,7 +50,7 @@ const Inprogress: React.FC = () => {
     { header: "Value", accessor: "OriginalValue" },
     { header: "Floor Breaks", accessor: "FloorBreaks" },
     { header: "Due", accessor: "Due" },
-    { header: "Country", accessor: "CountryName" },
+    { header: "Country", accessor: "CountryName" },    
   ];
 
   const fetchData = async (arg: any, start: number, end: number) => {

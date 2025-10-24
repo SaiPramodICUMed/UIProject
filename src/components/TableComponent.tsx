@@ -663,7 +663,7 @@ const TableComponent: React.FC<TableProps> = ({
       </tr>
 
       {/* Filters */}
-      <tr className="bg-gray-100 text-gray-800">
+      {/* <tr className="bg-gray-100 text-gray-800">
         {columns.map((col, i) => {
           const leftOffset = i === 0 ? 0 : i === 1 ? 120 : i === 2 ? 200 : 0;
           const isSticky = i < 3;
@@ -680,7 +680,7 @@ const TableComponent: React.FC<TableProps> = ({
             </th>
           );
         })}
-      </tr>
+      </tr> */}
     </thead>
 
     <tbody>

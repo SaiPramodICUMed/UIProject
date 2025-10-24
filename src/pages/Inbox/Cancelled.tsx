@@ -18,6 +18,8 @@ const Cancelled: React.FC = () => {
     { header: "Task Name", accessor: "Name" },
     { header: "Task Type", accessor: "TaskType" },
     { header: "Status", accessor: "TaskStatus" },
+    { header: "Account Names", accessor: "AccountNames" },
+    { header: "Buying Group Names", accessor: "BuyingGroupNames" },
     { header: "Creator", accessor: "Owner" },
     { header: "Created", accessor: "Created" },
     { header: "Last Modified", accessor: "LastModified" },

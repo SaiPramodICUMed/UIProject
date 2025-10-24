@@ -9,6 +9,7 @@ import SimpleBarChart from "../../../components/BarChart";
 const Accounts: React.FC = () => {
   const user = useSelector((state: any) => state.user.users);
   const [inboxData, setInboxData] = useState([]);
+  const [summaryData, setSummaryData] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(1);
@@ -107,9 +108,38 @@ const Accounts: React.FC = () => {
     }
   };
 
+  const fetchSummaryData = async () => {
+    //console.log(arg);
+    setLoading(true);
+    //setActiveTab(arg);
+    try {
+      const payload = {
+        segmentType: 1,
+        userId: user.userId,
+        selectedCountryId: user.activeCountryId,
+      };
+
+      // 👈 second argument is the body (data)
+      const response = await axios.post(
+        `https://10.2.6.130:5000/api/Strategy/getSummaryData`,
+        payload,
+        { headers: { "Content-Type": "application/json" } } // optional config
+      );
+
+      console.log("Summary Data:", response.data[0]);
+      setSummaryData(response.data[0]);
+      setLoading(false);
+      return response.data;
+    } catch (error: any) {
+      console.error("Error fetching data:", error.message);
+      return null;
+    }
+  };
+
   useEffect(() => {
     fetchCount();
-    fetchData(1, user.gridPageSize);
+    fetchSummaryData();
+    fetchData(1, user.gridPageSize);    
   }, []);
   useEffect(() => {
     setTotalPages(Math.ceil(totalRecords / recordsPerPage));
@@ -143,7 +173,7 @@ const Accounts: React.FC = () => {
               Total Customers:
             </span>
             <div className="bg-gray-100 px-4 py-2 rounded-md text-center min-w-[100px]">
-              4,124
+              {summaryData.customerCount}
             </div>
           </div>
 
@@ -153,7 +183,7 @@ const Accounts: React.FC = () => {
               Gross Sales:
             </span>
             <div className="bg-gray-100 px-4 py-2 rounded-md text-center min-w-[120px]">
-              € 32,419,629
+              € {summaryData.grossSales}
             </div>
           </div>
 
@@ -163,7 +193,7 @@ const Accounts: React.FC = () => {
               GM:
             </span>
             <div className="bg-gray-100 px-4 py-2 rounded-md text-center min-w-[120px]">
-              € 18,487,382
+              € {summaryData.gm}
             </div>
           </div>
 
@@ -173,7 +203,7 @@ const Accounts: React.FC = () => {
               GM %:
             </span>
             <div className="bg-gray-100 px-4 py-2 rounded-md text-center min-w-[80px]">
-              58.4 %
+               {summaryData.gmPerc} %
             </div>
           </div>
         </div>
