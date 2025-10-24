@@ -137,10 +137,10 @@ export default function layOut({ children }: { children: React.ReactNode }) {
       setActiveMenu(mainMenu);
       //console.log(path, subchildItems[path], menusFrom[subchildItems[path]]);
     } else {
-      mainMenu = menusFrom[path] || "";
+      mainMenu = menusFrom[path] || cleanPath;
 
       setActiveMenu(mainMenu);
-      setActiveSub(path || "");
+      setActiveSub(path || cleanPath);
     }
   }, [location.pathname]);
 
