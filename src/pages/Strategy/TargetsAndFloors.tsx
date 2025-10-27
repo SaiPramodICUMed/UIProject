@@ -7,8 +7,10 @@ import { useSelector } from "react-redux";
 
 const TargetsAndFloors: React.FC = () => {
   const user = useSelector((state: any) => state.user.users);
+  const countries: [] = useSelector((state: any) => state.user.countries);
   const [inboxData, setInboxData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(user.activeCountryId);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(user.gridPageSize);
@@ -45,7 +47,7 @@ const TargetsAndFloors: React.FC = () => {
     setPageChange(1, recordsPerPage);
   };
 
-  const fetchData = async (start: number, end: number) => {
+  const fetchData = async (start: number, end: number, country: number) => {
     //console.log(arg);
     //setActiveTab(arg);
     setLoading(true);
@@ -56,7 +58,7 @@ const TargetsAndFloors: React.FC = () => {
         lastRow: end,
         sortBy: "ItemID",
         sortByDirection: "asc",
-        filter: ` AND Isreference = 1  AND CountryID = 5`,
+        filter: ` AND Isreference = 1  AND CountryID = ${country}`,
         fieldList: "*",
         timeout: 0,
       };
@@ -78,14 +80,18 @@ const TargetsAndFloors: React.FC = () => {
     }
   };
 
-  const fetchCount = async () => {
+  const handleChange = (event: any) => {
+    setSelectedValue(event.target.value);
+  };
+
+  const fetchCount = async (country:number) => {
     //console.log(arg);
     setLoading(true);
     //setActiveTab(arg);
     try {
       const payload = {
         viewName: `vw_TargetData`,
-        filter: `AND Isreference = 1  AND CountryID = 5`
+        filter: `AND Isreference = 1  AND CountryID = ${country}`
       };
 
       // 👈 second argument is the body (data)
@@ -106,12 +112,17 @@ const TargetsAndFloors: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchCount();
-    fetchData(1, user.gridPageSize);
+    fetchCount(user.activeCountryId);
+    fetchData(1, user.gridPageSize, user.activeCountryId);
   }, []);
   useEffect(() => {
     setTotalPages(Math.ceil(totalRecords / recordsPerPage))
   }, [recordsPerPage, totalRecords]);
+
+  useEffect(() => {
+      fetchData(1, user.gridPageSize, selectedValue);
+      fetchCount(selectedValue);
+    }, [selectedValue]);
 
   return (
     <div className="bg-white p-6">
@@ -128,6 +139,16 @@ const TargetsAndFloors: React.FC = () => {
           <span className="text-gray-500 font-medium">&nbsp;Targets and Floors</span>
         </nav>
 
+        <div className=" top-0 right-0">          
+          <select id="fruit-select" value={selectedValue} onChange={handleChange}
+            className="w-[200] border border-gray-300 rounded-md px-3 py-0 text-gray-700 bg-white focus:ring-2 focus:ring-gray-200 focus:outline-none">
+            {countries.map((option: any) => (
+              <option key={option.countryId} value={option.countryId}>
+                {option.countryName}
+              </option>
+            ))}
+          </select>
+        </div>
         {/* <h2 className="text-xl font-semibold text-blue-700">User Details</h2> */}
 
       </div>
