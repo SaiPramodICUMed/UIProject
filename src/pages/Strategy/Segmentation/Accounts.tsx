@@ -162,7 +162,7 @@ const Accounts: React.FC = () => {
 
   return (
     <div className="bg-white p-6">
-      {/* <Loader isLoad={loading} /> */}
+      <Loader isLoad={loading} />
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
         <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-4">
           {/* <FaHome className="text-blue-600" /> */}
