@@ -646,7 +646,7 @@ const TableComponent: React.FC<TableProps> = ({
       <div
         className={`overflow-auto max-h-[${height}] border border-gray-300`}
       >
-        <table className="min-w-[800px] w-full border-collapse rounded-xl">
+        <table className="min-w-[800px] w-full border-collapse">
           {/* Header */}
           <thead className="sticky top-0 bg-[#0f59ac] text-white z-20">
             <tr>
@@ -686,19 +686,19 @@ const TableComponent: React.FC<TableProps> = ({
           </thead>
 
           {/* Body */}
-          <tbody className={`text-${color}-800 rounded-md` }>
+          <tbody className={`text-${color}-800` }>
             {filteredData.length ? (
               filteredData.map((row, rowIndex) => (
                 <tr
                   key={rowIndex}
-                  className={`cursor-pointer text-xs rounded-xl ${
+                  className={`cursor-pointer text-xs ${
                     rowIndex % 2 === 0 ? "bg-[#ebeff3]" : "bg-white"
                   } hover:bg-[#d0e5f5]`}
                 >
                   {columns.map((col, colIndex) => (
                     <td
                       key={colIndex}
-                      className="border border-gray-500 rounded-xl px-4 py-2 overflow-hidden text-ellipsis whitespace-nowrap min-w-[80px] w-[80px] max-w-[220px]"
+                      className="border border-gray-500 px-4 py-2 overflow-hidden text-ellipsis whitespace-nowrap min-w-[80px] w-[80px] max-w-[220px]"
                       title={String(row[col.accessor] ?? "")}
                     >
                       {col.accessor === "Created" ||
@@ -716,10 +716,10 @@ const TableComponent: React.FC<TableProps> = ({
                 </tr>
               ))
             ) : (
-              <tr className="border-gray-500 rounded-xl">
+              <tr className="border-gray-500">
                 <td
                   colSpan={columns.length}
-                  className="text-center p-4 text-gray-500 border border-gray-500 rounded-xl"
+                  className="text-center p-4 text-gray-500 border border-gray-500"
                 >
                   No records found.
                 </td>
