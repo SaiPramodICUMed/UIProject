@@ -36,6 +36,7 @@ import Login from "./pages/login";
 import ResetPassword from "./pages/resetPassword";
 import EditSegmentation from "./pages/editSegmentation";
 import ViewDetailsForm from "./pages/viewDetails";
+import PricingView from "./pages/pricingView";
 
 function App() {
   
@@ -80,6 +81,7 @@ function App() {
       <Route path="/resetPassword" element={<ResetPassword/>}/>
       <Route path="/editSegmentation" element={<EditSegmentation/>}/>
       <Route path="/viewDetails" element={<ViewDetailsForm/>}/>
+      <Route path="/pricingView" element={<PricingView/>} />
     </Routes>
     </LayOut>
     </Router>
