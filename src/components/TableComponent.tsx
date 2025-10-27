@@ -641,12 +641,12 @@ const TableComponent: React.FC<TableProps> = ({
   return (
     <div
       ref={tableRef}
-      className="w-full overflow-x-auto border rounded-lg shadow-sm bg-white"
+      className="w-full overflow-x-auto shadow-sm bg-white"
     >
       <div
-        className={`overflow-auto max-h-[${height}] border border-gray-300 rounded-md`}
+        className={`overflow-auto max-h-[${height}] border border-gray-300`}
       >
-        <table className="min-w-[800px] w-full border-collapse">
+        <table className="min-w-[800px] w-full border-collapse rounded-xl">
           {/* Header */}
           <thead className="sticky top-0 bg-[#0f59ac] text-white z-20">
             <tr>
@@ -686,19 +686,19 @@ const TableComponent: React.FC<TableProps> = ({
           </thead>
 
           {/* Body */}
-          <tbody className={`text-${color}-800`}>
+          <tbody className={`text-${color}-800 rounded-md` }>
             {filteredData.length ? (
               filteredData.map((row, rowIndex) => (
                 <tr
                   key={rowIndex}
-                  className={`cursor-pointer text-xs ${
+                  className={`cursor-pointer text-xs rounded-xl ${
                     rowIndex % 2 === 0 ? "bg-[#ebeff3]" : "bg-white"
                   } hover:bg-[#d0e5f5]`}
                 >
                   {columns.map((col, colIndex) => (
                     <td
                       key={colIndex}
-                      className="border border-gray-500 px-4 py-2 overflow-hidden text-ellipsis whitespace-nowrap min-w-[80px] w-[80px] max-w-[220px]"
+                      className="border border-gray-500 rounded-xl px-4 py-2 overflow-hidden text-ellipsis whitespace-nowrap min-w-[80px] w-[80px] max-w-[220px]"
                       title={String(row[col.accessor] ?? "")}
                     >
                       {col.accessor === "Created" ||
@@ -716,10 +716,10 @@ const TableComponent: React.FC<TableProps> = ({
                 </tr>
               ))
             ) : (
-              <tr>
+              <tr className="border-gray-500 rounded-xl">
                 <td
                   colSpan={columns.length}
-                  className="text-center p-4 text-gray-500 border border-gray-500"
+                  className="text-center p-4 text-gray-500 border border-gray-500 rounded-xl"
                 >
                   No records found.
                 </td>
