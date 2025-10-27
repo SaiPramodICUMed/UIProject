@@ -5,21 +5,23 @@ import axios from "axios";
 import Loader from "../../../components/loader";
 import { useSelector } from "react-redux";
 import SimpleBarChart from "../../../components/BarChart";
+import { useNavigate } from "react-router-dom";
 
 const Accounts: React.FC = () => {
   const user = useSelector((state: any) => state.user.users);
-  const countries = useSelector((state: any) => state.user.countries);
-  console.log("countries state data:",countries);
+  const countries: [] = useSelector((state: any) => state.user.countries);
   const [inboxData, setInboxData] = useState([]);
   const [summaryData, setSummaryData] = useState<any>({});
+  const [chartData, setChartData] = useState<any>([]);
   const [loading, setLoading] = useState(false);
-   const [selectedValue, setSelectedValue] = useState(3);
+  const [selectedValue, setSelectedValue] = useState(user.activeCountryId);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(user.gridPageSize);
   const [totalPages, setTotalPages] = useState(
     Math.ceil(totalRecords / user.gridPageSize)
   );
+  const navigate = useNavigate();
   const columns = [
     { header: "Customer Name", accessor: "CustomerName" },
     { header: "Customer Segment", accessor: "Segment" },
@@ -41,18 +43,10 @@ const Accounts: React.FC = () => {
     let end =
       pageNumber == 0 ? user.gridPageSize : pageNumber * noOfrecordsPerPage;
     console.log(start, end);
-    fetchData(start, end);
+    fetchData(start, end, selectedValue);
   };
 
-  const options = [
-    { label: 'Apple', value: 'apple' },
-    { label: 'Banana', value: 'banana' },
-    { label: 'Orange', value: 'orange' },
-    { label: 'Apple', value: 'apple' },
-    { label: 'Banana', value: 'banana' },
-    { label: 'Orange', value: 'orange' },
-  ];
-   const handleChange = (event:any) => {
+  const handleChange = (event: any) => {
     setSelectedValue(event.target.value);
   };
 
@@ -63,7 +57,7 @@ const Accounts: React.FC = () => {
     setPageChange(1, recordsPerPage);
   };
 
-  const fetchData = async (start: number, end: number) => {
+  const fetchData = async (start: number, end: number, country: number) => {
     //console.log(arg);
     //setActiveTab(arg);
     setLoading(true);
@@ -74,7 +68,7 @@ const Accounts: React.FC = () => {
         lastRow: end,
         sortBy: "CustomerName",
         sortByDirection: "asc",
-        filter: `AND CountryID = 5`,
+        filter: `AND CountryID = ${country}`,
         fieldList: "*",
         timeout: 0,
       };
@@ -96,14 +90,14 @@ const Accounts: React.FC = () => {
     }
   };
 
-  const fetchCount = async () => {
+  const fetchCount = async (country: number) => {
     //console.log(arg);
     setLoading(true);
     //setActiveTab(arg);
     try {
       const payload = {
         viewName: `vw_AccountSales`,
-        filter: `AND CountryID = 5`,
+        filter: `AND CountryID = ${country}`,
       };
 
       // 👈 second argument is the body (data)
@@ -123,7 +117,7 @@ const Accounts: React.FC = () => {
     }
   };
 
-  const fetchSummaryData = async () => {
+  const fetchSummaryData = async (country:number) => {
     //console.log(arg);
     setLoading(true);
     //setActiveTab(arg);
@@ -151,14 +145,51 @@ const Accounts: React.FC = () => {
     }
   };
 
+  const fetchChartData = async () => {
+    //console.log(arg);
+    setLoading(true);
+    //setActiveTab(arg);
+    try {
+      const payload = {
+        segmentType: 1,
+        valueType: 'gross',
+        userId: user.userId,
+        selectedCountryId: selectedValue,
+      };
+
+      // 👈 second argument is the body (data)
+      const response = await axios.post(
+        `https://10.2.6.130:5000/api/Strategy/getSummaryDataForSegments`,
+        payload,
+        { headers: { "Content-Type": "application/json" } } // optional config
+      );
+
+      console.log("Chart Data:", response.data);
+      setChartData(response.data);
+      setLoading(false);
+      return response.data;
+    } catch (error: any) {
+      console.error("Error fetching data:", error.message);
+      return null;
+    }
+  };
+
   useEffect(() => {
-    fetchCount();
-    fetchSummaryData();
-    fetchData(1, user.gridPageSize);    
+    fetchCount(user.activeCountryId);
+    fetchSummaryData(user.activeCountryId);
+    fetchData(1, user.gridPageSize, user.activeCountryId);
+    fetchChartData();
   }, []);
   useEffect(() => {
     setTotalPages(Math.ceil(totalRecords / recordsPerPage));
   }, [recordsPerPage, totalRecords]);
+
+  useEffect(() => {
+    fetchData(1, user.gridPageSize, selectedValue);
+    fetchCount(selectedValue);
+    fetchChartData();
+    fetchSummaryData(selectedValue);
+  }, [selectedValue]);
 
   return (
     <div className="bg-white p-6">
@@ -174,71 +205,71 @@ const Accounts: React.FC = () => {
             &nbsp;Segmentation /&nbsp;Accounts
           </span>
         </nav>
-        
+
 
         {/* <h2 className="text-xl font-semibold text-blue-700">User Details</h2> */}
-     
-      <div className=" top-0 right-0">  
-        <button className="bg-[#0f59ac] hover:bg-blue-600 text-white font-medium py-1 px-3 rounded text-sm mr-5">Edit Segmentation</button>    
-         <select id="fruit-select" value={selectedValue} onChange={handleChange}
-          className="w-[200] border border-gray-300 rounded-md px-3 py-0 text-gray-700 bg-white focus:ring-2 focus:ring-gray-200 focus:outline-none">
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+
+        <div className=" top-0 right-0">
+          <button className="bg-[#0f59ac] hover:bg-blue-600 text-white font-medium py-1 px-3 rounded text-sm mr-5" onClick={() => navigate("/editSegmentation")}>Edit Segmentation</button>
+          <select id="fruit-select" value={selectedValue} onChange={handleChange}
+            className="w-[200] border border-gray-300 rounded-md px-3 py-0 text-gray-700 bg-white focus:ring-2 focus:ring-gray-200 focus:outline-none">
+            {countries.map((option: any) => (
+              <option key={option.countryId} value={option.countryId}>
+                {option.countryName}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
-       </div>
 
       <div className="bg-white border border-gray-300 rounded-xl px-4 md:px-4 w-full m-2">
-        <h2 className="text-lg font-semibold mb-2">Summary</h2>
+        <h2 className="text-sm font-semibold mb-2">Summary</h2>
 
         {/* Summary content */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-2">
           {/* Total Customers */}
           <div className="flex flex-col md:flex-row md:items-center gap-2">
-            <span className="font-semibold text-gray-800 whitespace-nowrap">
+            <span className="font-semibold text-gray-800 whitespace-nowrap text-sm">
               Total Customers:
             </span>
-            <div className="bg-gray-100 px-4 py-2 rounded-md text-center min-w-[100px]">
+            <div className="bg-gray-100 px-4 py-2 rounded-md text-center min-w-[100px] text-sm">
               {summaryData.customerCount}
             </div>
           </div>
 
           {/* Gross Sales */}
           <div className="flex flex-col md:flex-row md:items-center gap-2">
-            <span className="font-semibold text-gray-800 whitespace-nowrap">
+            <span className="font-semibold text-gray-800 whitespace-nowrap text-sm">
               Gross Sales:
             </span>
-            <div className="bg-gray-100 px-4 py-2 rounded-md text-center min-w-[120px]">
-              € {summaryData.grossSales}
+            <div className="bg-gray-100 px-4 py-2 rounded-md text-center min-w-[120px] text-sm">
+              € {summaryData.grossSales?.toFixed(3)}
             </div>
           </div>
 
           {/* GM */}
           <div className="flex flex-col md:flex-row md:items-center gap-2">
-            <span className="font-semibold text-gray-800 whitespace-nowrap">
+            <span className="font-semibold text-gray-800 whitespace-nowrap text-sm">
               GM:
             </span>
-            <div className="bg-gray-100 px-4 py-2 rounded-md text-center min-w-[120px]">
-              € {summaryData.gm}
+            <div className="bg-gray-100 px-4 py-2 rounded-md text-center min-w-[120px] text-sm">
+              € {summaryData.gm?.toFixed(3)}
             </div>
           </div>
 
           {/* GM % */}
           <div className="flex flex-col md:flex-row md:items-center gap-2">
-            <span className="font-semibold text-gray-800 whitespace-nowrap">
+            <span className="font-semibold text-gray-800 whitespace-nowrap text-sm">
               GM %:
             </span>
-            <div className="bg-gray-100 px-4 py-2 rounded-md text-center min-w-[80px]">
-               {summaryData.gmPerc} %
+            <div className="bg-gray-100 px-4 py-2 rounded-md text-center min-w-[80px] text-sm">
+              {summaryData.gmPerc?.toFixed(3)} %
             </div>
           </div>
         </div>
       </div>
       <div className="p-6">
-        <SimpleBarChart />
+        <SimpleBarChart data={chartData} />
       </div>
       {/* Responsive Table inside the same container */}
       <TableComponent

@@ -22,7 +22,7 @@ const userSlice = createSlice({
       state.taskCount = { ...action.payload };
     },
     addCountries: (state, action: PayloadAction<CountriesResponse>) => {
-      state.countries = { ...action.payload };
+      state.countries = action.payload ;
     }
   },
 });
