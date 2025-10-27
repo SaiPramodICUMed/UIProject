@@ -199,7 +199,7 @@ const TableComponent: React.FC<TableProps> = ({
         <div className="relative">
           <input
             type="text"
-            className="w-full px-2 py-1 border rounded text-xs bg-white"
+            className="w-full px-2 py-1 border border-gray-400 rounded text-gray-550 text-xs bg-white"
             placeholder="Search..."
             value={filters[col.accessor] ?? ""}
             onChange={(e) => handleFilterChange(col.accessor, e.target.value)}
@@ -225,7 +225,7 @@ const TableComponent: React.FC<TableProps> = ({
     if (col.filterType === "select") {
       return (
         <select
-          className="w-full px-2 py-1 border rounded text-xs bg-white"
+          className="w-full px-2 py-1 border border-gray-400 rounded text-xs  text-gray-400 bg-white active:outline-none"
           value={filters[col.accessor] ?? ""}
           onChange={(e) => handleFilterChange(col.accessor, e.target.value)}
         >
@@ -244,7 +244,7 @@ const TableComponent: React.FC<TableProps> = ({
       const selectedValues = filters[col.accessor] ?? [];
       const [searchTerm, setSearchTerm] = useState("");
       const filteredOptions = values.filter((v) =>
-        v.toLowerCase().includes(searchTerm.toLowerCase())
+        v.toLowerCase().includes(searchTerm?.toLowerCase())
       );
       const allSelected = selectedValues.length === values.length;
 
@@ -271,7 +271,7 @@ const TableComponent: React.FC<TableProps> = ({
         <div className="relative w-full text-xs">
           <div
             ref={buttonRef}
-            className="w-full px-2 py-1 border rounded cursor-pointer bg-white"
+            className="w-full px-2 py-1 border rounded cursor-pointer bg-white text-gray-400 dropdown-portal"
             onClick={toggleDropdown}
           >
             {selectedValues.length > 0
@@ -355,7 +355,11 @@ const TableComponent: React.FC<TableProps> = ({
       ]);
 
       const buttonRef = useRef<HTMLDivElement>(null);
-      const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 240 });
+      const [dropdownPos, setDropdownPos] = useState({
+        top: 0,
+        left: 0,
+        width: 240,
+      });
 
       const toggleDropdown = () => {
         if (!openDropdown && buttonRef.current) {
@@ -379,7 +383,7 @@ const TableComponent: React.FC<TableProps> = ({
           <div
             ref={buttonRef}
             onClick={toggleDropdown}
-            className="cursor-pointer border px-2 py-1 rounded text-xs bg-white flex justify-between items-center dropdown-portal"
+            className="cursor-pointer border px-2 py-1 rounded text-xs bg-white flex justify-between items-center text-gray-400 dropdown-portal"
           >
             {rangeValue[0]} - {rangeValue[1]}
             <span className="text-gray-400 ml-2">&#9662;</span>
@@ -395,7 +399,7 @@ const TableComponent: React.FC<TableProps> = ({
                   width: 200,
                 }}
               >
-                <div className="w-full px-2 py-4">
+                <div className="w-full px-2 py-4 text-gray-400">
                   <Range
                     values={rangeValue}
                     step={1}
@@ -410,12 +414,16 @@ const TableComponent: React.FC<TableProps> = ({
                         <div
                           className="absolute h-1 bg-blue-500 rounded"
                           style={{
-                            left: `${((rangeValue[0] - STATIC_MIN) /
-                              (STATIC_MAX - STATIC_MIN)) *
-                              100}%`,
-                            width: `${((rangeValue[1] - rangeValue[0]) /
-                              (STATIC_MAX - STATIC_MIN)) *
-                              100}%`,
+                            left: `${
+                              ((rangeValue[0] - STATIC_MIN) /
+                                (STATIC_MAX - STATIC_MIN)) *
+                              100
+                            }%`,
+                            width: `${
+                              ((rangeValue[1] - rangeValue[0]) /
+                                (STATIC_MAX - STATIC_MIN)) *
+                              100
+                            }%`,
                           }}
                         />
                         {children}
@@ -471,15 +479,18 @@ const TableComponent: React.FC<TableProps> = ({
       const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0 });
 
       const startDate =
-        dateFilterValues[col.accessor]?.[0] ??
-        filters[col.accessor]?.[0] ??
-        "";
+        dateFilterValues[col.accessor]?.[0] ?? filters[col.accessor]?.[0] ?? "";
       const endDate =
-        dateFilterValues[col.accessor]?.[1] ??
-        filters[col.accessor]?.[1] ??
-        "";
+        dateFilterValues[col.accessor]?.[1] ?? filters[col.accessor]?.[1] ?? "";
 
-      const periods = ["Today", "1 Month", "3 Months", "6 Months", "1 Year", "2 Years"];
+      const periods = [
+        "Today",
+        "1 Month",
+        "3 Months",
+        "6 Months",
+        "1 Year",
+        "2 Years",
+      ];
 
       useEffect(() => {
         if (buttonRef.current && openDropdown === col.accessor) {
@@ -541,13 +552,17 @@ const TableComponent: React.FC<TableProps> = ({
         <>
           <div
             ref={buttonRef}
-            className="cursor-pointer border px-2 py-1 rounded text-xs bg-white shadow-sm hover:bg-gray-50 flex justify-between items-center"
+            className="cursor-pointer border px-2 py-1 rounded text-xs text-gray-400 bg-white shadow-sm hover:bg-gray-50 flex justify-between items-center"
             onClick={() =>
-              setOpenDropdown(openDropdown === col.accessor ? null : col.accessor)
+              setOpenDropdown(
+                openDropdown === col.accessor ? null : col.accessor
+              )
             }
           >
             <span>
-              {startDate && endDate ? `${startDate} - ${endDate}` : "Select Date"}
+              {startDate && endDate
+                ? `${startDate} - ${endDate}`
+                : "Select Date"}
             </span>
             <span className="ml-2 text-gray-500">&#9662;</span>
           </div>
@@ -618,7 +633,7 @@ const TableComponent: React.FC<TableProps> = ({
         placeholder="Search..."
         value={filters[col.accessor] ?? ""}
         onChange={(e) => handleFilterChange(col.accessor, e.target.value)}
-        className="w-full px-2 py-1 border rounded text-xs bg-white"
+        className="w-full px-2 py-1 border border-gray-400 rounded text-xs text-gray-550 bg-white"
       />
     );
   };
@@ -627,117 +642,92 @@ const TableComponent: React.FC<TableProps> = ({
     <div
       ref={tableRef}
       className="w-full overflow-x-auto border rounded-lg shadow-sm bg-white"
-      style={{ maxHeight: height }}
     >
-     <div className="overflow-x-auto">
-  <table className="min-w-[800px] w-full border-collapse">
-    <thead className="sticky top-0 bg-[#0f59ac] text-white z-10">
-      {/* Main Header */}
-      <tr>
-        {columns.map((col, i) => {
-          const leftOffset = i === 0 ? 0 : i === 1 ? 80 : i === 2 ? 160 : 0;
-          const isSticky = i < 3;
-
-          return (
-            <th
-              key={i}
-              onClick={() => handleSort(col.accessor)}
-              className={`border border-black px-4 py-2 text-left font-semibold text-xs cursor-pointer select-none ${
-                isSticky ? "sticky bg-[#0f59ac] z-30" : ""
-              }`}
-              style={isSticky ? { left: `${leftOffset}px` } : {}}
-            >
-              <div className="flex justify-between items-center">
-                <span>{col.header}</span>
-                <span>
-                  {sortConfig?.key === col.accessor
-                    ? sortConfig.direction === "asc"
-                      ? "▲"
-                      : "▼"
-                    : ""}
-                </span>
-              </div>
-            </th>
-          );
-        })}
-      </tr>
-
-      {/* Filters */}
+      <div
+        className={`overflow-auto max-h-[${height}] border border-gray-300 rounded-md`}
+      >
+        <table className="min-w-[800px] w-full border-collapse">
+          {/* Header */}
+          <thead className="sticky top-0 bg-[#0f59ac] text-white z-20">
+            <tr>
+              {columns.map((col, i) => (
+                <th
+                  key={i}
+                  onClick={() => handleSort(col.accessor)}
+                  className="border border-gray-500 px-4 py-2 text-left font-semibold text-xs cursor-pointer select-none bg-[#0f59ac]"
+                >
+                  <div className="flex justify-between items-center">
+                    <span>{col.header}</span>
+                    <span>
+                      {sortConfig?.key === col.accessor
+                        ? sortConfig.direction === "asc"
+                          ? "▲"
+                          : "▼"
+                        : ""}
+                    </span>
+                  </div>
+                </th>
+              ))}
+            </tr>
+            {/* Filters */}
       {/* <tr className="bg-gray-100 text-gray-800">
         {columns.map((col, i) => {
-          const leftOffset = i === 0 ? 0 : i === 1 ? 120 : i === 2 ? 200 : 0;
-          const isSticky = i < 3;
-
           return (
             <th
               key={i}
-              className={`border border-gray-300 px-2 py-1 ${
-                isSticky ? "sticky bg-gray-100 z-20" : ""
-              }`}
-              style={isSticky ? { left: `${leftOffset}px` } : {}}
+              className={`border border-gray-500 px-2 py-1`}
+      
             >
               {renderFilter(col)}
             </th>
           );
         })}
       </tr> */}
-    </thead>
+          </thead>
 
-    <tbody>
-      {filteredData.length ? (
-        filteredData.map((row, rowIndex) => (
-          <tr
-            key={rowIndex}
-            className={`cursor-pointer text-xs ${
-              rowIndex % 2 === 0 ? "bg-[#ebeff3]" : "bg-white"
-            } hover:bg-[#d0e5f5]`}
-          >
-            {columns.map((col, colIndex) => {
-              const leftOffset = colIndex === 0 ? 0 : colIndex === 1 ? 120 : colIndex === 2 ? 200 : 0;
-              const isSticky = colIndex < 3;
-
-              return (
-                <td
-                  key={colIndex}
-                  className={`border px-4 py-2 overflow-hidden text-ellipsis whitespace-nowrap ${
-                    colorClassMap[color] ? colorClassMap[color] : "text-gray-800"
-                  } ${
-                    colIndex === 0
-                      ? "min-w-[80px] w-[80px] max-w-[220px]"
-                      : colIndex === 1
-                      ? "min-w-[80px] w-[80px] max-w-[220px]"
-                      : colIndex === 2
-                      ? "min-w-[80px] w-[80px] max-w-[220px]"
-                      : "min-w-[80px] w-[80px] max-w-[220px]"
-                  } ${isSticky ? "sticky bg-white z-20" : ""}`}
-                  style={isSticky ? { left: `${leftOffset}px` } : {}}
-                  title={String(row[col.accessor] ?? "")}
+          {/* Body */}
+          <tbody className={`text-${color}-800`}>
+            {filteredData.length ? (
+              filteredData.map((row, rowIndex) => (
+                <tr
+                  key={rowIndex}
+                  className={`cursor-pointer text-xs ${
+                    rowIndex % 2 === 0 ? "bg-[#ebeff3]" : "bg-white"
+                  } hover:bg-[#d0e5f5]`}
                 >
-                  {col.accessor === "Created" || col.accessor === "LastModified"
-                    ? formatToDate(row[col.accessor])
-                    : col.accessor === "FloorBreaks"
-                    ? `${row[col.accessor]} (${row.FloorBreaksP}%)`
-                    : col.accessor === "OriginalValue"
-                    ? formatToUSCurrency(row[col.accessor])
-                    : col.accessor === "Due"
-                    ? getDaysFromToday(row[col.accessor])
-                    : row[col.accessor]}
+                  {columns.map((col, colIndex) => (
+                    <td
+                      key={colIndex}
+                      className="border border-gray-500 px-4 py-2 overflow-hidden text-ellipsis whitespace-nowrap min-w-[80px] w-[80px] max-w-[220px]"
+                      title={String(row[col.accessor] ?? "")}
+                    >
+                      {col.accessor === "Created" ||
+                      col.accessor === "LastModified"
+                        ? formatToDate(row[col.accessor])
+                        : col.accessor === "FloorBreaks"
+                        ? `${row[col.accessor]} (${row.FloorBreaksP}%)`
+                        : col.accessor === "OriginalValue"
+                        ? formatToUSCurrency(row[col.accessor])
+                        : col.accessor === "Due"
+                        ? getDaysFromToday(row[col.accessor])
+                        : row[col.accessor]}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={columns.length}
+                  className="text-center p-4 text-gray-500 border border-gray-500"
+                >
+                  No records found.
                 </td>
-              );
-            })}
-          </tr>
-        ))
-      ) : (
-        <tr>
-          <td colSpan={columns.length} className="text-center p-4 text-gray-500">
-            No records found.
-          </td>
-        </tr>
-      )}
-    </tbody>
-  </table>
-</div>
-
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
