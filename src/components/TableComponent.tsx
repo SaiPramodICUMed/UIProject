@@ -638,6 +638,10 @@ const TableComponent: React.FC<TableProps> = ({
     );
   };
 
+  function handleClick(row:any) {
+    console.log("Row clicked:", row);
+  }
+
   return (
     <div
       ref={tableRef}
@@ -694,6 +698,7 @@ const TableComponent: React.FC<TableProps> = ({
                   className={`cursor-pointer text-xs ${
                     rowIndex % 2 === 0 ? "bg-[#ebeff3]" : "bg-white"
                   } hover:bg-[#d0e5f5]`}
+                  onClick={()=>{handleClick(row)}}
                 >
                   {columns.map((col, colIndex) => (
                     <td
