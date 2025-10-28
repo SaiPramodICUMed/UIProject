@@ -37,7 +37,7 @@ const TargetsAndFloors: React.FC = () => {
     let end =
       pageNumber == 0 ? user.gridPageSize : pageNumber * noOfrecordsPerPage;
     console.log(start, end);
-    fetchData(start, end);
+    fetchData(start, end, user.activeCountryId);
   };
 
   const changeRecordsPerPage = (recordsPerPage: any) => {
