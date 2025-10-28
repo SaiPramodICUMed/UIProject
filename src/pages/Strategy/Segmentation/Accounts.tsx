@@ -125,7 +125,7 @@ const Accounts: React.FC = () => {
       const payload = {
         segmentType: 1,
         userId: user.userId,
-        selectedCountryId: user.activeCountryId,
+        selectedCountryId: country,
       };
 
       // 👈 second argument is the body (data)

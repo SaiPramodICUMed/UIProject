@@ -648,7 +648,7 @@ const TableComponent: React.FC<TableProps> = ({
       className="w-full overflow-x-auto shadow-sm bg-white"
     >
       <div
-        className={`overflow-auto max-h-[450px] border border-gray-300`}
+        className={`overflow-auto md:h-[62vh] border border-gray-300`}
       >
         <table className="min-w-[800px] w-full border-collapse">
           {/* Header */}

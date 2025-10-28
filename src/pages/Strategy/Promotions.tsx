@@ -4,6 +4,7 @@ import Pagination from "../../components/PageNation";
 import axios from "axios";
 import Loader from "../../components/loader";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Promotions: React.FC = () => {
   const user = useSelector((state: any) => state.user.users);
@@ -13,6 +14,9 @@ const Promotions: React.FC = () => {
   const [totalRecords, setTotalRecords] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(user.gridPageSize);
   const [totalPages, setTotalPages] = useState(Math.ceil(totalRecords / user.gridPageSize));
+  const [selectedValue, setSelectedValue] = useState(user.activeCountryId);
+  const countries: [] = useSelector((state: any) => state.user.countries);
+  const navigate = useNavigate();
   const columns = [
     { header: "Items Count", accessor: "ItemsCount" },
     { header: "Name", accessor: "Name" },
@@ -40,7 +44,7 @@ const Promotions: React.FC = () => {
     let end =
       pageNumber == 0 ? user.gridPageSize : pageNumber * noOfrecordsPerPage;
     console.log(start, end);
-    fetchData(start, end);
+    fetchData(start, end, user.activeCountryId);
   };
 
   const changeRecordsPerPage = (recordsPerPage: any) => {
@@ -49,14 +53,16 @@ const Promotions: React.FC = () => {
     setTotalPages(Math.ceil(totalRecords / recordsPerPage))
     setPageChange(1, recordsPerPage);
   };
-
-  const fetchData = async (start: number, end: number) => {
+  const handleChange = (event: any) => {
+    setSelectedValue(event.target.value);
+  };
+  const fetchData = async (start: number, end: number, country: number) => {
     //console.log(arg);
     //setActiveTab(arg);
     setLoading(true);
     try {
       const payload = {
-        viewName: "dbo.GetPromoItems(5)",
+        viewName: `dbo.GetPromoItems(${country})`,
         firstRow: start,
         lastRow: end,
         sortBy: "PromoItemID",
@@ -83,13 +89,13 @@ const Promotions: React.FC = () => {
     }
   };
 
-  const fetchCount = async () => {
+  const fetchCount = async (country: number) => {
     //console.log(arg);
     setLoading(true);
     //setActiveTab(arg);
     try {
       const payload = {
-        viewName: `dbo.GetPromoItems(5)`,
+        viewName: `dbo.GetPromoItems(${country})`,
         filter: ``
       };
 
@@ -100,7 +106,7 @@ const Promotions: React.FC = () => {
         { headers: { "Content-Type": "application/json" } } // optional config
       );
 
-      //console.log("All", response.data);
+      console.log("Promo Count", response.data.count);
       setTotalRecords(response.data.count);
       setLoading(false);
       return response.data;
@@ -111,13 +117,16 @@ const Promotions: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchCount();
-    fetchData(1, user.gridPageSize);
+    fetchCount(user.activeCountryId);
+    fetchData(1, user.gridPageSize, user.activeCountryId);
   }, []);
   useEffect(() => {
     setTotalPages(Math.ceil(totalRecords / recordsPerPage))
   }, [recordsPerPage, totalRecords]);
-
+  useEffect(() => {
+    fetchCount(selectedValue);
+    fetchData(1, user.gridPageSize, selectedValue);
+  }, [selectedValue]);
   return (
     <div className="bg-white p-6">
       <Loader isLoad={loading} />
@@ -132,6 +141,18 @@ const Promotions: React.FC = () => {
           /{/* <FaChevronRight className="text-gray-400 text-xs" /> */}
           <span className="text-gray-500 font-medium">&nbsp;Promotions</span>
         </nav>
+
+        <div className=" top-0 right-0">
+          <button className="bg-[#0f59ac] hover:bg-blue-600 text-white font-medium py-1 px-3 rounded text-sm mr-5" onClick={() => navigate("/editSegmentation")}>Create New Promo Item</button>
+          <select id="fruit-select" value={selectedValue} onChange={handleChange}
+            className="w-[200] border border-gray-300 rounded-md px-3 py-0 text-gray-700 bg-white focus:ring-2 focus:ring-gray-200 focus:outline-none">
+            {countries.map((option: any) => (
+              <option key={option.countryId} value={option.countryId}>
+                {option.countryName}
+              </option>
+            ))}
+          </select>
+        </div>
 
         {/* <h2 className="text-xl font-semibold text-blue-700">User Details</h2> */}
 
