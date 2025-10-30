@@ -15,6 +15,7 @@ const Accounts: React.FC = () => {
   const [chartData, setChartData] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [selectedValue, setSelectedValue] = useState(user.activeCountryId);
+  const [selectedGrossValue, setGrossSelectedValue] = useState('Gross Sales');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(user.gridPageSize);
@@ -48,6 +49,10 @@ const Accounts: React.FC = () => {
 
   const handleChange = (event: any) => {
     setSelectedValue(event.target.value);
+  };
+
+  const handleGrossChange = (event: any) => {
+    setGrossSelectedValue(event.target.value);
   };
 
   const changeRecordsPerPage = (recordsPerPage: any) => {
@@ -268,6 +273,26 @@ const Accounts: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* <div className=" top-0 right-0">
+          <select id="grossSales" value={selectedGrossValue} onChange={handleGrossChange}
+            className="w-[200] border border-gray-300 rounded-md px-3 py-0 text-gray-700 bg-white focus:ring-2 focus:ring-gray-200 focus:outline-none">
+            
+              <option key='' value=''>
+                Gross Sales
+              </option>
+              <option key='' value=''>
+                GM
+              </option>
+              <option key='' value=''>
+                GM %
+              </option>
+              <option key='' value=''>
+                Customer Count
+              </option>
+          </select>
+        </div> */}
+
       <div className="p-6">
         <SimpleBarChart data={chartData} />
       </div>
