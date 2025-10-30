@@ -37,6 +37,7 @@ import ResetPassword from "./pages/resetPassword";
 import EditSegmentation from "./pages/editSegmentation";
 import ViewDetailsForm from "./pages/viewDetails";
 import PricingView from "./pages/pricingView";
+//import PriceListsPage from "./pages/PriceListsPage";
 import Competitors from "./pages/Strategy/Competitors";
 
 function App() {
@@ -81,9 +82,10 @@ function App() {
       <Route path="/approvalControls" element={<ApprovalControls/>}/>
       <Route path="/resetPassword" element={<ResetPassword/>}/>
       <Route path="/editSegmentation" element={<EditSegmentation/>}/>
-      <Route path="/viewDetails" element={<ViewDetailsForm/>}/>
-      <Route path="/pricingView" element={<PricingView/>} />
       <Route path="/competitors" element={<Competitors/>} />
+      <Route path="/inbox/viewDetails" element={<ViewDetailsForm/>}/>
+      <Route path="/inbox/pricingView" element={<PricingView/>} />
+      {/* <Route path="/priceListsPage" element={<PriceListsPage/>} /> */}
     </Routes>
     </LayOut>
     </Router>

@@ -218,7 +218,7 @@ const Accounts: React.FC = () => {
           <button className="bg-[#0f59ac] hover:bg-blue-600 text-white font-medium py-1 px-3 rounded text-sm mr-5" onClick={() => navigate("/editSegmentation")}>Edit Segmentation</button>
           <select id="fruit-select" value={selectedValue} onChange={handleChange}
             className="w-[200] border border-gray-300 rounded-md px-3 py-0 text-gray-700 bg-white focus:ring-2 focus:ring-gray-200 focus:outline-none">
-            {countries.map((option: any) => (
+            {countries?.map((option: any) => (
               <option key={option.countryId} value={option.countryId}>
                 {option.countryName}
               </option>

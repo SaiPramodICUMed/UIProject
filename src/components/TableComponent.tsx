@@ -704,7 +704,16 @@ const TableComponent: React.FC<TableProps> = ({
                     <td
                       key={colIndex}
                       className="border border-gray-500 px-4 py-2 overflow-hidden text-ellipsis whitespace-nowrap min-w-[80px] w-[80px] max-w-[220px]"
-                      title={String(row[col.accessor] ?? "")}
+                      title={String(col.accessor === "Created" ||
+                      col.accessor === "LastModified"
+                        ? formatToDate(row[col.accessor])
+                        : col.accessor === "FloorBreaks"
+                        ? `${row[col.accessor]} (${row.FloorBreaksP}%)`
+                        : col.accessor === "OriginalValue"
+                        ? formatToUSCurrency(row[col.accessor])
+                        : col.accessor === "Due"
+                        ? getDaysFromToday(row[col.accessor])
+                        : row[col.accessor])}
                     >
                       {col.accessor === "Created" ||
                       col.accessor === "LastModified"

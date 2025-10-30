@@ -4,7 +4,24 @@ import Pagination from "../../components/PageNation";
 import axios from "axios";
 import Loader from "../../components/loader";
 import { useSelector } from "react-redux";
-//import data from "../../../data.json";
+import data from "../../../data.json";
+//import CustomerSegmentationModal from "../CustomerSegmentationModal";
+//import PriceListModal from "../PriceListsPage";
+import PromoItemModal from "../PromoItemModal";
+
+// const sampleData = Array.from({ length: 50 }, (_, i) => ({
+//     name: `(DE) Customer ${i + 1}`,
+//     gpoName: `(DE)GPO${1000 + i}`,
+//     description: `Description ${i + 1}`,
+//     headerId: `${800000 + i}`,
+//     contractId: `${900000 + i}`,
+//     startDate: "12/31/2024",
+//     endDate: "12/31/2025",
+//     active: i % 2 === 0 ? "Yes" : "No",
+//     sales: `€ ${Math.floor(Math.random() * 10000)}`,
+//     lastSaleDate: "9/10/2025",
+//     items: Math.floor(Math.random() * 200),
+//   }));
 
 const Inprogress: React.FC = () => {
   const user = useSelector((state: any) => state.user.users);
@@ -15,6 +32,17 @@ const Inprogress: React.FC = () => {
   const [totalRecords] = useState(taskCount.inProgress);
   const [recordsPerPage, setRecordsPerPage] = useState(user.gridPageSize);
   const [totalPages, setTotalPages] = useState(Math.ceil(totalRecords / user.gridPageSize));
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [selectedCustomers, setSelectedCustomers] = useState([
+  //   "AbbVie GmbH & Co. KG",
+  // ]);
+
+  //  const handleConfirm = (segmentation: string) => {
+  //   console.log("Selected segmentation:", segmentation);
+  //   // handle update logic here
+  // };
+
+
 
   //const intervel=user.gridPageSize;
   // const totalPages = Math.ceil(totalRecords / user.gridPageSize);
@@ -112,8 +140,24 @@ const Inprogress: React.FC = () => {
 
       </div>
       {/* Responsive Table inside the same container */}
+      {/* <button
+        onClick={() => setIsModalOpen(true)}
+        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+      ></button> */}
+      {/* <CustomerSegmentationModal
+      isOpen={isModalOpen}
+         onClose={() => setIsModalOpen(false)}
+        selectedCustomers={selectedCustomers}
+        onConfirm={handleConfirm}     /> */}
+        {/* <PriceListModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        data={sampleData}
+        onSelect={(selected) => console.log("Selected:", selected)}
+      /> */}
+        <PromoItemModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <TableComponent
-        data={inboxData}
+        data={data}
         columns={columns}
         height="450px"
         color="red"

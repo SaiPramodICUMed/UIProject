@@ -29,6 +29,25 @@ const TargetsAndFloors: React.FC = () => {
     { header: "Seg Salesman Floor", accessor: "SegSalesmanFloor" },
     { header: "Seg Target Price", accessor: "SegTargetPrice" },
   ];
+   const Newcolumns = [
+    { header: "Item", accessor: "ItemName" },
+    { header: "Description", accessor: "ItemDescription" },
+    { header: "Super Franchise", accessor: "SuperFranchis" },
+    { header: "Gross Sales", accessor: "GrossSales" },
+    { header:"GPH1", accessor:"GPH1"},
+    { header:"GPH2", accessor:"GPH2"},
+    { header:"GPH3", accessor:"GPH3"},
+    { header:"GPH4", accessor:"GPH4"},
+    { header: "Gross Volume", accessor: "GrossVolume" },
+    { header: "Gross ASP", accessor: "GrossASP" },
+    { header: "GM %", accessor: "GM_P" },
+    { header: "Manager Margin Floor", accessor: "ManagerMarginFloor" },
+    { header: "Salesman Margin Floor", accessor: "SalesmanMarginFloor" },
+    { header: "Seg Margin Floor", accessor: "SegManagerFloor" },
+    { header: "Seg Salesman Floor", accessor: "SegSalesmanFloor" },
+    { header: "Seg Target Price", accessor: "SegTargetPrice" },
+  ];
+  const [activeColumnList, setActiveColumnList] = useState(columns);
 
   const setPageChange = (pageNumber: any, listPerPage?: any) => {
     const noOfrecordsPerPage = listPerPage ? listPerPage : recordsPerPage
@@ -83,6 +102,12 @@ const TargetsAndFloors: React.FC = () => {
   const handleChange = (event: any) => {
     setSelectedValue(event.target.value);
   };
+  const  [isGPHVisible, setIsGPHVisible]=useState(false);
+  const ShowGPH = () => {
+    const GPHVisible = activeColumnList.length > columns.length;
+   setIsGPHVisible(GPHVisible);
+    setActiveColumnList(GPHVisible?columns:Newcolumns);
+  }
 
   const fetchCount = async (country:number) => {
     //console.log(arg);
@@ -142,7 +167,7 @@ const TargetsAndFloors: React.FC = () => {
         <div className=" top-0 right-0">          
           <select id="fruit-select" value={selectedValue} onChange={handleChange}
             className="w-[200] border border-gray-300 rounded-md px-3 py-0 text-gray-700 bg-white focus:ring-2 focus:ring-gray-200 focus:outline-none">
-            {countries.map((option: any) => (
+            {countries?.map((option: any) => (
               <option key={option.countryId} value={option.countryId}>
                 {option.countryName}
               </option>
@@ -151,11 +176,38 @@ const TargetsAndFloors: React.FC = () => {
         </div>
         {/* <h2 className="text-xl font-semibold text-blue-700">User Details</h2> */}
 
+
+      </div>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
+         <div className=" top-0 right-0">          
+          <button className="bg-[#0f59ac] hover:bg-blue-500 text-white font-medium py-1 px-3 rounded text-sm mr-5" onClick={handleChange}>View History</button>
+          <button className={`font-medium py-1 px-5 rounded text-sm mr-5 bg-[#0f59ac] text-white`} onClick={ShowGPH}> {isGPHVisible?"Show GPH":"Hide GPH"}</button>
+        </div>
+
+        <div className=" top-0 right-0">          
+          <select id="select-role" value={selectedValue} onChange={handleChange}
+            className="w-[200] border border-gray-300 rounded-md px-3 py-0 text-gray-700 bg-white focus:ring-2 focus:ring-gray-200 focus:outline-none">
+            {/* {countries?.map((option: any) => ( */}
+              <option key="all" value="all">
+                All
+              </option>
+              <option key="Salesmans" value="Salesmans">
+                Salesmans
+              </option>
+              <option key="Managers" value="Managers">
+                Managers
+              </option>
+            {/* ))} */}
+          </select>
+        </div>
+        {/* <h2 className="text-xl font-semibold text-blue-700">User Details</h2> */}
+        
+
       </div>
       {/* Responsive Table inside the same container */}
       <TableComponent
         data={inboxData}
-        columns={columns}
+        columns={activeColumnList}
         height="450px"
         color="blue"
       />
