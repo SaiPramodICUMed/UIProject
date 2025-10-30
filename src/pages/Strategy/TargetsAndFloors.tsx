@@ -104,9 +104,9 @@ const TargetsAndFloors: React.FC = () => {
   };
   const  [isGPHVisible, setIsGPHVisible]=useState(false);
   const ShowGPH = () => {
-    const GPHVisible = activeColumnList.length > columns.length;
-   setIsGPHVisible(GPHVisible);
-    setActiveColumnList(GPHVisible?columns:Newcolumns);
+   // const GPHVisible = activeColumnList.length > columns.length;
+   setIsGPHVisible(!isGPHVisible);
+    setActiveColumnList(isGPHVisible?columns:Newcolumns);
   }
 
   const fetchCount = async (country:number) => {
@@ -151,7 +151,7 @@ const TargetsAndFloors: React.FC = () => {
 
   return (
     <div className="bg-white p-6">
-      <Loader isLoad={loading} />
+      {/* <Loader isLoad={loading} /> */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
         <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-4">
           {/* <FaHome className="text-blue-600" /> */}
@@ -181,7 +181,7 @@ const TargetsAndFloors: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
          <div className=" top-0 right-0">          
           <button className="bg-[#0f59ac] hover:bg-blue-500 text-white font-medium py-1 px-3 rounded text-sm mr-5" onClick={handleChange}>View History</button>
-          <button className={`font-medium py-1 px-5 rounded text-sm mr-5 bg-[#0f59ac] text-white`} onClick={ShowGPH}> {isGPHVisible?"Show GPH":"Hide GPH"}</button>
+          <button className={`font-medium py-1 px-5 rounded text-sm mr-5 bg-[#0f59ac] text-white`} onClick={ShowGPH}> {!isGPHVisible?"Show GPH":"Hide GPH"}</button>
         </div>
 
         <div className=" top-0 right-0">          
