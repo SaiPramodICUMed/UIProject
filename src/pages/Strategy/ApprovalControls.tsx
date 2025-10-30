@@ -3,10 +3,10 @@ import TableComponent from "../../components/TableComponent";
 //import Pagination from "../../components/PageNation";
 import axios from "axios";
 import Loader from "../../components/loader";
-//import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const ApprovalControls: React.FC = () => {
-  //const user = useSelector((state: any) => state.user.users);
+  const user = useSelector((state: any) => state.user.users);
   const [inboxData, setInboxData] = useState([]);
   const [loading, setLoading] = useState(false);
 //   const [currentPage, setCurrentPage] = useState(1);
@@ -39,7 +39,7 @@ const ApprovalControls: React.FC = () => {
 //     setPageChange(1, recordsPerPage);
 //   };
 
-  const fetchData = async () => {
+  const fetchData = async (country:number) => {
     //console.log(arg);
     //setActiveTab(arg);
     setLoading(true);
@@ -48,7 +48,7 @@ const ApprovalControls: React.FC = () => {
 
       // 👈 second argument is the body (data)
       const response = await axios.get(
-        `https://10.2.6.130:5000/api/Strategy/getRules/5`,
+        `https://10.2.6.130:5000/api/Strategy/getRules/${country}`,
         
         { headers: { "Content-Type": "application/json" } } // optional config
       );
@@ -67,7 +67,7 @@ const ApprovalControls: React.FC = () => {
 
   useEffect(() => {
     
-    fetchData();
+    fetchData(user.activeCountryId);
   }, []);
   
   return (

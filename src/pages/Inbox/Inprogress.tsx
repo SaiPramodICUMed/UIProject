@@ -83,7 +83,7 @@ const Inprogress: React.FC = () => {
 
   const fetchData = async (arg: any, start: number, end: number) => {
     console.log(arg, start, end);
-   // setLoading(true);
+    setLoading(true);
     //setActiveTab(arg);
     try {
       const payload = {
@@ -123,7 +123,7 @@ const Inprogress: React.FC = () => {
   }, [recordsPerPage]);
 
   return (
-    <div className="bg-white p-6">
+    <div className="bg-white pl-6 pr-6">
       <Loader isLoad={loading} />
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
         <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-4">
