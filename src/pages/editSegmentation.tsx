@@ -361,7 +361,7 @@ const EditSegmentation: React.FC = () => {
           onChange={handleChange}
           className="w-[200] border border-gray-300 rounded-md px-3 py-0 text-gray-700 bg-white focus:ring-2 focus:ring-gray-200 focus:outline-none"
         >
-          {countries.map((option: any) => (
+          {countries?.map((option: any) => (
             <option key={option.countryId} value={option.countryId}>
               {option.countryName}
             </option>

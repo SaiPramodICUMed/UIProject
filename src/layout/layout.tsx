@@ -66,6 +66,7 @@ export default function layOut({ children }: { children: React.ReactNode }) {
   const cleanPath = location.pathname.startsWith("/")
     ? location.pathname.slice(1)
     : location.pathname;
+    //console.log("Current Path:", cleanPath);
   if (cleanPath === "login" || cleanPath === "") {
     return <>{children}</>;
   }
@@ -127,14 +128,15 @@ export default function layOut({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const path = location.pathname.startsWith("/")
-      ? location.pathname.slice(1)
-      : location.pathname;
-
+      ? location.pathname.slice(1).split("/")[0]
+      : location.pathname.split("/")[0];
+      
     // If we have a mapping (menusFrom[path]) use it, otherwise default to 'inbox'
     let mainMenu: any;
+   // console.log("Pathname changed:", path);
 
     if (subchilditems.includes(path)) {
-      //console.log(path, subchildItems[path]);
+     // console.log(path, subchildItems[path]);
       setActiveSubSub(path);
       setActiveSub(subchildItems[path] );
       mainMenu = menusFrom[subchildItems[path]];

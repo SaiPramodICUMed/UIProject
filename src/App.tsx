@@ -81,7 +81,7 @@ function App() {
       <Route path="/promotions" element={<Promotions/>}/>
       <Route path="/approvalControls" element={<ApprovalControls/>}/>
       <Route path="/resetPassword" element={<ResetPassword/>}/>
-      <Route path="/editSegmentation" element={<EditSegmentation/>}/>
+      <Route path="/segmentationAccounts/editSegmentation" element={<EditSegmentation/>}/>
       <Route path="/competitors" element={<Competitors/>} />
       <Route path="/inbox/viewDetails" element={<ViewDetailsForm/>}/>
       <Route path="/inbox/pricingView" element={<PricingView/>} />
