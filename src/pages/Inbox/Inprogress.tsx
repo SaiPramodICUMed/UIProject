@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import TableComponent from "../../components/TableComponent";
+import TableNewComponent from "../../components/TableNewComponent";
 import Pagination from "../../components/PageNation";
 import axios from "axios";
-import Loader from "../../components/loader";
+// import Loader from "../../components/loader";
 import { useSelector } from "react-redux";
 import data from "../../../data.json";
 //import CustomerSegmentationModal from "../CustomerSegmentationModal";
@@ -27,7 +27,7 @@ const Inprogress: React.FC = () => {
   const user = useSelector((state: any) => state.user.users);
   const taskCount = useSelector((state: any) => state.user.taskCount);
   const [inboxData, setInboxData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords] = useState(taskCount.inProgress);
   const [recordsPerPage, setRecordsPerPage] = useState(user.gridPageSize);
@@ -83,7 +83,7 @@ const Inprogress: React.FC = () => {
 
   const fetchData = async (arg: any, start: number, end: number) => {
     console.log(arg, start, end);
-    setLoading(true);
+    //setLoading(true);
     //setActiveTab(arg);
     try {
       const payload = {
@@ -106,7 +106,7 @@ const Inprogress: React.FC = () => {
 
       console.log("API Response:", response.data);
       setInboxData(response.data);
-      setLoading(false);
+    //  setLoading(false);
       return response.data;
     } catch (error: any) {
       console.error("Error fetching data:", error.message);
@@ -124,7 +124,7 @@ const Inprogress: React.FC = () => {
 
   return (
     <div className="bg-white pl-6 pr-6">
-      <Loader isLoad={loading} />
+      {/* <Loader isLoad={loading} /> */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
         <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-4">
           {/* <FaHome className="text-blue-600" /> */}
@@ -156,7 +156,7 @@ const Inprogress: React.FC = () => {
         onSelect={(selected) => console.log("Selected:", selected)}
       /> */}
         <PromoItemModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-      <TableComponent
+      <TableNewComponent
         data={data}
         columns={columns}
         height="450px"
